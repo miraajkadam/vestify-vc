@@ -155,6 +155,8 @@ import PartnersAndInvestors from "./PartnersAndInvestors";
 import Socials from "./Socials";
 import { createProject } from "@/lib/api";
 import StepIndicator from "./StepIndicator";
+import { any } from "zod";
+import { TeamMember, Partner, ProjectRound } from "@/lib/api";
 
 type ProjectDataState = {
   info: {
@@ -237,7 +239,16 @@ const ProjectCreationForm: React.FC<{
     setIsLoading(true);
     setError(null);
     try {
-      await createProject(projectData);
+      const projectDataToCreate = {
+        ...projectData,
+        tokenMetrics: projectData.tokenMetrics.map((metric) => ({
+          ...metric,
+          round: metric.round as ProjectRound, // Cast the round property to ProjectRound
+          tgeUnlock: metric.tgeUnlock.toString(),
+        })),
+      };
+      await createProject(projectDataToCreate);
+      // await createProject(projectData);
       router.push("/dashboard");
     } catch (error) {
       console.error("Project creation error:", error);
@@ -258,19 +269,34 @@ const ProjectCreationForm: React.FC<{
         {CurrentStepComponent && (
           <CurrentStepComponent
             onComplete={(data) => handleStepComplete(data)}
+            // initialData={
+            //   step === 1
+            //     ? projectData.info
+            //     : step === 2
+            //     ? projectData.tokenMetrics
+            //     : step === 3
+            //     ? projectData.deals
+            //     : step === 4
+            //     ? // ? projectData.teamAndAdvisors
+            //       (projectData.teamAndAdvisors as TeamMember[])
+            //     : step === 5
+            //     ? // ? projectData.partnersAndInvestors
+            //       (projectData.partnersAndInvestors as Partner[])
+            //     : step === 6
+            //     ? projectData.projectSocials
+            //     : undefined
+            // }
             initialData={
               step === 1
-                ? projectData.info
+                ? (projectData.info as any)
                 : step === 2
                 ? projectData.tokenMetrics
                 : step === 3
                 ? projectData.deals
                 : step === 4
-                ? projectData.teamAndAdvisors
+                ? (projectData.teamAndAdvisors as TeamMember[])
                 : step === 5
-                ? projectData.partnersAndInvestors
-                : step === 6
-                ? projectData.projectSocials
+                ? (projectData.partnersAndInvestors as Partner[])
                 : undefined
             }
           />

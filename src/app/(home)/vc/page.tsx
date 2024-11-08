@@ -4,10 +4,12 @@ import { getVCProfile, VCProfile } from "@/lib/api";
 import Navbar from "@/components/vcprofile/Navbar";
 import Profile from "@/components/vcprofile/Profile";
 import Descp from "@/components/vcprofile/Descp";
+import { GetVCProjectsResponse } from "@/lib/api";
 import Projects from "@/components/vcprofile/Projects";
 
 const VCProfilePage2: React.FC = () => {
-  const [profile, setProfile] = useState<VCProfile | null>(null);
+  // const [profile, setProfile] = useState<VCProfile | null>(null);
+  const [profile, setProfile] = useState<GetVCProjectsResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +21,7 @@ const VCProfilePage2: React.FC = () => {
         if (response.success) {
           setProfile(response.data);
         } else {
-          setError(response.message);
+          setError(response.message ?? "An error occurred");
         }
       } catch (err) {
         setError("Failed to fetch VC profile");

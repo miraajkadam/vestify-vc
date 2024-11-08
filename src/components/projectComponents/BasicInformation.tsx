@@ -103,10 +103,19 @@ const BasicInformation: React.FC<BasicInformationProps> = ({
         >
           Project Categories
         </label>
-        <Dropdown
+        {/* <Dropdown
           options={categoryOptions}
           value={categories}
           onChange={(selected) => setCategories(selected)}
+          placeholder="Select Project categories"
+          multiple={true}
+        /> */}
+        <Dropdown
+          options={categoryOptions}
+          value={categories}
+          onChange={(selected) =>
+            setCategories(Array.isArray(selected) ? selected : [selected])
+          }
           placeholder="Select Project categories"
           multiple={true}
         />

@@ -109,24 +109,30 @@ export interface VCProfile {
     raisedAmount: string;
     ongoingClaim: number;
   }[];
+  // projects: Project[];
 }
 
-// interface ApiResponse<T> {
-//   success: boolean;
-//   message: string;
-//   data: T;
-// }
+// Assuming the response includes a `projects` field
 
 interface ApiResponse<T> {
   success: boolean;
-  data: {
-    projects: Project[];
-  };
+  data: T;
   message?: string;
 }
 
 interface CreateVCResponse {
   vcId: string;
+}
+
+export interface GetVCProjectsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    projects: Project[]; // Array of projects
+    vcId: string; // Assuming VC ID is also part of the response
+    message: string;
+    success: boolean;
+  };
 }
 
 interface DecodedToken {
@@ -202,30 +208,6 @@ export const createVC = async (
   }
 };
 
-// export const createProject = async (
-//   data: Omit<ProjectData, "info"> & { info: Omit<ProjectInfo, "vcId"> }
-// ): Promise<AxiosResponse<ApiResponse<{ project: ProjectData }>>> => {
-//   const token = Cookies.get("access_token");
-//   if (!token) {
-//     throw new Error("No access token found");
-//   }
-
-//   const decodedToken = jwtDecode<DecodedToken>(token);
-//   const vcId = decodedToken.user.id;
-
-//   const projectData: ProjectData = {
-//     ...data,
-//     info: {
-//       ...data.info,
-//       vcId,
-//     },
-//   };
-
-//   return api.post<ApiResponse<{ project: ProjectData }>>(
-//     "api/project/new",
-//     projectData
-//   );
-// };
 export const createProject = async (
   data: Omit<ProjectData, "info"> & { info: Omit<ProjectInfo, "vcId"> }
 ): Promise<AxiosResponse<ApiResponse<{ project: ProjectData }>>> => {
@@ -250,6 +232,30 @@ export const createProject = async (
     projectData
   );
 };
+// export const createProject = async (
+//   data: Omit<ProjectData, "info"> & { info: Omit<ProjectInfo, "vcId"> }
+// ): Promise<AxiosResponse<ApiResponse<{ project: ProjectData }>>> => {
+//   const token = Cookies.get("access_token");
+//   if (!token) {
+//     throw new Error("No access token found");
+//   }
+
+//   const decodedToken = jwtDecode<DecodedToken>(token);
+//   const vcId = decodedToken.user.id;
+
+//   const projectData: ProjectData = {
+//     ...data,
+//     info: {
+//       ...data.info,
+//       vcId,
+//     },
+//   };
+
+//   return api.post<ApiResponse<{ project: ProjectData }>>(
+//     "api/project/new",
+//     projectData
+//   );
+// };
 
 export interface LoginData {
   email: string;
@@ -269,7 +275,9 @@ export const login = async (data: LoginData): Promise<LoginResponse> => {
   return response.data;
 };
 
-export const getVCProfile = async (): Promise<ApiResponse<VCProfile>> => {
+export const getVCProfile = async (): Promise<
+  ApiResponse<GetVCProjectsResponse>
+> => {
   try {
     const token = Cookies.get("access_token");
     if (!token) {
@@ -279,7 +287,7 @@ export const getVCProfile = async (): Promise<ApiResponse<VCProfile>> => {
     const decodedToken = jwtDecode<DecodedToken>(token);
     const vcId = decodedToken.user.id;
 
-    const response = await api.get<ApiResponse<VCProfile>>(
+    const response = await api.get<ApiResponse<GetVCProjectsResponse>>(
       `/api/vc/${vcId}/profile`
     );
     return response.data;
@@ -304,9 +312,9 @@ export const logout = async (): Promise<ApiResponse<null>> => {
 
 export const getVCProjects = async (
   vcId: string
-): Promise<ApiResponse<Project[]>> => {
+): Promise<GetVCProjectsResponse> => {
   try {
-    const response = await api.get<ApiResponse<Project[]>>(
+    const response = await api.get<GetVCProjectsResponse>(
       `/api/vc/${vcId}/projects`
     );
     return response.data;

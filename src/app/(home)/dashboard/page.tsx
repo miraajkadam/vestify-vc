@@ -52,23 +52,6 @@ const Dashboard: React.FC = () => {
         } else {
           throw new Error(response.message || "Failed to fetch projects");
         }
-        // Check that the response is successful and contains projects
-        // Ensure response.success is true and the data contains projects
-        // if (
-        //   response.success &&
-        //   response.data.projects &&
-        //   Array.isArray(response.data.projects)
-        // ) {
-        //   setProjects(
-        //     response.data.projects.map((project: Project) => ({
-        //       ...project,
-        //       status: Math.random() > 0.5 ? "Success" : "In Progress",
-        //       progress: Math.floor(Math.random() * 100),
-        //     }))
-        //   );
-        // } else {
-        //   throw new Error(response.message || "Failed to fetch projects");
-        // }
       } catch (error) {
         console.error("Failed to fetch projects:", error);
         setError(error instanceof Error ? error.message : "An error occurred");

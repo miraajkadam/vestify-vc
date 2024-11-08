@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Dropdown from "../ui/Dropdown";
 
-interface TokenMetric {
+interface tokenMetric {
   round: string;
   fdv: string;
   price: string;
@@ -12,15 +12,15 @@ interface TokenMetric {
 }
 
 interface TokenMetricsProps {
-  onComplete: (data: { tokenMetrics: TokenMetric[] }) => void;
-  initialData?: TokenMetric[];
+  onComplete: (data: { tokenMetrics: tokenMetric[] }) => void;
+  initialData?: tokenMetric[];
 }
 
 const TokenMetrics: React.FC<TokenMetricsProps> = ({
   onComplete,
   initialData = [],
 }) => {
-  const [rounds, setRounds] = useState<TokenMetric[]>([]);
+  const [rounds, setRounds] = useState<tokenMetric[]>([]);
 
   useEffect(() => {
     setRounds(
@@ -41,7 +41,7 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
 
   const handleInputChange = (
     index: number,
-    field: keyof TokenMetric,
+    field: keyof tokenMetric,
     value: string | number
   ) => {
     const updatedRounds = rounds.map((round, i) =>
@@ -95,10 +95,22 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
             >
               Project Round
             </label>
-            <Dropdown
+            {/* <Dropdown
               options={roundOptions}
               value={round.round}
               onChange={(value) => handleInputChange(index, "round", value)}
+              placeholder="Select Round"
+            /> */}
+            <Dropdown
+              options={roundOptions}
+              value={round.round}
+              onChange={(value) => {
+                if (typeof value === "string" || typeof value === "number") {
+                  handleInputChange(index, "round", value);
+                } else {
+                  console.error("Invalid value type:", value);
+                }
+              }}
               placeholder="Select Round"
             />
           </div>
