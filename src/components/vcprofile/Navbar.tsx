@@ -2,7 +2,7 @@ import React from "react";
 import { FaPlus } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
-function Navbar({ profile }) {
+function Navbar({ profile }: any) {
   const router = useRouter();
   return (
     <div className="w-full py-[32px] justify-between items-start flex">

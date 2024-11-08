@@ -34,11 +34,9 @@ const Socials: React.FC<SocialsProps> = ({ onComplete }) => {
 
     switch (platform) {
       case "x":
-        regex = /^(https?:\/\/)?(www\.)?(x\.com\/\S+)/;
+        regex = /^(https?:\/\/)?(www\.)?(twitter\.com\/\S+)/;
         break;
-      case "instagram":
-        regex = /^(https?:\/\/)?(www\.)?(instagram\.com\/\S+)/;
-        break;
+
       case "discord":
         regex = /^(https?:\/\/)?(www\.)?(discord\.gg\/\S+)/;
         break;
@@ -92,7 +90,7 @@ const Socials: React.FC<SocialsProps> = ({ onComplete }) => {
 
   const socialIcons = {
     x: FaXTwitter,
-    instagram: FaInstagram,
+    website: FaInstagram,
     discord: FaDiscord,
     telegram: FaTelegram,
     medium: FaMedium,

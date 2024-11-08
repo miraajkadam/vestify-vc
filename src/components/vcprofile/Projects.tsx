@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
-function Projects({ profile }) {
+function Projects({ profile }: { profile: any }) {
   const router = useRouter();
   return (
     <div className="w-full self-stretch h-[409.50px] flex-col justify-start items-start gap-[30px] flex">
@@ -22,7 +22,7 @@ function Projects({ profile }) {
 
               {/* <br className="h-[1px] bg-gray w-full "></br> */}
 
-              {profile?.projects.map((item, index) => (
+              {profile?.projects.map((item: any, index: number) => (
                 <React.Fragment key={index}>
                   <div className="h-[55.36px] col-span-2 flex justify-start items-center">
                     <div className="w-[55.36px] h-[55.36px] bg-[#d9d9d9]" />

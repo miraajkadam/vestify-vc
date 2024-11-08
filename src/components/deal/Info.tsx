@@ -53,7 +53,7 @@ function Info() {
       </div>
 
       <div className="bg-neutral-100 rounded-[10px] flex-col justify-start items-start gap-[30px] inline-flex">
-        <Deal />
+        {/* <Deal socialLink={socialLink} project={project} tokenMetrics={tokenMetrics} /> */}
         {/* <div className="text-[#18191c] text-2xl font-bold font-['Urbanist'] leading-loose">
            Deal Info
          </div>

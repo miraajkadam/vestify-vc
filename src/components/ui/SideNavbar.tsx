@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import Logo from "@/components/ui/Icons/Logo";
 import Capital from "@/components/ui/Icons/Capital";
 import Home from "@/components/ui/Icons/Home";
-import profileimg from "@/public/profile.svg";
+import profileimg from "../../../public/profile.svg";
 
 export function SideNavbar() {
   const router = useRouter();

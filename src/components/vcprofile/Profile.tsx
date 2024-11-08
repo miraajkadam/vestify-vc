@@ -1,9 +1,17 @@
 import React from "react";
-import discordicon from "@/public/Discord.svg";
+import discordIcon from "../../../public/Discord.svg";
+import twitterIcon from "../../../public/Twitter.svg";
+import telegramIcon from "../../../public/Telegram.svg";
+import linkedinIcon from "../../../public/Linkedin.svg";
 import Image from "next/image";
 
-function Profile({ profile }) {
-  console.log(profile);
+const socialIcons = {
+  discord: discordIcon,
+  x: twitterIcon,
+  telegram: telegramIcon,
+  website: linkedinIcon,
+};
+function Profile({ profile }: { profile: any }) {
   return (
     <div className="w-full self-stretch h-[291.32px] flex-col justify-start items-start gap-[21.34px] flex">
       <div className="w-full justify-between items-start gap-[25.61px] inline-flex">
@@ -46,17 +54,24 @@ function Profile({ profile }) {
         <div className="w-[276.89px] h-[139.75px] bg-[#f8f8f8] rounded-[20.29px] border border-black/10">
           <div className="p-5 flex-col justify-between h-full w-full  inline-flex text-[#18191c] text-[15px] font-medium font-['Urbanist'] leading-[17.39px]">
             <span>Social Media:</span>
-            <div className="flex gap-5 py-4 flex-row justify-start items-start ">
-              <Image
-                className="w-[30.57px] h-[23.57px] "
-                alt=""
-                src={discordicon}
-              />
-              <Image
-                className="w-[30.57px] h-[23.57px] "
-                alt=""
-                src={discordicon}
-              />
+            <div className="flex gap-5 py-4 flex-row justify-between items-start ">
+              {Object.entries(profile.social).map(
+                ([platform, url]: [any, unknown]) => (
+                  <a
+                    key={platform}
+                    href={url as string} // Add a type assertion here
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center"
+                  >
+                    <Image
+                      className="w-[35.57px] h-[26.57px]"
+                      alt={`${platform} icon`}
+                      src={socialIcons[platform as keyof typeof socialIcons]}
+                    />
+                  </a>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -82,7 +97,7 @@ function Profile({ profile }) {
               Tags
             </div>
             <div className="self-stretch justify-start items-center gap-[8.54px] inline-flex">
-              {profile?.tags.map((tag) => (
+              {profile?.tags.map((tag: string) => (
                 <div className="px-[12.81px] py-[6.40px] bg-[#443cc4] rounded-[10.67px] justify-start items-start gap-[10.67px] flex">
                   <div className="text-white text-[15px] font-medium font-['Inter'] leading-snug">
                     {tag}

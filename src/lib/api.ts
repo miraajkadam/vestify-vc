@@ -111,10 +111,18 @@ export interface VCProfile {
   }[];
 }
 
+// interface ApiResponse<T> {
+//   success: boolean;
+//   message: string;
+//   data: T;
+// }
+
 interface ApiResponse<T> {
   success: boolean;
-  message: string;
-  data: T;
+  data: {
+    projects: Project[];
+  };
+  message?: string;
 }
 
 interface CreateVCResponse {
@@ -182,12 +190,11 @@ export const createVC = async (
   data: VCData
 ): Promise<ApiResponse<CreateVCResponse>> => {
   try {
-    console.log("Calling createVC API with data:", data);
     const response = await api.post<ApiResponse<CreateVCResponse>>(
       "/api/vc/new",
       data
     );
-    console.log("createVC API response:", response.data);
+
     return response.data;
   } catch (error) {
     console.error("Error in createVC API call:", error);
@@ -195,6 +202,30 @@ export const createVC = async (
   }
 };
 
+// export const createProject = async (
+//   data: Omit<ProjectData, "info"> & { info: Omit<ProjectInfo, "vcId"> }
+// ): Promise<AxiosResponse<ApiResponse<{ project: ProjectData }>>> => {
+//   const token = Cookies.get("access_token");
+//   if (!token) {
+//     throw new Error("No access token found");
+//   }
+
+//   const decodedToken = jwtDecode<DecodedToken>(token);
+//   const vcId = decodedToken.user.id;
+
+//   const projectData: ProjectData = {
+//     ...data,
+//     info: {
+//       ...data.info,
+//       vcId,
+//     },
+//   };
+
+//   return api.post<ApiResponse<{ project: ProjectData }>>(
+//     "api/project/new",
+//     projectData
+//   );
+// };
 export const createProject = async (
   data: Omit<ProjectData, "info"> & { info: Omit<ProjectInfo, "vcId"> }
 ): Promise<AxiosResponse<ApiResponse<{ project: ProjectData }>>> => {
@@ -293,7 +324,7 @@ export interface ProjectDetails {
     categories: string[];
     tokensReceived: string;
   };
-  token: {
+  tokenMetrics: {
     round: string;
     fdv: string;
     price: string;
@@ -315,6 +346,7 @@ export interface ProjectDetails {
     x?: string;
     telegram?: string;
     youtube?: string;
+    website?: string;
   };
   teamAndAdvisors: Array<{
     name: string;
@@ -335,10 +367,9 @@ export const getProjectDetails = async (
     const response = await api.get<ApiResponse<ProjectDetails>>(
       `/api/project/${projectId}`
     );
-    console.log("getProjectDetails response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching project details:", error);
-    throw error;
+    throw error; // Rethrow the error to handle it in the calling component
   }
 };

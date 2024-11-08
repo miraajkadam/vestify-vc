@@ -1,6 +1,6 @@
 import React from "react";
 
-function About({ project }) {
+function About({ project }: { project: any }) {
   return (
     <div className="w-full flex-col justify-start items-start gap-2.5 flex">
       <div className="w-full text-[#18191c] text-2xl font-bold font-['Urbanist'] leading-loose">

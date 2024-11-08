@@ -34,7 +34,6 @@ const VCProfilePage2: React.FC = () => {
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
   if (!profile) return <NoProfileData />;
-  console.log(profile);
 
   return (
     <div className=" h-[100vh] w-full bg-white justify-start items-start inline-flex overflow-y-scroll ">
