@@ -76,7 +76,7 @@ export interface Partner {
 
 export interface ProjectSocials {
   x?: string;
-  instagram?: string;
+  website?: string;
   discord?: string;
   telegram?: string;
   medium?: string;
