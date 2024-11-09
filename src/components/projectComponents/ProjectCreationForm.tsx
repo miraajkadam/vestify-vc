@@ -244,7 +244,7 @@ const ProjectCreationForm: React.FC<{
         tokenMetrics: projectData.tokenMetrics.map((metric) => ({
           ...metric,
           round: metric.round as ProjectRound, // Cast the round property to ProjectRound
-          tgeUnlock: metric.tgeUnlock.toString(),
+          tgeUnlock: metric.tgeUnlock,
         })),
       };
       await createProject(projectDataToCreate);

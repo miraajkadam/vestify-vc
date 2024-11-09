@@ -48,7 +48,7 @@ export interface TokenMetrics {
   round: ProjectRound;
   fdv: string;
   price: string;
-  tgeUnlock: string;
+  tgeUnlock: number;
   tge: string;
   tgeSummary: string;
 }
@@ -226,36 +226,13 @@ export const createProject = async (
       vcId,
     },
   };
+  console.log(projectData);
 
   return api.post<ApiResponse<{ project: ProjectData }>>(
     "api/project/new",
     projectData
   );
 };
-// export const createProject = async (
-//   data: Omit<ProjectData, "info"> & { info: Omit<ProjectInfo, "vcId"> }
-// ): Promise<AxiosResponse<ApiResponse<{ project: ProjectData }>>> => {
-//   const token = Cookies.get("access_token");
-//   if (!token) {
-//     throw new Error("No access token found");
-//   }
-
-//   const decodedToken = jwtDecode<DecodedToken>(token);
-//   const vcId = decodedToken.user.id;
-
-//   const projectData: ProjectData = {
-//     ...data,
-//     info: {
-//       ...data.info,
-//       vcId,
-//     },
-//   };
-
-//   return api.post<ApiResponse<{ project: ProjectData }>>(
-//     "api/project/new",
-//     projectData
-//   );
-// };
 
 export interface LoginData {
   email: string;
