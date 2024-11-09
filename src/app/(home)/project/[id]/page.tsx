@@ -17,7 +17,7 @@ const ProjectDetailsPage = async ({ params }: { params: { id: string } }) => {
   const {
     project,
     tokenMetrics,
-    socialLink,
+    projectSocials,
     teamAndAdvisors,
     partnersAndInvestors,
   } = projectDetails.data;
@@ -73,7 +73,7 @@ const ProjectDetailsPage = async ({ params }: { params: { id: string } }) => {
 
                 {/** Deal Info */}
                 <Deal
-                  socialLink={socialLink}
+                  socialLink={projectSocials}
                   project={project}
                   tokenMetrics={tokenMetrics}
                 />
