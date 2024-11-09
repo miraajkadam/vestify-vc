@@ -325,7 +325,7 @@ export interface ProjectDetails {
     startDate: string;
     endDate: string;
   };
-  socialLink: {
+  projectSocials: {
     medium?: string;
     discord?: string;
     x?: string;
