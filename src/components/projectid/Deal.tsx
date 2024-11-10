@@ -2,6 +2,8 @@ import React from "react";
 
 function Deal({ socialLink, project, tokenMetrics }: any) {
   const firstToken = tokenMetrics[0];
+  console.log("firstToken", firstToken);
+  console.log("socialLink", socialLink);
   return (
     <div className="p-5 h-full bg-neutral-100 rounded-[10px] flex-col justify-start items-start gap-[30px] inline-flex">
       <div className="text-[#18191c] text-2xl font-bold font-['Urbanist'] leading-loose">
@@ -13,6 +15,7 @@ function Deal({ socialLink, project, tokenMetrics }: any) {
             <div className="text-[#18191c] text-[17px] font-bold font-['Urbanist'] leading-loose">
               Token price
             </div>
+
             <div className="text-right text-[#a5a5a5] text-[17px] font-bold font-['Urbanist'] leading-loose">
               {firstToken?.round} Round ${firstToken?.price}
             </div>

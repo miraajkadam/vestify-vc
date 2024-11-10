@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { getProjectDetails } from "@/lib/api";
 import About from "@/components/projectid/About";
@@ -21,6 +22,8 @@ const ProjectDetailsPage = async ({ params }: { params: { id: string } }) => {
     teamAndAdvisors,
     partnersAndInvestors,
   } = projectDetails.data;
+
+  console.log(projectDetails);
 
   return (
     <div className="h-[100vh] w-full bg-white items-start inline-flex overflow-y-scroll">

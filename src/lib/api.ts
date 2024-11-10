@@ -333,6 +333,14 @@ export interface ProjectDetails {
     youtube?: string;
     website?: string;
   };
+  // socailLinks: {
+  //   medium?: string;
+  //   discord?: string;
+  //   x?: string;
+  //   telegram?: string;
+  //   youtube?: string;
+  //   website?: string;
+  // };
   teamAndAdvisors: Array<{
     name: string;
     title: string;
@@ -352,6 +360,7 @@ export const getProjectDetails = async (
     const response = await api.get<ApiResponse<ProjectDetails>>(
       `/api/project/${projectId}`
     );
+    console.log("response data", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching project details:", error);

@@ -16,8 +16,8 @@ function Team({ teamAndAdvisors }: any) {
             <div className="w-[238.45px] h-[208.37px] relative">
               <img
                 className="w-[238.45px] h-[181.91px] left-0 top-0 absolute rounded-[11.16px]"
-                // src="https://via.placeholder.com/238x182"
-                src="https://static.vecteezy.com/system/resources/previews/003/715/527/non_2x/picture-profile-icon-male-icon-human-or-people-sign-and-symbol-vector.jpg"
+                src={member?.imgBase64}
+                alt={member?.name}
               />
               <div className="h-[53.25px] p-[11.16px] left-[16px] top-[155.12px] absolute bg-white rounded-[8.93px] justify-start items-center gap-[77px] inline-flex">
                 <div className="w-full flex-col justify-start items-start gap-[8.93px] inline-flex">
@@ -25,7 +25,7 @@ function Team({ teamAndAdvisors }: any) {
                     {member.name}
                   </div>
                   <div className="text-[#949494] text-sm font-medium font-['Urbanist'] leading-tight">
-                    Founder
+                    {member.title}
                   </div>
                 </div>
               </div>
