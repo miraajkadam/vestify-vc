@@ -11,6 +11,7 @@ import { createProject } from "@/lib/api";
 import StepIndicator from "./StepIndicator";
 import { any } from "zod";
 import { TeamMember, Partner, ProjectRound } from "@/lib/api";
+import ConnectWallet from "./ConnectWallet";
 
 type ProjectDataState = {
   info: {
@@ -75,6 +76,7 @@ const ProjectCreationForm: React.FC<{
     { name: "Team & Advisors", component: TeamAndAdvisors },
     { name: "Partners & Investors", component: PartnersAndInvestors },
     { name: "Socials", component: Socials },
+    { name: "ConnectWallet", component: ConnectWallet },
   ];
 
   const CurrentStepComponent = steps[step - 1].component;
