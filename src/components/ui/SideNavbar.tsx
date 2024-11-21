@@ -113,44 +113,6 @@ export function SideNavbar() {
         <Link href="/dashboard">
           <Image src={profileimg} alt="avatar" className="w-12 h-12" />
         </Link>
-
-        {/* Avatar Dropdown */}
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="p-0 hover:bg-transparent"
-            >
-              <Avatar className="w-10 h-10">
-                <AvatarImage src="/11.webp" alt="@username" />
-                <AvatarFallback>UN</AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-white text-black">
-            <DropdownMenuLabel className="text-black">
-              My Account
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-black hover:bg-gray-100">
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-black hover:bg-gray-100">
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={handleLogout}
-              className="text-black hover:bg-gray-100"
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu> */}
       </div>
     </nav>
   );

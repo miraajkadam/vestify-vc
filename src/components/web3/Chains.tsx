@@ -12,7 +12,7 @@ function Chains({ onSelectChain }) {
         <div className="flex-col justify-start items-center flex">
           <div className="h-[34px] flex-col justify-start items-center gap-2 flex">
             <div className="text-[#101828] text-[28px] font-semibold font-['Urbanist'] leading-[33.60px]">
-              Connect Wallet
+              Connects Wallets
             </div>
           </div>
         </div>

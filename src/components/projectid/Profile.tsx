@@ -1,8 +1,6 @@
 import React from "react";
 
 function Profile({ tokenMetrics, project }: any) {
-  // Safely get the first token from tokenMetrics
-
   const firstToken = tokenMetrics[0];
 
   return (
