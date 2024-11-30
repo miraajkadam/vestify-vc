@@ -14,13 +14,16 @@ const VCProfilePage2: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log("CALLED");
     const fetchProfile = async () => {
       try {
         setIsLoading(true);
         const response = await getVCProfile();
         if (response.success) {
+          console.log(response, "RESPONSE");
           setProfile(response.data);
         } else {
+          console.log(response, "ERROR");
           setError(response.message ?? "An error occurred");
         }
       } catch (err) {
