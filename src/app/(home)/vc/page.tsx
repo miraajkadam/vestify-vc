@@ -7,15 +7,24 @@ import Descp from "@/components/vcprofile/Descp";
 import { GetVCProjectsResponse } from "@/lib/api";
 import Projects from "@/components/vcprofile/Projects";
 import { useVCProfileData } from "@/hooks/useVCProfile";
+import { FomoDeal, Network } from "fomo-deal-sdk-v1";
+
 
 const VCProfilePage2: React.FC = () => {
+  const fomoDeal = new FomoDeal();
   // const [profile, setProfile] = useState<VCProfile | null>(null);
   // const [profile, setProfile] = useState<GetVCProjectsResponse | null>(null);
   // const [isLoading, setIsLoading] = useState(true);
   // const [error, setError] = useState<string | null>(null);
 
   const { data: profileData, isError, error, isLoading } = useVCProfileData();
+  console.log("profileData", profileData)
 
+  const getAllProjects = async () => {
+    const projects = await fomoDeal.getAllProjects(Network.ETHEREUM);
+    console.log("projects", projects);
+  };
+  getAllProjects()
   // useEffect(() => {
   //   const fetchProfile = async () => {
   //     try {

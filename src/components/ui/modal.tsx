@@ -4,6 +4,7 @@ interface ModalProps {
   title: string;
   isOpen: boolean;
   closeModal: () => void;
+  handleMetamask?: ()=> void;
 }
 
 const Wallets = () => {
@@ -36,7 +37,7 @@ const Wallets = () => {
   );
 };
 
-const Modal = ({ closeModal, title, isOpen }: ModalProps) => {
+const Modal = ({ closeModal, title, isOpen, handleMetamask }: ModalProps) => {
   return (
     <>
       <div
@@ -106,7 +107,7 @@ const Modal = ({ closeModal, title, isOpen }: ModalProps) => {
                   {/* MetaMask Wallet */}
                   <div
                     className="px-[15px] w-full py-2.5 bg-[#f6f6f6] rounded-[10px] justify-between items-center inline-flex cursor-pointer"
-                    // onClick={connectMetaMask}
+                    onClick={handleMetamask}
                   >
                     <div className="justify-start items-center gap-[5px] flex">
                       <div className="w-10 h-10 relative">

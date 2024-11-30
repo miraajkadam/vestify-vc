@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import "../globals.css";
+import { Providers } from "../providers";
+import { cookieToInitialState } from "wagmi";
+import { config } from "../../../config";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -11,13 +15,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialState = cookieToInitialState(config, headers().get("cookie"));
   return (
     <html lang="en">
       <body className="flex">
+        <Providers initialState={initialState}>
         <main className="flex flex-row overflow-auto bg-gray-50 w-full">
           {/* <SideNavbar /> */}
           <div className="flex-1">{children}</div>
         </main>
+        </Providers>
       </body>
     </html>
   );

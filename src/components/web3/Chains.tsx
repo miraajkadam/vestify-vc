@@ -2,10 +2,26 @@ import React, { useState } from "react";
 import DialogDemo from "../ui/modal";
 import Modal from "../ui/modal";
 import EVMWallets from "./EVMWallets";
+import { useAccount, useConnect, useEnsName, useDisconnect } from "wagmi";
+import { metaMask, walletConnect } from "wagmi/connectors";
 
 function Chains({ onSelectChain }) {
   const [openEvmModal, setOpenEvmModal] = useState<boolean>(false);
   const [openSolanaModal, setOpenSolanaModal] = useState<boolean>(false);
+
+  const { isConnected, address, chainId } = useAccount();
+  const { connect } = useConnect();
+  const { connectors, disconnect } = useDisconnect();
+
+  const { data: ensName, error, status } = useEnsName({ address });
+  console.log("isConnected:", isConnected);
+  console.log("address:", address);
+  console.log("chainId:", chainId);
+  console.log("connectors:", connectors);
+  console.log("ensName:", ensName);
+  console.log("status:", status);
+  console.log("error:", error);
+
   const handleEvmModal = () => {
     setOpenEvmModal(true);
   };
@@ -16,6 +32,21 @@ function Chains({ onSelectChain }) {
   const handleCloseModal = () => {
     setOpenEvmModal(false);
     setOpenSolanaModal(false);
+  };
+
+  const connectMetaMask = () => {
+    if (typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask) {
+      connect({ connector: metaMask() });
+    } else {
+      alert("MetaMask is not installed. Please install it.");
+      window.open("https://metamask.io/download.html", "_blank");
+    }
+  };
+
+  const handleDisconnect = () => {
+    connectors.forEach((connector) => {
+      disconnect({ connector });
+    });
   };
 
   return (
@@ -71,17 +102,35 @@ function Chains({ onSelectChain }) {
         closeModal={handleCloseModal}
       /> */}
 
-      {/* <Modal
+      <Modal
         title="Connect a wallet on EVM to continue"
         isOpen={openEvmModal}
         closeModal={handleCloseModal}
+        handleMetamask={connectMetaMask}
       />
       <Modal
         title="Connect a wallet on
 Solana to continue"
         isOpen={openSolanaModal}
         closeModal={handleCloseModal}
-      /> */}
+      />
+
+      {isConnected ? (
+        <button
+          className="px-2 py-1.5 bg-[#f0f0f0] rounded-[10px] justify-center items-center flex"
+          onClick={handleDisconnect}
+        >
+          <span className="text-black/30 text-base font-semibold font-['Urbanist'] leading-normal">
+            Disconnect
+          </span>
+        </button>
+      ) : (
+        <button className="px-2 py-1.5 bg-[#f0f0f0] rounded-[10px] justify-center items-center flex">
+          <span className="text-black/30 text-base font-semibold font-['Urbanist'] leading-normal">
+            {}
+          </span>
+        </button>
+      )}
     </div>
   );
 }
