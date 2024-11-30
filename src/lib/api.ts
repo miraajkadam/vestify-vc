@@ -1,4 +1,7 @@
+import { httpClientRequest } from "@/utils/axios-utils";
+import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
+import { url } from "inspector";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
@@ -149,7 +152,7 @@ export interface Project {
   round: string;
 }
 
-const api: AxiosInstance = axios.create({
+export const api: AxiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",

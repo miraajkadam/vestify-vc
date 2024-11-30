@@ -55,7 +55,7 @@ function Profile({ profile }: { profile: any }) {
           <div className="p-5 flex-col justify-between h-full w-full  inline-flex text-[#18191c] text-[15px] font-medium font-['Urbanist'] leading-[17.39px]">
             <span>Social Media:</span>
             <div className="flex gap-5 py-4 flex-row justify-between items-start ">
-              {Object.entries(profile.social).map(
+              {Object.entries(profile?.social).map(
                 ([platform, url]: [any, unknown]) => (
                   <a
                     key={platform}

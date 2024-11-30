@@ -22,7 +22,7 @@ function Projects({ profile }: { profile: any }) {
 
               {/* <br className="h-[1px] bg-gray w-full "></br> */}
 
-              {profile?.projects.map((item: any, index: number) => (
+              {profile?.projects?.map((item: any, index: number) => (
                 <React.Fragment key={index}>
                   <div className="h-[55.36px] col-span-2 flex justify-start items-center">
                     <div className="w-[55.36px] h-[55.36px] bg-[#d9d9d9]" />

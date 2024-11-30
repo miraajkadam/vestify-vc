@@ -6,49 +6,55 @@ import Profile from "@/components/vcprofile/Profile";
 import Descp from "@/components/vcprofile/Descp";
 import { GetVCProjectsResponse } from "@/lib/api";
 import Projects from "@/components/vcprofile/Projects";
+import { useVCProfileData } from "@/hooks/useVCProfile";
 
 const VCProfilePage2: React.FC = () => {
   // const [profile, setProfile] = useState<VCProfile | null>(null);
-  const [profile, setProfile] = useState<GetVCProjectsResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [profile, setProfile] = useState<GetVCProjectsResponse | null>(null);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    console.log("CALLED");
-    const fetchProfile = async () => {
-      try {
-        setIsLoading(true);
-        const response = await getVCProfile();
-        if (response.success) {
-          console.log(response, "RESPONSE");
-          setProfile(response.data);
-        } else {
-          console.log(response, "ERROR");
-          setError(response.message ?? "An error occurred");
-        }
-      } catch (err) {
-        setError("Failed to fetch VC profile");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const { data: profileData, isError, error, isLoading } = useVCProfileData();
 
-    fetchProfile();
-  }, []);
+  // useEffect(() => {
+  //   const fetchProfile = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       const response = await getVCProfile();
+  //       if (response.success) {
+  //         console.log(response, "RESPONSE");
+  //         setProfile(response.data);
+  //       } else {
+  //         console.log(response, "ERROR");
+  //         setError(response.message ?? "An error occurred");
+  //       }
+  //     } catch (err) {
+  //       setError("Failed to fetch VC profile");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchProfile();
+  // }, []);
 
   if (isLoading) return <LoadingSpinner />;
-  if (error) return <ErrorMessage message={error} />;
-  if (!profile) return <NoProfileData />;
+  if (isError) {
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred.";
+    return <ErrorMessage message={errorMessage} />;
+  }
+  if (!profileData?.data) return <NoProfileData />;
 
   return (
     <div className=" h-[100vh] w-full bg-white justify-start items-start inline-flex overflow-y-scroll ">
       <div className="w-full px-8 pb-8 bg-white flex-col justify-start items-start gap-[25px] inline-flex">
         <div className="w-full flex-col justify-start items-end flex">
-          <Navbar profile={profile} />
-          <Profile profile={profile} />
+          <Navbar profile={profileData?.data} />
+          <Profile profile={profileData?.data} />
         </div>
-        <Descp profile={profile} />
-        <Projects profile={profile} />
+        <Descp profile={profileData?.data} />
+        <Projects profile={profileData?.data} />
       </div>
     </div>
   );
