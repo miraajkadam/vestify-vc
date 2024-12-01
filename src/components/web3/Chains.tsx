@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import DialogDemo from "../ui/modal";
-import Modal from "../ui/modal";
-import EVMWallets from "./EVMWallets";
 import { useAccount, useConnect, useEnsName, useDisconnect } from "wagmi";
-import { metaMask, walletConnect } from "wagmi/connectors";
+import { metaMask } from "wagmi/connectors";
+import EVMWalletModal from "./EVMWalletModal";
+import SolanaWalletModal from "./SolanaWalletModal";
 
-function Chains({ onSelectChain }) {
+function Chains() {
   const [openEvmModal, setOpenEvmModal] = useState<boolean>(false);
   const [openSolanaModal, setOpenSolanaModal] = useState<boolean>(false);
 
@@ -95,42 +94,23 @@ function Chains({ onSelectChain }) {
           </button>
         </div>
       </div>
-      {/* <EVMWallets /> */}
-      {/* <Modal
-        title="Connect a wallet on EVM to continue"
-        isOpen={openEvmModal}
-        closeModal={handleCloseModal}
-      /> */}
 
-      <Modal
+      <EVMWalletModal
         title="Connect a wallet on EVM to continue"
         isOpen={openEvmModal}
         closeModal={handleCloseModal}
         handleMetamask={connectMetaMask}
+        isConnected={isConnected}
+        handleDisconnect={handleDisconnect}
+        handleTrustWallet={() => {}}
+        handleWalletConnect={() => {}}
       />
-      <Modal
-        title="Connect a wallet on
-Solana to continue"
-        isOpen={openSolanaModal}
+      <SolanaWalletModal
         closeModal={handleCloseModal}
+        isOpen={openSolanaModal}
+        handleDisconnect={() => {}}
+        isConnected={false}
       />
-
-      {isConnected ? (
-        <button
-          className="px-2 py-1.5 bg-[#f0f0f0] rounded-[10px] justify-center items-center flex"
-          onClick={handleDisconnect}
-        >
-          <span className="text-black/30 text-base font-semibold font-['Urbanist'] leading-normal">
-            Disconnect
-          </span>
-        </button>
-      ) : (
-        <button className="px-2 py-1.5 bg-[#f0f0f0] rounded-[10px] justify-center items-center flex">
-          <span className="text-black/30 text-base font-semibold font-['Urbanist'] leading-normal">
-            {}
-          </span>
-        </button>
-      )}
     </div>
   );
 }
