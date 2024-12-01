@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAccount, useConnect, useEnsName, useDisconnect } from "wagmi";
-import { metaMask } from "wagmi/connectors";
+import { metaMask, walletConnect } from "wagmi/connectors";
 import EVMWalletModal from "./EVMWalletModal";
 import SolanaWalletModal from "./SolanaWalletModal";
 
@@ -42,11 +42,19 @@ function Chains() {
     }
   };
 
+  const connectWalletConnect = () => {
+    connect({connector: walletConnect({
+      projectId: "cff3ecbe18bc2b1755d7507dd22ba82b", 
+      showQrModal: true,
+    }) })
+  }
+
   const handleDisconnect = () => {
     connectors.forEach((connector) => {
       disconnect({ connector });
     });
   };
+
 
   return (
     <div className="h-[202.77px] px-7 py-8 bg-white rounded-[10px] border border-[#d0d4dd] flex-col justify-start items-end inline-flex">
@@ -102,8 +110,8 @@ function Chains() {
         handleMetamask={connectMetaMask}
         isConnected={isConnected}
         handleDisconnect={handleDisconnect}
-        handleTrustWallet={() => {}}
-        handleWalletConnect={() => {}}
+        handleTrustWallet={()=> {}}
+        handleWalletConnect={connectWalletConnect}
       />
       <SolanaWalletModal
         closeModal={handleCloseModal}
