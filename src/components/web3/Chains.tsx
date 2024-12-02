@@ -3,6 +3,9 @@ import { useAccount, useConnect, useEnsName, useDisconnect } from "wagmi";
 import { metaMask, walletConnect } from "wagmi/connectors";
 import EVMWalletModal from "./EVMWalletModal";
 import SolanaWalletModal from "./SolanaWalletModal";
+import { PhantomWalletAdapter } from "./Phantom_adapter";
+import Cookies from "js-cookie";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 function Chains() {
   const [openEvmModal, setOpenEvmModal] = useState<boolean>(false);
@@ -20,6 +23,10 @@ function Chains() {
   console.log("ensName:", ensName);
   console.log("status:", status);
   console.log("error:", error);
+
+  const [phantomWallet, setPhantomWallet] = useState<PhantomWalletAdapter | null>(null);
+  const [solanaAddress, setSolanaAddress] = useState<string | null>(null);
+  const [isPhantomConnected, setIsPhantomConnected] = useState(false);
 
   const handleEvmModal = () => {
     setOpenEvmModal(true);
@@ -43,11 +50,13 @@ function Chains() {
   };
 
   const connectWalletConnect = () => {
-    connect({connector: walletConnect({
-      projectId: "cff3ecbe18bc2b1755d7507dd22ba82b", 
-      showQrModal: true,
-    }) })
-  }
+    connect({
+      connector: walletConnect({
+        projectId: "cff3ecbe18bc2b1755d7507dd22ba82b",
+        showQrModal: true,
+      }),
+    });
+  };
 
   const handleDisconnect = () => {
     connectors.forEach((connector) => {
@@ -55,6 +64,47 @@ function Chains() {
     });
   };
 
+  const handlePhantomConnect = async () => {
+    try {
+      const adapter = new PhantomWalletAdapter();
+      await adapter.connect();
+      setPhantomWallet(adapter);
+      setSolanaAddress(adapter.publicKey?.toBase58() || null);
+      console.log(
+        "Connected to Phantom Wallet:",
+        adapter.publicKey?.toBase58()
+      );
+      setIsPhantomConnected(true)
+      // setWalletToCookies(adapter.publicKey?.toBase58(), true);
+      // queryClient.invalidateQueries(["wallet"]);
+    } catch (error) { 
+      console.error("Connection Error:", error);
+    }
+  };
+
+  const disconnectPhantomWallet = async () => {
+    if (phantomWallet) {
+      await phantomWallet.disconnect();
+      setPhantomWallet(null);
+      setSolanaAddress(null);
+      console.log("Disconnected from Phantom Wallet.");
+      setIsPhantomConnected(false)
+      // setWalletToCookies("", false);
+      // queryClient.invalidateQueries(["wallet"]);
+    }
+  };
+
+  const getWalletFromCookies = () => {
+    const solanaAddress = Cookies.get("walletAddress");
+    const isPhantomConnected = Cookies.get("isConnected") === "true";
+    setIsPhantomConnected(isPhantomConnected)
+    return { solanaAddress, isPhantomConnected };
+  };
+  
+  const setWalletToCookies = (walletAddress: string, isConnected: boolean) => {
+    Cookies.set("walletAddress", walletAddress);
+    Cookies.set("isConnected", isConnected.toString());
+  };
 
   return (
     <div className="h-[202.77px] px-7 py-8 bg-white rounded-[10px] border border-[#d0d4dd] flex-col justify-start items-end inline-flex">
@@ -110,14 +160,14 @@ function Chains() {
         handleMetamask={connectMetaMask}
         isConnected={isConnected}
         handleDisconnect={handleDisconnect}
-        handleTrustWallet={()=> {}}
         handleWalletConnect={connectWalletConnect}
       />
       <SolanaWalletModal
         closeModal={handleCloseModal}
         isOpen={openSolanaModal}
-        handleDisconnect={() => {}}
-        isConnected={false}
+        handleDisconnect={disconnectPhantomWallet}
+        isConnected={isPhantomConnected}
+        handlePhantom={handlePhantomConnect}
       />
     </div>
   );

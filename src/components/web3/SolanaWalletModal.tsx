@@ -90,7 +90,7 @@ const SolanaWalletModal = ({
                     walletLogo={"/Phantom.svg"}
                     walletName="Phantom"
                     handleWalletClick={handlePhantom}
-                    isConnected={false}
+                    isConnected={isConnected}
                     handleDisconnect={handleDisconnect}
                   />
                   <Wallets
