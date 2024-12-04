@@ -9,6 +9,8 @@ interface ModalProps {
   handleNightly?: () => void;
   handleDisconnect: () => void;
   isConnected: boolean;
+  title? : string
+  isNightlyConnected: boolean
 }
 
 const SolanaWalletModal = ({
@@ -20,6 +22,7 @@ const SolanaWalletModal = ({
   handleMagicEden,
   handleNightly,
   handlePhantom,
+  isNightlyConnected
 }: ModalProps) => {
   return (
     <>
@@ -104,7 +107,7 @@ const SolanaWalletModal = ({
                     walletLogo={"/Nightly.svg"}
                     walletName="Nightly"
                     handleWalletClick={handleNightly}
-                    isConnected={false}
+                    isConnected={isNightlyConnected}
                     handleDisconnect={handleDisconnect}
                   />
                 </div>

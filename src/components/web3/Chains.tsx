@@ -6,6 +6,7 @@ import SolanaWalletModal from "./SolanaWalletModal";
 import { PhantomWalletAdapter } from "./Phantom_adapter";
 import Cookies from "js-cookie";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getNightlyAdapter } from "./NightlyAdapter";
 
 function Chains() {
   const [openEvmModal, setOpenEvmModal] = useState<boolean>(false);
@@ -24,9 +25,11 @@ function Chains() {
   console.log("status:", status);
   console.log("error:", error);
 
-  const [phantomWallet, setPhantomWallet] = useState<PhantomWalletAdapter | null>(null);
+  const [phantomWallet, setPhantomWallet] =
+    useState<PhantomWalletAdapter | null>(null);
   const [solanaAddress, setSolanaAddress] = useState<string | null>(null);
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
+  const [nightlyAddress, setNightlyAddress] = useState<string | undefined>();
 
   const handleEvmModal = () => {
     setOpenEvmModal(true);
@@ -74,36 +77,81 @@ function Chains() {
         "Connected to Phantom Wallet:",
         adapter.publicKey?.toBase58()
       );
-      setIsPhantomConnected(true)
+      setIsPhantomConnected(true);
       // setWalletToCookies(adapter.publicKey?.toBase58(), true);
       // queryClient.invalidateQueries(["wallet"]);
-    } catch (error) { 
+    } catch (error) {
       console.error("Connection Error:", error);
     }
   };
 
-  const disconnectPhantomWallet = async () => {
+  const disconnectSolanaWallet = async () => {
     if (phantomWallet) {
       await phantomWallet.disconnect();
       setPhantomWallet(null);
       setSolanaAddress(null);
       console.log("Disconnected from Phantom Wallet.");
-      setIsPhantomConnected(false)
+      setIsPhantomConnected(false);
       // setWalletToCookies("", false);
       // queryClient.invalidateQueries(["wallet"]);
+    } else {
+      try {
+        const adapter = await getNightlyAdapter();
+        await adapter.disconnect();
+        setNightlyAddress(undefined);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
   const getWalletFromCookies = () => {
     const solanaAddress = Cookies.get("walletAddress");
     const isPhantomConnected = Cookies.get("isConnected") === "true";
-    setIsPhantomConnected(isPhantomConnected)
+    setIsPhantomConnected(isPhantomConnected);
     return { solanaAddress, isPhantomConnected };
   };
-  
+
   const setWalletToCookies = (walletAddress: string, isConnected: boolean) => {
     Cookies.set("walletAddress", walletAddress);
     Cookies.set("isConnected", isConnected.toString());
+  };
+
+  useEffect(() => {
+    const init = async () => {
+      const adapter = await getNightlyAdapter();
+      // Eager connect
+      if (await adapter.canEagerConnect()) {
+        try {
+          await adapter.connect();
+          const publicKey = await adapter.accounts.get();
+          if (publicKey.length > 0) {
+            console.log(publicKey[0].address);
+            setNightlyAddress(publicKey[0].address);
+          }
+        } catch (error) {
+          await adapter.disconnect().catch(() => {});
+          console.log(error);
+        }
+      }
+    };
+    init();
+    // Try eagerly connect
+  }, []);
+
+  const handleNightlyConnect = async () => {
+    const adapter = await getNightlyAdapter();
+    try {
+      await adapter.connect();
+      const publicKey = await adapter.accounts.get();
+      if (publicKey.length > 0) {
+        setNightlyAddress(publicKey[0].address);
+        console.log(publicKey[0].address);
+      }
+    } catch (error) {
+      await adapter.disconnect().catch(() => {});
+      console.log(error);
+    }
   };
 
   return (
@@ -165,9 +213,11 @@ function Chains() {
       <SolanaWalletModal
         closeModal={handleCloseModal}
         isOpen={openSolanaModal}
-        handleDisconnect={disconnectPhantomWallet}
+        handleDisconnect={disconnectSolanaWallet}
         isConnected={isPhantomConnected}
         handlePhantom={handlePhantomConnect}
+        handleNightly={handleNightlyConnect}
+        isNightlyConnected={nightlyAddress !== undefined}
       />
     </div>
   );
