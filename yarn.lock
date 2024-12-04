@@ -4892,10 +4892,10 @@ follow-redirects@^1.15.6:
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.9.tgz"
   integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
 
-fomo-deal-sdk-v1@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.npmjs.org/fomo-deal-sdk-v1/-/fomo-deal-sdk-v1-0.0.1.tgz"
-  integrity sha512-f8uIAhwfqK5s0YmAEa4UJZLcYaRQxkS31xNqCufVHcR7NsannxVGjuX/e3Z7zPGVCJQt5VfPZdDzIJ/5aG+QPQ==
+fomo-deal-sdk-v1@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.npmjs.org/fomo-deal-sdk-v1/-/fomo-deal-sdk-v1-0.0.6.tgz"
+  integrity sha512-FLCHP5U/tZm2sBNjUra57tvv5BoXY7CWr/kc0gAOYcdTM7UMrdzN9Ji04vax+qCjjqm1OSvIqLp7yiUEsC9LQA==
   dependencies:
     "@solana/web3.js" "^1.95.4"
     date-fns "^4.1.0"
