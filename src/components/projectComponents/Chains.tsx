@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useAccount, useConnect, useEnsName, useDisconnect } from "wagmi";
 import { metaMask, walletConnect } from "wagmi/connectors";
-import EVMWalletModal from "./EVMWalletModal";
-import SolanaWalletModal from "./SolanaWalletModal";
-import { PhantomWalletAdapter } from "./Phantom_adapter";
+import EVMWalletModal from "../web3/EVMWalletModal";
+import SolanaWalletModal from "../web3/SolanaWalletModal";
+import { PhantomWalletAdapter } from "../web3/Phantom_adapter";
 import Cookies from "js-cookie";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getNightlyAdapter } from "./NightlyAdapter";
+import { getNightlyAdapter } from "../web3/NightlyAdapter";
 
-function Chains() {
+interface projectWalletData {
+  chain: string | undefined,
+  walletAddress: `0x${string}` | undefined
+}
+
+
+interface ChainsProps {
+  onComplete: (data: { projectWallet: projectWalletData }) => void;
+}
+
+const Chains: React.FC<ChainsProps> = ({
+    onComplete
+}) => {
   const [openEvmModal, setOpenEvmModal] = useState<boolean>(false);
   const [openSolanaModal, setOpenSolanaModal] = useState<boolean>(false);
 
@@ -30,6 +42,7 @@ function Chains() {
   const [solanaAddress, setSolanaAddress] = useState<string | null>(null);
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
   const [nightlyAddress, setNightlyAddress] = useState<string | undefined>();
+  // const [projectWalletData, setProjectWalletData] = useState<projectWalletData>();
 
   const handleEvmModal = () => {
     setOpenEvmModal(true);
@@ -45,12 +58,24 @@ function Chains() {
 
   const connectMetaMask = () => {
     if (typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask) {
+      console.log("connectinggggggggggggggggggggg")
       connect({ connector: metaMask() });
     } else {
       alert("MetaMask is not installed. Please install it.");
       window.open("https://metamask.io/download.html", "_blank");
-    }
+    } 
   };
+
+  useEffect(()=> {
+    const projectWalletData : projectWalletData = {
+      chain: chainId === 11155111 ? "EVM" : "SOLANA",
+      walletAddress: address
+    }   
+    console.log("projectWalletData", projectWalletData) 
+    onComplete({
+      projectWallet: projectWalletData
+    })
+  }, [chainId, address])
 
   const connectWalletConnect = () => {
     connect({
@@ -214,7 +239,7 @@ function Chains() {
         closeModal={handleCloseModal}
         isOpen={openSolanaModal}
         handleDisconnect={disconnectSolanaWallet}
-        isConnected={isPhantomConnected}
+        isConnected={solanaAddress !== undefined}
         handlePhantom={handlePhantomConnect}
         handleNightly={handleNightlyConnect}
         isNightlyConnected={nightlyAddress !== undefined}

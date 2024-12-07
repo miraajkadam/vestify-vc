@@ -9,9 +9,11 @@ import PartnersAndInvestors from "./PartnersAndInvestors";
 import Socials from "./Socials";
 import { createProject } from "@/lib/api";
 import StepIndicator from "./StepIndicator";
-import { any } from "zod";
+import { any, string } from "zod";
 import { TeamMember, Partner, ProjectRound } from "@/lib/api";
-import ConnectWallet from "./ConnectWallet";
+import Chains from "./Chains";
+import { FomoDeal, Network, EthereumOptions, ProjectParams, SolanaOptions } from "fomo-deal-sdk-v1";
+import { ethers } from "ethers";
 
 type ProjectDataState = {
   info: {
@@ -38,6 +40,10 @@ type ProjectDataState = {
   teamAndAdvisors: any[];
   partnersAndInvestors: any[];
   projectSocials: Record<string, string>;
+  projectWallet: {
+    chain: string | undefined;
+    walletAddress?:  `0x${string}` | undefined;
+  }
 };
 
 const ProjectCreationForm: React.FC<{
@@ -65,6 +71,10 @@ const ProjectCreationForm: React.FC<{
     teamAndAdvisors: [],
     partnersAndInvestors: [],
     projectSocials: {},
+    projectWallet:{
+      chain: "",
+      walletAddress: `0x${""}`
+    }
   });
 
   const router = useRouter();
@@ -76,10 +86,17 @@ const ProjectCreationForm: React.FC<{
     { name: "Team & Advisors", component: TeamAndAdvisors },
     { name: "Partners & Investors", component: PartnersAndInvestors },
     { name: "Socials", component: Socials },
-    { name: "ConnectWallet", component: ConnectWallet },
+    { name: "ConnectWallet", component: Chains },
   ];
 
+  const fomoDeal = new FomoDeal();
   const CurrentStepComponent = steps[step - 1].component;
+
+  const createProjectSDK = async (chain: string | undefined, projectData : ProjectParams) => {
+    const network = chain === "EVM" ? Network.ETHEREUM : Network.SOLANA
+    let options = {}  // TODO : need to check
+    await fomoDeal.createOrUpdateProject(network, options, projectData)
+  }
 
   const handleStepComplete = (stepData: Partial<ProjectDataState>) => {
     console.log("Step Data received in handleStepComplete:", stepData);
@@ -122,7 +139,23 @@ const ProjectCreationForm: React.FC<{
       };
       console.log("projectDataToCreate", projectDataToCreate);
       await createProject(projectDataToCreate);
-      // await createProject(projectData);
+      const projectDataParams : ProjectParams = {
+        projectName: projectData.info.name,
+        poolFee: projectData.deals.poolFee,
+        price: Number(projectData.tokenMetrics[0].price),
+        minAllocation: projectData.deals.minimum,
+        maxAllocation: projectData.deals.maximum,
+        vcAddress: `${projectData.projectWallet.walletAddress}`,
+        fundWallet: projectData.tokenMetrics[0].fdv,  // TODO : need to check
+        hardCap:1,  // TODO : need to check
+        merkleRoot: "",  // TODO : need to check
+        startTime: Number(projectData.deals.startDate),
+        endTime: Number(projectData.deals.endDate),
+        paymentTokenAddresses: [""], // TODO : need to check
+        projectToken: projectData.info.name,  // TODO : need to check
+        projectCount: 1,  // TODO : need to check
+      }
+      createProjectSDK(projectData?.projectWallet?.chain, projectDataParams)
       router.push("/dashboard");
     } catch (error) {
       console.error("Project creation error:", error);
@@ -156,6 +189,8 @@ const ProjectCreationForm: React.FC<{
                 ? (projectData.partnersAndInvestors as Partner[])
                 : step === 6
                 ? projectData.projectSocials
+                : step === 7
+                ? projectData.projectWallet
                 : undefined
             }
           />
