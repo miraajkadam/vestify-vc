@@ -1,12 +1,12 @@
-import React from "react";
-import Chains from "../web3/Chains";
+// import React from "react";
+// import Chains from "./Chains";
 
-const ConnectWallet: React.FC = () => {
-  return (
-    <div>
-      <Chains />
-    </div>
-  );
-};
+// const ConnectWallet: React.FC = () => {
+//   return (
+//     <div>
+//       <Chains />
+//     </div>
+//   );
+// };
 
-export default ConnectWallet;
+// export default ConnectWallet;

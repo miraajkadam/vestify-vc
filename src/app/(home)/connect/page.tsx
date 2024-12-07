@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Chains from "@/components/web3/Chains";
+import Chains from "@/components/projectComponents/Chains";
 import EVMWallets from "@/components/web3/EVMWallets";
 import SolanaWallets from "@/components/web3/SolanaWallets";
 
