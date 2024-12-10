@@ -3,11 +3,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProjectCreationForm from "@/components/projectComponents/ProjectCreationForm";
 import BackButton from "@/components/ui/BackButton";
+import { useWalletInfo } from "@/store/walletContext";
 
 export default function CreateProjectPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
+  const { connectedWalletAddressInfo } = useWalletInfo();
 
+  console.log(connectedWalletAddressInfo);
   const handleBack = () => {
     if (step > 1) {
       setStep((prevStep) => prevStep - 1);

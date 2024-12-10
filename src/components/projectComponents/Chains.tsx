@@ -9,18 +9,15 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getNightlyAdapter } from "../web3/NightlyAdapter";
 
 interface projectWalletData {
-  chain: string | undefined,
-  walletAddress: `0x${string}` | undefined
+  chain: string | undefined;
+  walletAddress: `0x${string}` | undefined;
 }
-
 
 interface ChainsProps {
   onComplete: (data: { projectWallet: projectWalletData }) => void;
 }
 
-const Chains: React.FC<ChainsProps> = ({
-    onComplete
-}) => {
+const Chains: React.FC<ChainsProps> = ({ onComplete }) => {
   const [openEvmModal, setOpenEvmModal] = useState<boolean>(false);
   const [openSolanaModal, setOpenSolanaModal] = useState<boolean>(false);
 
@@ -58,24 +55,24 @@ const Chains: React.FC<ChainsProps> = ({
 
   const connectMetaMask = () => {
     if (typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask) {
-      console.log("connectinggggggggggggggggggggg")
+      console.log("connectinggggggggggggggggggggg");
       connect({ connector: metaMask() });
     } else {
       alert("MetaMask is not installed. Please install it.");
       window.open("https://metamask.io/download.html", "_blank");
-    } 
+    }
   };
 
-  useEffect(()=> {
-    const projectWalletData : projectWalletData = {
+  useEffect(() => {
+    const projectWalletData: projectWalletData = {
       chain: chainId === 11155111 ? "EVM" : "SOLANA",
-      walletAddress: address
-    }   
-    console.log("projectWalletData", projectWalletData) 
+      walletAddress: address,
+    };
+    console.log("projectWalletData", projectWalletData);
     onComplete({
-      projectWallet: projectWalletData
-    })
-  }, [chainId, address])
+      projectWallet: projectWalletData,
+    });
+  }, [chainId, address]);
 
   const connectWalletConnect = () => {
     connect({
@@ -246,6 +243,6 @@ const Chains: React.FC<ChainsProps> = ({
       />
     </div>
   );
-}
+};
 
 export default Chains;

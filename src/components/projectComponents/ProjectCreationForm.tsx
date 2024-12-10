@@ -20,6 +20,8 @@ import {
   SolanaOptions,
 } from "fomo-deal-sdk-v1";
 import { ethers } from "ethers";
+import WalletConnection from "./WalletConnection";
+import { useWalletInfo } from "@/store/walletContext";
 
 type ProjectDataState = {
   info: {
@@ -59,6 +61,7 @@ const ProjectCreationForm: React.FC<{
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFinalStep, setIsFinalStep] = useState(false);
+
   const [projectData, setProjectData] = useState<ProjectDataState>({
     info: {
       name: "",
@@ -92,7 +95,7 @@ const ProjectCreationForm: React.FC<{
     { name: "Team & Advisors", component: TeamAndAdvisors },
     { name: "Partners & Investors", component: PartnersAndInvestors },
     { name: "Socials", component: Socials },
-    { name: "ConnectWallet", component: Chains },
+    { name: "ConnectWallet", component: WalletConnection },
   ];
 
   const fomoDeal = new FomoDeal();

@@ -2,7 +2,13 @@ import React from "react";
 import { FaPlus } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
-function Navbar({ profile }: any) {
+function Navbar({
+  profile,
+  openModal,
+  connectedWalletAdd,
+  isConnected,
+  handleDisconnect,
+}: any) {
   const router = useRouter();
   return (
     <div className="w-full py-[32px] justify-between items-start flex">
@@ -12,13 +18,37 @@ function Navbar({ profile }: any) {
         </div>
       </div>
 
-      <button
-        className="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 flex items-center transition duration-300"
-        onClick={() => router.push("/add-project")}
-      >
-        <FaPlus className="mr-2" />
-        Add New Project
-      </button>
+      <div className="flex gap-2">
+        {isConnected ? (
+          <>
+            <button className="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 flex items-center transition duration-300">
+              {connectedWalletAdd}
+            </button>
+            <button
+              onClick={handleDisconnect}
+              className="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 flex items-center transition duration-300"
+            >
+              Disconnect
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={openModal}
+            className="px-4 py-2  border-indigo-600 rounded-full text-black font-semibold border-2 hover:bg-indigo-700 hover:text-white transition"
+          >
+            Connect Wallet
+          </button>
+        )}
+
+        <button
+          disabled={!isConnected}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 flex items-center transition duration-300"
+          onClick={() => router.push("/createProject")}
+        >
+          <FaPlus className="mr-2" />
+          Add New Project
+        </button>
+      </div>
     </div>
   );
 }
