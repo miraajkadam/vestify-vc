@@ -39,7 +39,6 @@ const Dashboard: React.FC = () => {
         const vcId = decodedToken.user.id;
 
         const response = await getVCProjects(vcId);
-        console.log("dashboard", response);
 
         if (response.success) {
           setProjects(
