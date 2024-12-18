@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import { getVCProjects } from "@/lib/api";
 import ProjectCard from "@/components/projectComponents/ProjectCard";
 import { FaArrowLeft, FaPlus, FaSearch } from "react-icons/fa";
-
+import Papa from "papaparse";
 interface DecodedToken {
   user: { id: string };
   iat: number;
@@ -94,6 +94,7 @@ const Dashboard: React.FC = () => {
                 <FaPlus className="mr-2" />
                 Add New Project
               </button>
+              {/* <input type="file" accept=".csv" onChange={handleUploadFile} /> */}
             </div>
           </div>
           <div className="mt-[32px] mb-[24px] bg-gray-200 p-2 rounded-full w-[30px]">

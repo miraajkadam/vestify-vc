@@ -42,7 +42,7 @@ function Navbar({
 
         <button
           disabled={!isConnected}
-          className="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 flex items-center transition duration-300"
+          className="bg-indigo-600 text-white px-4 py-2 cursor-pointer rounded-full hover:bg-indigo-700 flex items-center transition duration-300"
           onClick={() => router.push("/createProject")}
         >
           <FaPlus className="mr-2" />

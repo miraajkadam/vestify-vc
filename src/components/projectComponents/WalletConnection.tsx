@@ -1,16 +1,19 @@
+"use client";
+
 import { useWalletInfo } from "@/store/walletContext";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 
 interface projectWalletData {
   chain: string | undefined;
   walletAddress: `0x${string}` | undefined;
+  fundWalletAddress: string;
 }
 
 interface ChainsProps {
   onComplete: (data: { projectWallet: projectWalletData }) => void;
 }
 
-const WalletConnection = ({ onComplete }: ChainsProps) => {
+const WalletConnection: FC<ChainsProps> = ({ onComplete }) => {
   const { connectedWalletAddressInfo } = useWalletInfo();
 
   const { chain, walletAdd } = connectedWalletAddressInfo;
@@ -32,6 +35,7 @@ const WalletConnection = ({ onComplete }: ChainsProps) => {
       const payload = {
         walletAddress: walletAdd,
         chain,
+        fundWalletAddress: fundraisingWalletAddress,
       };
 
       onComplete({

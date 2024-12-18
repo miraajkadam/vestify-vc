@@ -51,6 +51,7 @@ type ProjectDataState = {
   projectWallet: {
     chain: string | undefined;
     walletAddress?: `0x${string}` | undefined;
+    fundWalletAddress: string;
   };
 };
 
@@ -83,6 +84,7 @@ const ProjectCreationForm: React.FC<{
     projectWallet: {
       chain: "",
       walletAddress: `0x${""}`,
+      fundWalletAddress: "",
     },
   });
 
@@ -99,6 +101,7 @@ const ProjectCreationForm: React.FC<{
   ];
 
   const fomoDeal = new FomoDeal();
+  console.log(steps, step, "TEST STEP");
   const CurrentStepComponent = steps[step - 1].component;
 
   const createProjectSDK = async (
@@ -133,6 +136,7 @@ const ProjectCreationForm: React.FC<{
     }
   };
   useEffect(() => {
+    console.log("CALLED");
     if (isFinalStep) {
       handleSubmit(); // Trigger form submission after the final step
     }
@@ -158,9 +162,10 @@ const ProjectCreationForm: React.FC<{
         minAllocation: projectData.deals.minimum,
         maxAllocation: projectData.deals.maximum,
         vcAddress: `${projectData.projectWallet.walletAddress}`, //connected wallet
-        fundWallet: projectData.tokenMetrics[0].fdv, // TODO : need to check
+        fundWallet: projectData.projectWallet.fundWalletAddress, // TODO : need to check
         hardCap: 1, // TODO : need to check [maximum raising amt]
-        merkleRoot: "", // TODO : need to check [subscribed user add from vcinfo] =>MIRAAJ
+        merkleRoot:
+          "0x00000000000000000000000000000000000000000000000000000000000000000", // TODO : need to check [subscribed user add from vcinfo] =>MIRAAJ
         startTime: Number(projectData.deals.startDate), //[epoc timestamp ]
         endTime: Number(projectData.deals.endDate),
         paymentTokenAddresses: [""], // TODO : need to check

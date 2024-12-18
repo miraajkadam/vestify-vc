@@ -23,7 +23,7 @@ const ProjectDetailsPage = async ({ params }: { params: { id: string } }) => {
     partnersAndInvestors,
   } = projectDetails.data;
 
-  console.log(projectDetails);
+  // console.log(projectDetails);
 
   return (
     <div className="h-[100vh] w-full bg-white items-start inline-flex overflow-y-scroll">
