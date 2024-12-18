@@ -22,6 +22,7 @@ import {
 import { ethers } from "ethers";
 import WalletConnection from "./WalletConnection";
 import { useWalletInfo } from "@/store/walletContext";
+import { useMerkleRootWallets } from "@/hooks/useMerkleRootAddresses";
 
 type ProjectDataState = {
   info: {
@@ -62,7 +63,8 @@ const ProjectCreationForm: React.FC<{
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFinalStep, setIsFinalStep] = useState(false);
-
+  const { data: merkleRootWallets } = useMerkleRootWallets();
+  console.log(merkleRootWallets);
   const [projectData, setProjectData] = useState<ProjectDataState>({
     info: {
       name: "",
@@ -104,13 +106,28 @@ const ProjectCreationForm: React.FC<{
   console.log(steps, step, "TEST STEP");
   const CurrentStepComponent = steps[step - 1].component;
 
+  const contractAddress = "0x000000000000";
+  const abi = [{}];
+
   const createProjectSDK = async (
     chain: string | undefined,
     projectData: ProjectParams
   ) => {
     const network = chain === "EVM" ? Network.ETHEREUM : Network.SOLANA;
-    let options = {}; // TODO : need to check
-    await fomoDeal.createOrUpdateProject(network, options, projectData);
+    let options = {
+      ethereum: {
+        provider: window.ethereum,
+        contractAddress,
+        abi,
+        vcAddress: projectData.vcAddress,
+      },
+    }; // TODO : need to check
+    const sdkData = await fomoDeal.createOrUpdateProject(
+      network,
+      options,
+      projectData
+    );
+    return sdkData;
   };
 
   const handleStepComplete = (stepData: Partial<ProjectDataState>) => {
@@ -153,8 +170,8 @@ const ProjectCreationForm: React.FC<{
           tgeUnlock: metric.tgeUnlock,
         })),
       };
-      console.log("projectDataToCreate", projectDataToCreate);
-      await createProject(projectDataToCreate);
+      // console.log("projectDataToCreate", projectDataToCreate);
+      // await createProject(projectDataToCreate);
       const projectDataParams: ProjectParams = {
         projectName: projectData.info.name,
         poolFee: projectData.deals.poolFee,
@@ -165,15 +182,21 @@ const ProjectCreationForm: React.FC<{
         fundWallet: projectData.projectWallet.fundWalletAddress, // TODO : need to check
         hardCap: 1, // TODO : need to check [maximum raising amt]
         merkleRoot:
-          "0x00000000000000000000000000000000000000000000000000000000000000000", // TODO : need to check [subscribed user add from vcinfo] =>MIRAAJ
+          merkleRootWallets ||
+          "0x00000000000000000000000000000000000000000000000000000000000000",
         startTime: Number(projectData.deals.startDate), //[epoc timestamp ]
         endTime: Number(projectData.deals.endDate),
-        paymentTokenAddresses: [""], // TODO : need to check
+        paymentTokenAddresses: ["0xdAC17F958D2ee523a2206206994597C13D831ec7"], // TODO : need to check
         projectToken: projectData.info.name, // TODO : need to check
         projectCount: 1, // TODO : need to check //depends on project status [new=>0,existing one =>increment counter will get from SDK ]
       };
-      createProjectSDK(projectData?.projectWallet?.chain, projectDataParams);
-      router.push("/dashboard");
+      const sdkData = createProjectSDK(
+        projectData?.projectWallet?.chain,
+        projectDataParams
+      );
+      console.log(sdkData, "SDKDATA");
+
+      // router.push("/dashboard");
     } catch (error) {
       console.error("Project creation error:", error);
       setError(

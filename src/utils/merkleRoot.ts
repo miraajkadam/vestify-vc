@@ -14,7 +14,7 @@ const hash = (value: string): string => {
  * @param items - Array of strings representing the data items
  * @returns The Merkle root as a string
  */
-const generateMerkleRoot = (items: string[]): string => {
+export const generateMerkleRoot = (items: string[]): string => {
   if (items.length === 0) {
     throw new Error("Cannot generate Merkle root for an empty array.");
   }

@@ -16,6 +16,7 @@ import { useAccount, useConnect, useEnsName, useDisconnect } from "wagmi";
 import { PhantomWalletAdapter } from "@/components/web3/Phantom_adapter";
 import { getNightlyAdapter } from "@/components/web3/NightlyAdapter";
 import { useWalletInfo } from "@/store/walletContext";
+import { useMerkleRootWallets } from "@/hooks/useMerkleRootAddresses";
 
 const VCProfilePage2: React.FC = () => {
   const fomoDeal = new FomoDeal();
@@ -28,7 +29,8 @@ const VCProfilePage2: React.FC = () => {
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
 
   const { data: profileData, isError, error, isLoading } = useVCProfileData();
-  console.log("profileData", profileData);
+
+  // console.log("merkleData", merkleData);
 
   // const getAllProjects = async () => {
   //   const projects = await fomoDeal.getAllProjects(Network.ETHEREUM);
