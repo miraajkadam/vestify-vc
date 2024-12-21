@@ -4,6 +4,7 @@ import twitterIcon from "../../../public/Twitter.svg";
 import telegramIcon from "../../../public/Telegram.svg";
 import linkedinIcon from "../../../public/Linkedin.svg";
 import Image from "next/image";
+import { ProjectData } from "@/hooks/useVCProfile";
 
 const socialIcons = {
   discord: discordIcon,
@@ -11,7 +12,9 @@ const socialIcons = {
   telegram: telegramIcon,
   website: linkedinIcon,
 };
-function Profile({ profile }: { profile: any }) {
+
+function Profile({ profile }: { profile: ProjectData }) {
+  console.log(profile, "DATA");
   return (
     <div className="w-full self-stretch h-[291.32px] flex-col justify-start items-start gap-[21.34px] flex">
       <div className="w-full justify-between items-start gap-[25.61px] inline-flex">
@@ -20,11 +23,11 @@ function Profile({ profile }: { profile: any }) {
           <div className="w-[316.50px] h-[139.05px] left-0 top-0 absolute bg-[#f8f8f8] rounded-3xl border border-black/10" />
           <div className="w-[250.53px] h-[73.21px] left-[32.99px] top-[32.92px] absolute justify-start items-center gap-[20.06px] inline-flex">
             <img
-              src={profile?.logoBase64}
+              src={""}
               className="w-[73.21px] h-[73.21px] bg-[#bad7ff] rounded-full"
             />
             <div className="text-[#18191c] text-[35px] font-bold font-['Urbanist'] leading-[46.12px]">
-              {profile?.name}
+              {profile?.vcName}
             </div>
           </div>
         </div>
@@ -35,7 +38,7 @@ function Profile({ profile }: { profile: any }) {
           <div className="left-[20.69px] top-[20.29px] absolute text-[#18191c] text-[15px] font-medium font-['Urbanist'] leading-[17.39px]">
             KYC Status
           </div>
-          {profile?.kycDone ? (
+          {profile?.kycStatus ? (
             <div className="h-[49.09px] p-[16.05px] left-[60px] top-[60.65px] absolute bg-[#00b800]/5 rounded-lg justify-start items-center gap-2 inline-flex">
               <div className="text-[#00ea00] text-2xl font-semibold font-['Urbanist'] leading-[32.81px]">
                 Approved
@@ -55,7 +58,7 @@ function Profile({ profile }: { profile: any }) {
           <div className="p-5 flex-col justify-between h-full w-full  inline-flex text-[#18191c] text-[15px] font-medium font-['Urbanist'] leading-[17.39px]">
             <span>Social Media:</span>
             <div className="flex gap-5 py-4 flex-row justify-between items-start ">
-              {Object.entries(profile?.social).map(
+              {Object.entries(profile?.socialMedia).map(
                 ([platform, url]: [any, unknown]) => (
                   <a
                     key={platform}
@@ -83,7 +86,7 @@ function Profile({ profile }: { profile: any }) {
             Fund Size
           </div>
           <div className="left-[19.30px] top-[62.15px] absolute text-[#18191c] text-[40px] font-bold font-['Urbanist'] leading-[41.35px]">
-            $1,00,000
+            {profile?.fundSize}
           </div>
         </div>
       </div>
@@ -119,7 +122,7 @@ function Profile({ profile }: { profile: any }) {
             <div className="w-[81.34px] h-[82.18px] left-[0.42px] top-0 absolute rounded-full border-8 border-[#46d5e5]" />
           </div>
           <div className="left-[20.78px] top-[65.83px] absolute text-[#18191c] text-3xl font-extrabold font-['Urbanist'] leading-[38.92px]">
-            32%
+            {profile?.lastProjectROI}
           </div>
         </div>
 
@@ -131,7 +134,7 @@ function Profile({ profile }: { profile: any }) {
           </div>
           <div className="w-[224.97px] h-[0px] left-[30.17px] top-[96.25px] absolute"></div>
           <div className="left-[199.96px] top-[20.31px] absolute text-[#18191c] text-3xl font-extrabold font-['Urbanist'] leading-7">
-            72%
+            {profile?.averageROI}
           </div>
         </div>
 

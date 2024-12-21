@@ -194,7 +194,9 @@ const ProjectCreationForm: React.FC<{
         projectData?.projectWallet?.chain,
         projectDataParams
       );
-      console.log(sdkData, "SDKDATA");
+
+      const data = await sdkData;
+      // console.log(data, "data");
 
       // router.push("/dashboard");
     } catch (error) {

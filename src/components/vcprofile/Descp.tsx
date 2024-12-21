@@ -1,6 +1,7 @@
+import { ProjectData } from "@/hooks/useVCProfile";
 import React from "react";
 
-function Descp({ profile }: any) {
+function Descp(profile: ProjectData) {
   return (
     <div className="h-full w-full flex-col justify-start items-start gap-[15px] flex">
       <div className="text-[#18191c] text-[25px] font-bold font-['Urbanist'] leading-7">

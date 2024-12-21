@@ -30,13 +30,6 @@ const VCProfilePage2: React.FC = () => {
 
   const { data: profileData, isError, error, isLoading } = useVCProfileData();
 
-  // console.log("merkleData", merkleData);
-
-  // const getAllProjects = async () => {
-  //   const projects = await fomoDeal.getAllProjects(Network.ETHEREUM);
-  //   console.log("projects", projects);
-  // };
-  // getAllProjects();
   const { isConnected, address, chainId } = useAccount();
   const { connect } = useConnect();
   const { connectors, disconnect } = useDisconnect();
@@ -153,7 +146,7 @@ const VCProfilePage2: React.FC = () => {
           />
           <Profile profile={profileData?.data} />
         </div>
-        <Descp profile={profileData?.data} />
+        {/* <Descp profile={profileData?.data} /> */}
         <Projects profile={profileData?.data} />
       </div>
 
