@@ -58,7 +58,6 @@ const MainConnectModal = ({
         className={` ${
           isOpen ? "flex" : "hidden"
         } h-[376.77px] px-7 py-8 bg-white rounded-[10px] border border-[#d0d4dd] flex-col justify-start items-end inline-flex`}
-        // onClick={closeModal}
       >
         <div className="fixed inset-0 bg-gray-500/75 transition-opacity"></div>
         <div

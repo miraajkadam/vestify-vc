@@ -106,6 +106,17 @@ interface DecodedToken {
   iat: number;
 }
 
+export interface WalletAPIResponse<T> {
+  data: T;
+  success: boolean;
+  message: string;
+}
+
+export interface WalletData {
+  address: string;
+  chain: string;
+}
+
 const fomoDeal = new FomoDeal();
 
 const getVCProfile = async (): Promise<ApiResponse<ProjectData>> => {
@@ -118,18 +129,18 @@ const getVCProfile = async (): Promise<ApiResponse<ProjectData>> => {
     const decodedToken = jwtDecode<DecodedToken>(token);
     const vcId = decodedToken.user.id;
 
-    // const [pdata, wdata] = await Promise.all([
-    //   api.get<ApiResponse<GetVCProjectsResponse>>(`/api/vc/${vcId}/profile`),
-    //   api.get(`/api/account/${vcId}/wallets`),
-    // ]);
+    const [response, walletData] = await Promise.all([
+      api.get<ApiResponse<GetVCProjectsResponse>>(`/api/vc/${vcId}/profile`),
+      api.get<WalletAPIResponse<WalletData[]>>(`/api/account/${vcId}/wallets`),
+      // api.get(`/api/vc/${vcId}/projects`),
 
-    // console.log(pdata, wdata, "PROMISE ALL");
+      //getProjectBYID
+    ]);
 
-    const response = await api.get<ApiResponse<GetVCProjectsResponse>>(
-      `/api/vc/${vcId}/profile`
-    );
+    // console.log(projectById, "PROJECT BY ID");
 
     const {
+      id,
       description,
       subscriptionFee,
       kycDone,
@@ -141,7 +152,8 @@ const getVCProfile = async (): Promise<ApiResponse<ProjectData>> => {
     const { discord, telegram, website, x } = social;
 
     const projects = await fomoDeal.getAllProjects(Network.ETHEREUM);
-
+    // const projectById = await fomoDeal.getProjectById(Network.ETHEREUM, id);
+    // console.log(projectById, "PROJECT BY ID");
     const vcprojects = projects?.projectCreateds?.map((item: Project) => {
       return {
         projectName: item.projectName,
@@ -172,11 +184,8 @@ const getVCProfile = async (): Promise<ApiResponse<ProjectData>> => {
       averageROI: "", //backend job
       subscriptionFee: subscriptionFee,
       description: description,
-      projectName: "",
       project: vcprojects,
-      linkedWallets: [
-        { address: "0x5e2c12098f76e5437d8304b3fa35b2d5297a2596", chain: "ETH" },
-      ],
+      linkedWallets: walletData?.data?.data,
     };
 
     return { data: projectData };

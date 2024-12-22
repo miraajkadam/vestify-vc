@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 type WalletInfoType = {
   walletAdd: `0x${string}` | undefined;
   chain: string;
+  isWalletConnected?: boolean;
 };
 
 type walletContextProp = {
@@ -27,18 +28,16 @@ export const WalletInfoContext = ({ children }: any) => {
     useState<WalletInfoType>({
       walletAdd: `0x${""}`,
       chain: "",
+      isWalletConnected: false,
     });
 
   const handleSetWalletAddressInfo = (data: WalletInfoType) => {
     setConnectedWalletAddressInfo({
       walletAdd: data.walletAdd,
       chain: data.chain,
+      isWalletConnected: data.isWalletConnected,
     });
   };
-
-  useEffect(() => {
-    console.log(connectedWalletAddressInfo);
-  }, [connectedWalletAddressInfo]);
 
   return (
     <WalletInfo.Provider

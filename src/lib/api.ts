@@ -356,6 +356,11 @@ export interface ProjectDetails {
   }>;
 }
 
+interface ApiWalletAddResponse {
+  success: boolean;
+  message: string;
+}
+
 export const getProjectDetails = async (
   projectId: string
 ): Promise<ApiResponse<ProjectDetails>> => {

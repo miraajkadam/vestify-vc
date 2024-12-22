@@ -25,7 +25,7 @@
     "fomo-deal-sdk-v1": "^0.0.6",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
-    "lucide-react": "^0.446.0",
+    "lucide-react": "^0.469.0",
     "next": "14.2.18",
     "papaparse": "^5.4.1",
     "react": "^18",

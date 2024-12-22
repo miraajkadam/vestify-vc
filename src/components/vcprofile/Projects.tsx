@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { ProjectData } from "@/hooks/useVCProfile";
+import EmptyState from "../ui/EmptyState";
 
 function Projects({ profile }: { profile: ProjectData }) {
   const router = useRouter();
@@ -9,6 +10,7 @@ function Projects({ profile }: { profile: ProjectData }) {
       <div className="text-[#18191c] text-[25px] font-bold font-['Urbanist'] leading-7">
         Last 5 projects
       </div>
+
       <div className="w-full self-stretch h-[351.50px] flex-col justify-between items-start gap-5 flex">
         <div className="w-full h-[31.50px] relative">
           <div className="w-full ">

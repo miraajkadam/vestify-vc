@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getVCProfile, VCProfile } from "@/lib/api";
+import { getVCProfile, registerVCWallet, VCProfile } from "@/lib/api";
 import Navbar from "@/components/vcprofile/Navbar";
 import Profile from "@/components/vcprofile/Profile";
 import Descp from "@/components/vcprofile/Descp";
@@ -17,18 +17,29 @@ import { PhantomWalletAdapter } from "@/components/web3/Phantom_adapter";
 import { getNightlyAdapter } from "@/components/web3/NightlyAdapter";
 import { useWalletInfo } from "@/store/walletContext";
 import { useMerkleRootWallets } from "@/hooks/useMerkleRootAddresses";
+import RegisterVCModal from "@/components/web3/registerVCModal";
+import EmptyState from "@/components/ui/EmptyState";
+import { useMutation } from "@tanstack/react-query";
+import { useAddWallet } from "@/hooks/useAddWallet";
 
 const VCProfilePage2: React.FC = () => {
   const fomoDeal = new FomoDeal();
   const [openModal, setOpenModal] = useState(false);
+  const [openRegisterModal, setOpenRegisterModal] = useState(false);
   const [phantomWallet, setPhantomWallet] =
     useState<PhantomWalletAdapter | null>(null);
 
   const [nightlyAddress, setNightlyAddress] = useState<string | undefined>();
   const [solanaAddress, setSolanaAddress] = useState<string | null>(null);
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
-
-  const { data: profileData, isError, error, isLoading } = useVCProfileData();
+  const { mutateAsync, isPending } = useAddWallet();
+  const {
+    data: profileData,
+    isError,
+    error,
+    isLoading,
+    refetch,
+  } = useVCProfileData();
 
   const { isConnected, address, chainId } = useAccount();
   const { connect } = useConnect();
@@ -51,6 +62,7 @@ const VCProfilePage2: React.FC = () => {
     handleSetWalletAddressInfo({
       walletAdd: address,
       chain: "EVM",
+      isWalletConnected: isConnected,
     });
   }, [address]);
   // useEffect(() => {
@@ -110,6 +122,33 @@ const VCProfilePage2: React.FC = () => {
     }
   };
 
+  const handleOpenRegisterModal = () => {
+    if (isConnected) {
+      console.log("connected");
+
+      setOpenRegisterModal(true);
+    } else {
+      setOpenModal(true);
+    }
+  };
+
+  const handleRegister = async () => {
+    try {
+      await mutateAsync({
+        address: connectedWalletAddressInfo.walletAdd,
+        chain: connectedWalletAddressInfo.chain,
+      });
+      console.log("wallet added");
+      setOpenRegisterModal(false);
+      alert("Wallet added successfully");
+      refetch();
+    } catch (error) {
+      console.log(error, "ERROR");
+      setOpenRegisterModal(false);
+      refetch(); //need to shift in try block
+    }
+  };
+
   const handleNightlyConnect = async () => {
     const adapter = await getNightlyAdapter();
     try {
@@ -147,7 +186,15 @@ const VCProfilePage2: React.FC = () => {
           <Profile profile={profileData?.data} />
         </div>
         {/* <Descp profile={profileData?.data} /> */}
-        <Projects profile={profileData?.data} />
+
+        {isConnected && profileData?.data?.linkedWallets?.length > 0 ? (
+          <Projects profile={profileData?.data} />
+        ) : (
+          <EmptyState
+            isWalletConnected={isConnected}
+            handleButtonClick={handleOpenRegisterModal}
+          />
+        )}
       </div>
 
       <MainConnectModal
@@ -162,6 +209,14 @@ const VCProfilePage2: React.FC = () => {
         handleNighly={handleNightlyConnect}
         isSolanaConnected={solanaAddress !== undefined}
         isNightlyConnected={nightlyAddress !== undefined}
+      />
+
+      <RegisterVCModal
+        handleClose={() => setOpenRegisterModal(false)}
+        isPending={isPending}
+        isOpen={openRegisterModal}
+        handleDisconnect={handleDisconnect}
+        handleRegister={handleRegister}
       />
     </div>
   );
