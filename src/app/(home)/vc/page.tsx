@@ -1,14 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getVCProfile, registerVCWallet, VCProfile } from "@/lib/api";
 import Navbar from "@/components/vcprofile/Navbar";
 import Profile from "@/components/vcprofile/Profile";
-import Descp from "@/components/vcprofile/Descp";
-import { GetVCProjectsResponse } from "@/lib/api";
 import Projects from "@/components/vcprofile/Projects";
 import { useVCProfileData } from "@/hooks/useVCProfile";
 import { FomoDeal, Network } from "fomo-deal-sdk-v1";
-import EVMWalletModal from "@/components/web3/EVMWalletModal";
 import MainConnectModal from "@/components/web3/MainConnectModal";
 import { metaMask, walletConnect } from "wagmi/connectors";
 
@@ -16,11 +12,10 @@ import { useAccount, useConnect, useEnsName, useDisconnect } from "wagmi";
 import { PhantomWalletAdapter } from "@/components/web3/Phantom_adapter";
 import { getNightlyAdapter } from "@/components/web3/NightlyAdapter";
 import { useWalletInfo } from "@/store/walletContext";
-import { useMerkleRootWallets } from "@/hooks/useMerkleRootAddresses";
 import RegisterVCModal from "@/components/web3/registerVCModal";
 import EmptyState from "@/components/ui/EmptyState";
-import { useMutation } from "@tanstack/react-query";
 import { useAddWallet } from "@/hooks/useAddWallet";
+import { useVCProjects } from "@/hooks/useVCProjects";
 
 const VCProfilePage2: React.FC = () => {
   const fomoDeal = new FomoDeal();
@@ -40,6 +35,8 @@ const VCProfilePage2: React.FC = () => {
     isLoading,
     refetch,
   } = useVCProfileData();
+
+  const { data: vcProjects } = useVCProjects();
 
   const { isConnected, address, chainId } = useAccount();
   const { connect } = useConnect();
@@ -65,9 +62,6 @@ const VCProfilePage2: React.FC = () => {
       isWalletConnected: isConnected,
     });
   }, [address]);
-  // useEffect(() => {
-  //   console.log(connectedWalletAddressInfo);
-  // }, [connectedWalletAddressInfo]);
 
   const connectWalletConnect = () => {
     connect({
@@ -185,10 +179,9 @@ const VCProfilePage2: React.FC = () => {
           />
           <Profile profile={profileData?.data} />
         </div>
-        {/* <Descp profile={profileData?.data} /> */}
 
         {isConnected && profileData?.data?.linkedWallets?.length > 0 ? (
-          <Projects profile={profileData?.data} />
+          <Projects projects={vcProjects} />
         ) : (
           <EmptyState
             isWalletConnected={isConnected}

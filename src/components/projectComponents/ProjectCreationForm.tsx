@@ -103,7 +103,6 @@ const ProjectCreationForm: React.FC<{
   ];
 
   const fomoDeal = new FomoDeal();
-  console.log(steps, step, "TEST STEP");
   const CurrentStepComponent = steps[step - 1].component;
 
   const contractAddress = "0x000000000000";

@@ -9,19 +9,20 @@ import Profile from "@/components/projectid/Profile";
 import Token from "@/components/projectid/Token";
 
 const ProjectDetailsPage = async ({ params }: { params: { id: string } }) => {
-  const projectDetails = await getProjectDetails(params.id);
+  // console.log(params.id, "params");
+  // const projectDetails = await getProjectDetails(params.id);
 
-  if (!projectDetails.success) {
-    return <div>Error loading project details</div>;
-  }
+  // if (!projectDetails.success) {
+  //   return <div>Error loading project details</div>;
+  // }
 
-  const {
-    project,
-    tokenMetrics,
-    projectSocials,
-    teamAndAdvisors,
-    partnersAndInvestors,
-  } = projectDetails.data;
+  // const {
+  //   project,
+  //   tokenMetrics,
+  //   projectSocials,
+  //   teamAndAdvisors,
+  //   partnersAndInvestors,
+  // } = projectDetails.data;
 
   // console.log(projectDetails);
 
@@ -40,13 +41,13 @@ const ProjectDetailsPage = async ({ params }: { params: { id: string } }) => {
                     </div>
                   </div>
 
-                  <div className="text-black text-3xl font-bold font-['Urbanist'] leading-[43.50px]">
+                  {/* <div className="text-black text-3xl font-bold font-['Urbanist'] leading-[43.50px]">
                     {project.name}
-                  </div>
+                  </div> */}
                 </div>
 
                 {/** Profile */}
-                <Profile tokenMetrics={tokenMetrics} project={project} />
+                {/* <Profile tokenMetrics={tokenMetrics} project={project} /> */}
               </div>
 
               <div className="h-full w-full flex-col justify-end items-end gap-[25px] inline-flex">
@@ -66,20 +67,20 @@ const ProjectDetailsPage = async ({ params }: { params: { id: string } }) => {
               <div className="w-full justify-start items-start gap-[53px] inline-flex">
                 <div className="w-full flex-col justify-start items-start gap-[25px] inline-flex">
                   {/** About */}
-                  <About project={project} />
+                  {/* <About project={project} /> */}
                   {/** Team */}
-                  <Team teamAndAdvisors={teamAndAdvisors} />
+                  {/* <Team teamAndAdvisors={teamAndAdvisors} /> */}
                   {/** Partners and Investors */}
-                  <Partner partnersAndInvestors={partnersAndInvestors} />
-                  <Token tokenMetrics={tokenMetrics} project={project} />
+                  {/* <Partner partnersAndInvestors={partnersAndInvestors} /> */}
+                  {/* <Token tokenMetrics={tokenMetrics} project={project} /> */}
                 </div>
 
                 {/** Deal Info */}
-                <Deal
+                {/* <Deal
                   socialLink={projectSocials}
                   project={project}
                   tokenMetrics={tokenMetrics}
-                />
+                /> */}
               </div>
             </div>
           </div>

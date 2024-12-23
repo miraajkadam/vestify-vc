@@ -137,7 +137,7 @@ const getVCProfile = async (): Promise<ApiResponse<ProjectData>> => {
       //getProjectBYID
     ]);
 
-    // console.log(projectById, "PROJECT BY ID");
+    console.log(response, "PROJECT BY ID");
 
     const {
       id,
@@ -152,7 +152,13 @@ const getVCProfile = async (): Promise<ApiResponse<ProjectData>> => {
     const { discord, telegram, website, x } = social;
 
     const projects = await fomoDeal.getAllProjects(Network.ETHEREUM);
-    // const projectById = await fomoDeal.getProjectById(Network.ETHEREUM, id);
+
+    // console.log(projects, "PROJECTS SDK");
+    //onChian ID
+    // const projectById = await fomoDeal.getProjectById(
+    //   Network.ETHEREUM,
+    //   "0xf9492e17a64410373b44a9c8137a0bc7e26700a405d3960342233e1075f74203"
+    // );
     // console.log(projectById, "PROJECT BY ID");
     const vcprojects = projects?.projectCreateds?.map((item: Project) => {
       return {
