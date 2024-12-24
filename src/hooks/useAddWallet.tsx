@@ -31,7 +31,7 @@ const registerVCWallet = async (payload: AddWalletPayload) => {
       accountId: vcId,
     };
     const res = await api.post(`/api/account/addWallet`, addWalletPayload);
-    console.log(res, "ADD WALLET RES");
+
     return res;
   } catch (error) {
     console.error("Error registering VC wallet:", error);

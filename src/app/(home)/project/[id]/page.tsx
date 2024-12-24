@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { getProjectDetails } from "@/lib/api";
 import About from "@/components/projectid/About";
 import Team from "@/components/projectid/Team";
@@ -7,8 +7,9 @@ import Partner from "@/components/projectid/Partner";
 import Deal from "@/components/projectid/Deal";
 import Profile from "@/components/projectid/Profile";
 import Token from "@/components/projectid/Token";
+import { useProjectDetails } from "@/hooks/useVCProjectDetails";
 
-const ProjectDetailsPage = async ({ params }: { params: { id: string } }) => {
+const ProjectDetailsPage = ({ params }: { params: { id: string } }) => {
   // console.log(params.id, "params");
   // const projectDetails = await getProjectDetails(params.id);
 
@@ -26,6 +27,20 @@ const ProjectDetailsPage = async ({ params }: { params: { id: string } }) => {
 
   // console.log(projectDetails);
 
+  const { data, isPending, isError } = useProjectDetails(params.id);
+
+  // const {} = data?.data?.project;
+
+  // console.log(data?.data., "PROJECT DATA");
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const data = await getProjectDetails(params.id);
+  //     console.log("PROJECTDATA", data);
+  //   };
+  //   fetchData();
+  // }, [params.id]);
+
   return (
     <div className="h-[100vh] w-full bg-white items-start inline-flex overflow-y-scroll">
       <div className="pt-[35px] w-full pb-8 bg-white flex-col justify-start items-end inline-flex">
@@ -41,13 +56,16 @@ const ProjectDetailsPage = async ({ params }: { params: { id: string } }) => {
                     </div>
                   </div>
 
-                  {/* <div className="text-black text-3xl font-bold font-['Urbanist'] leading-[43.50px]">
-                    {project.name}
-                  </div> */}
+                  <div className="text-black text-3xl font-bold font-['Urbanist'] leading-[43.50px]">
+                    {data?.data?.project.name}
+                  </div>
                 </div>
 
                 {/** Profile */}
-                {/* <Profile tokenMetrics={tokenMetrics} project={project} /> */}
+                <Profile
+                  tokenMetrics={data?.data?.tokenMetrics}
+                  project={data?.data?.project}
+                />
               </div>
 
               <div className="h-full w-full flex-col justify-end items-end gap-[25px] inline-flex">
@@ -67,20 +85,25 @@ const ProjectDetailsPage = async ({ params }: { params: { id: string } }) => {
               <div className="w-full justify-start items-start gap-[53px] inline-flex">
                 <div className="w-full flex-col justify-start items-start gap-[25px] inline-flex">
                   {/** About */}
-                  {/* <About project={project} /> */}
+                  <About project={data?.data?.project} />
                   {/** Team */}
-                  {/* <Team teamAndAdvisors={teamAndAdvisors} /> */}
+                  <Team teamAndAdvisors={data?.data?.teamAndAdvisors} />
                   {/** Partners and Investors */}
-                  {/* <Partner partnersAndInvestors={partnersAndInvestors} /> */}
-                  {/* <Token tokenMetrics={tokenMetrics} project={project} /> */}
+                  <Partner
+                    partnersAndInvestors={data?.data?.partnersAndInvestors}
+                  />
+                  <Token
+                    tokenMetrics={data?.data?.tokenMetrics}
+                    project={data?.data?.project}
+                  />
                 </div>
 
                 {/** Deal Info */}
-                {/* <Deal
-                  socialLink={projectSocials}
-                  project={project}
-                  tokenMetrics={tokenMetrics}
-                /> */}
+                <Deal
+                  socialLink={data?.data?.projectSocials}
+                  project={data?.data?.project}
+                  tokenMetrics={data?.data?.tokenMetrics}
+                />
               </div>
             </div>
           </div>

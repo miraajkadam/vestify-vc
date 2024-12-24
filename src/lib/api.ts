@@ -362,11 +362,11 @@ interface ApiWalletAddResponse {
 }
 
 export const getProjectDetails = async (
-  projectId: string
+  projectId?: string
 ): Promise<ApiResponse<ProjectDetails>> => {
   try {
     const response = await api.get<ApiResponse<ProjectDetails>>(
-      `/api/project/${projectId}`
+      `/api/project/0xf9492e17a64410373b44a9c8137a0bc7e26700a405d3960342233e1075f74203`
     );
     console.log("response data", response.data);
     return response.data;

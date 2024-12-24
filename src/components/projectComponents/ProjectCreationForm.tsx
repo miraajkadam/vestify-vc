@@ -152,7 +152,6 @@ const ProjectCreationForm: React.FC<{
     }
   };
   useEffect(() => {
-    console.log("CALLED");
     if (isFinalStep) {
       handleSubmit(); // Trigger form submission after the final step
     }
@@ -195,7 +194,7 @@ const ProjectCreationForm: React.FC<{
       );
 
       const data = await sdkData;
-      // console.log(data, "data");
+      console.log(data, "data");
 
       // router.push("/dashboard");
     } catch (error) {

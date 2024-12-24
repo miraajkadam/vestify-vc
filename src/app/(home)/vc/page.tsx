@@ -16,6 +16,7 @@ import RegisterVCModal from "@/components/web3/registerVCModal";
 import EmptyState from "@/components/ui/EmptyState";
 import { useAddWallet } from "@/hooks/useAddWallet";
 import { useVCProjects } from "@/hooks/useVCProjects";
+import { getProjectDetails } from "@/lib/api";
 
 const VCProfilePage2: React.FC = () => {
   const fomoDeal = new FomoDeal();

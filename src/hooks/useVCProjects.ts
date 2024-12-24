@@ -86,6 +86,8 @@ const getVCProjectsById = async (): Promise<ProjectedCreated> => {
 
     const { id } = response.data.data.projects[0];
 
+    console.log("BACKEND PID", response);
+
     const sdkVcProjects: ProjectedCreated = await fomoDeal.getProjectById(
       Network.ETHEREUM,
       id

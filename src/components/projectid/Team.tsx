@@ -1,6 +1,7 @@
 import React from "react";
+import { TeamAndAdvisor } from "./types";
 
-function Team({ teamAndAdvisors }: any) {
+function Team({ teamAndAdvisors }: { teamAndAdvisors?: TeamAndAdvisor[] }) {
   // console.log(teamAndAdvisors);
   return (
     <div className="h-[266.37px] w-full flex-col justify-start items-center gap-2.5 flex">
@@ -11,7 +12,7 @@ function Team({ teamAndAdvisors }: any) {
       </div>
 
       <div className="w-full justify-between items-center gap-[22.32px] inline-flex">
-        {teamAndAdvisors.map((member: any, index: number) => (
+        {teamAndAdvisors?.map((member: any, index: number) => (
           <div className="w-[238.45px] flex-col justify-start items-start gap-[20.09px] inline-flex">
             <div className="w-[238.45px] h-[208.37px] relative">
               <img

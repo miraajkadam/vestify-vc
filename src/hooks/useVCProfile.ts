@@ -1,7 +1,7 @@
-import { api } from "@/lib/api";
 import Cookies from "js-cookie";
 
 import { jwtDecode } from "jwt-decode";
+import { api } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { FomoDeal, Network } from "fomo-deal-sdk-v1";
 import { reset } from "viem/actions";

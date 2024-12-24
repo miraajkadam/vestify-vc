@@ -1,6 +1,11 @@
 import React from "react";
+import { Partners } from "./types";
 
-function Partner({ partnersAndInvestors }: any) {
+function Partner({
+  partnersAndInvestors,
+}: {
+  partnersAndInvestors?: Partners[];
+}) {
   return (
     <>
       <div className="w-full h-[0px] border border-[#18191c]/20"></div>
@@ -9,7 +14,7 @@ function Partner({ partnersAndInvestors }: any) {
           Partners and Investors
         </div>
         <div className="self-stretch justify-between items-start gap-[85px] inline-flex">
-          {partnersAndInvestors.map((partner: any, index: number) => (
+          {partnersAndInvestors?.map((partner: any, index: number) => (
             <img
               key={index}
               className="w-[124.27px] h-[25px]"

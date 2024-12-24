@@ -1,17 +1,22 @@
 import React from "react";
+import { Projects, TokenMetrics } from "./types";
 
-function Profile({ tokenMetrics, project }: any) {
-  const firstToken = tokenMetrics[0];
-
+function Profile({
+  tokenMetrics,
+  project,
+}: {
+  tokenMetrics?: TokenMetrics;
+  project?: Projects;
+}) {
   return (
     <>
       <div className="justify-start items-start gap-6 inline-flex">
         <div className="p-[15px] bg-[#f3f3f3] rounded-[10px] flex-col justify-start items-start gap-[15px] inline-flex">
           <div className="text-black text-[25px] font-extrabold font-['Urbanist'] leading-9">
-            ${firstToken?.price}
+            ${tokenMetrics?.price}
           </div>
           <div className="text-[#6c6c6c] text-base font-semibold font-['Urbanist'] leading-normal">
-            {firstToken?.round}
+            {tokenMetrics?.round}
           </div>
         </div>
         <div className="p-[15px] bg-[#f3f3f3] rounded-[10px] flex-col justify-start items-start gap-[15px] inline-flex">
