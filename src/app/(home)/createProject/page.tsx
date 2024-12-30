@@ -25,7 +25,7 @@ export default function CreateProjectPage() {
       <div className="flex items-center mb-6">
         <BackButton onClick={handleBack} />
       </div>
-      <ProjectCreationForm step={step} setStep={setStep} />
+      <ProjectCreationForm step={2} setStep={setStep} />
     </div>
   );
 }

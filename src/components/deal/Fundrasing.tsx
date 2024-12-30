@@ -1,6 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
+import { FileUploadModal } from "./UploadFile";
+import { useAddPools } from "@/hooks/useCreatePool";
+import { ToastContainer, toast } from "react-toastify";
+function Fundrasing({ projectId }: { projectId: string }) {
+  const [openModal, setOpenModal] = useState(false);
+  const [groupName, setGroupName] = useState<string>("");
+  const [isGroupNameAdded, setIsGroupNameAdded] = useState<boolean>(false);
+  const [excelData, setExcelData] = useState<any[]>([]);
 
-function Fundrasing() {
+  const { mutateAsync, isPending } = useAddPools();
+
+  const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setGroupName(e.target.value);
+    if (e.target.value.length === 0) {
+      setIsGroupNameAdded(true);
+    } else {
+      setIsGroupNameAdded(false);
+    }
+  };
+
+  const handleDistribute = async () => {
+    if (!groupName) {
+      setIsGroupNameAdded(true);
+    } else {
+      const payload = {
+        name: groupName,
+        addresses: excelData
+          .splice(0, excelData.length - 1)
+          .map((item) => item.walletAddress),
+        projectId: projectId,
+        fee: 433,
+        maxAllocation: 40,
+        minAllocation: 30,
+      };
+      try {
+        await mutateAsync(payload);
+        toast.success("Uploaded success fully");
+        setOpenModal(false);
+      } catch (err) {
+        setOpenModal(false);
+        toast.error("API got failed ");
+      }
+    }
+  };
+
   return (
     <div className="w-full h-full flex-col justify-start items-start gap-[50px] flex">
       <div className="  self-stretch h-[131px] flex-col justify-start items-start gap-10 flex">
@@ -13,11 +56,14 @@ function Fundrasing() {
           </div>
           <div className="h-[43px] justify-start items-center gap-[18px] flex">
             <div className="h-full px-2 bg-indigo-600 rounded-[5px] justify-center items-center gap-2.5 flex">
-              <div className="text-white text-lg font-semibold font-['Urbanist'] leading-loose">
-                Finish fundraising
-              </div>
+              <button
+                onClick={() => setOpenModal(true)}
+                className="text-white text-lg font-semibold font-['Urbanist'] leading-loose"
+              >
+                Add Pool
+              </button>
             </div>
-            <div className="h-full px-2 rounded-[5px] border border-[#908eb6] justify-center items-center gap-2.5 flex">
+            {/* <div className="h-full px-2 rounded-[5px] border border-[#908eb6] justify-center items-center gap-2.5 flex">
               <div className="text-[#908eb6] text-lg font-semibold font-['Urbanist'] leading-loose">
                 Pool links
               </div>
@@ -36,7 +82,7 @@ function Fundrasing() {
               <div className="text-[#908eb6] text-lg font-semibold font-['Urbanist'] leading-loose">
                 Add investor
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="w-full h-full flex-col justify-start items-start flex">
@@ -58,11 +104,11 @@ function Fundrasing() {
                 Investors
               </div>
             </div>
-            <div className="py-[15px] justify-center items-center gap-2.5 flex">
+            {/* <div className="py-[15px] justify-center items-center gap-2.5 flex">
               <div className="text-[#505050] text-lg font-semibold font-['Urbanist'] capitalize">
                 + Add pool
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="w-full h-[0px] relative">
             <div className="w-full h-[0px] left-0 top-0 absolute border border-[#e1e1e1]"></div>
@@ -250,6 +296,19 @@ function Fundrasing() {
         {/* <Table /> */}
         <div className="w-full h-[0px] left-[0.45px] top-[108.46px] absolute border border-[#18191c]/10"></div>
       </div>
+
+      <FileUploadModal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        groupName={groupName}
+        isGroupNameAdded={isGroupNameAdded}
+        handleTextInput={handleTextInput}
+        isPending={isPending}
+        handleUpload={handleDistribute}
+        excelData={excelData}
+        setExcelData={setExcelData}
+      />
+      <ToastContainer autoClose={5000} />
     </div>
   );
 }
