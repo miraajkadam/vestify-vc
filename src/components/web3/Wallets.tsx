@@ -9,9 +9,9 @@ const Wallets = ({
 }: {
   walletName: string;
   walletLogo: string;
-  isConnected: boolean;
+  isConnected?: boolean;
   handleWalletClick?: () => void;
-  handleDisconnect: () => void;
+  handleDisconnect?: () => void;
 }) => {
   return (
     <>

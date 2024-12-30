@@ -23,6 +23,7 @@ import { ethers } from "ethers";
 import WalletConnection from "./WalletConnection";
 import { useWalletInfo } from "@/store/walletContext";
 import { useMerkleRootWallets } from "@/hooks/useMerkleRootAddresses";
+import { Config, useConnectorClient } from 'wagmi';
 
 type ProjectDataState = {
   info: {
@@ -105,20 +106,17 @@ const ProjectCreationForm: React.FC<{
   const fomoDeal = new FomoDeal();
   const CurrentStepComponent = steps[step - 1].component;
 
-  const contractAddress = "0x000000000000";
-  const abi = [{}];
 
   const createProjectSDK = async (
     chain: string | undefined,
     projectData: ProjectParams
   ) => {
     const network = chain === "EVM" ? Network.ETHEREUM : Network.SOLANA;
+    const signer =  new ethers.BrowserProvider(window.ethereum);
+
     let options = {
       ethereum: {
-        provider: window.ethereum,
-        contractAddress,
-        abi,
-        vcAddress: projectData.vcAddress,
+        provider: signer,
       },
     }; // TODO : need to check
     const sdkData = await fomoDeal.createOrUpdateProject(
