@@ -57,8 +57,8 @@ const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
         minimum: parseFloat(minimum),
         acceptedTokens,
         poolFee: parseFloat(poolFee),
-        startDate: new Date(tge).toISOString(),
-        endDate: new Date(vesting).toISOString(),
+        startDate: tge,
+        endDate: vesting,
       },
     });
   };

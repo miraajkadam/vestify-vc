@@ -93,6 +93,18 @@ export interface ProjectData {
   teamAndAdvisors: TeamMember[];
   partnersAndInvestors: Partner[];
   projectSocials: ProjectSocials;
+  projectWallet: projectWallet,
+  onChain: onChain
+
+}
+
+interface projectWallet {
+  chain: string,
+  walletAddress: string
+}
+
+interface onChain {
+  projectId: string
 }
 export interface VCProfile {
   name: string;
@@ -212,7 +224,7 @@ export const createVC = async (
 };
 
 export const createProject = async (
-  data: Omit<ProjectData, "info"> & { info: Omit<ProjectInfo, "vcId"> }
+  data: Omit<ProjectData, "info"> & { info: Omit<ProjectInfo, "vcId"> }, projectId: string
 ): Promise<AxiosResponse<ApiResponse<{ project: ProjectData }>>> => {
   const token = Cookies.get("access_token");
   if (!token) {
@@ -228,6 +240,13 @@ export const createProject = async (
       ...data.info,
       vcId,
     },
+    projectWallet: {
+      chain: data.projectWallet.chain,
+      walletAddress: data.projectWallet.walletAddress
+    },
+    onChain: {
+      projectId: projectId
+    }
   };
   console.log(projectData);
 

@@ -65,7 +65,7 @@ const ProjectCreationForm: React.FC<{
   const [error, setError] = useState<string | null>(null);
   const [isFinalStep, setIsFinalStep] = useState(false);
   const { data: merkleRootWallets } = useMerkleRootWallets();
-  console.log(merkleRootWallets);
+  console.log(merkleRootWallets, "merkleRootWallets");
   const [projectData, setProjectData] = useState<ProjectDataState>({
     info: {
       name: "",
@@ -135,7 +135,8 @@ const ProjectCreationForm: React.FC<{
       console.log("Updated Project Data:", updatedData);
       return updatedData;
     });
-
+    // handleSubmit();
+    
     // // If this is the last step, submit the project
     // if (step === steps.length) {
     //   handleSubmit();
@@ -149,6 +150,21 @@ const ProjectCreationForm: React.FC<{
       setStep((prevStep) => prevStep + 1);
     }
   };
+ 
+  const addProject = async (projectData: ProjectDataState, projectID: string) => {
+    try {
+      console.log(" project data:", projectData);
+      const response = await createProject(projectData, projectID);
+      console.log("Project created:", response);
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error creating project:", error);
+      setError("An error occurred while creating the project. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  
   useEffect(() => {
     if (isFinalStep) {
       handleSubmit(); // Trigger form submission after the final step
@@ -166,7 +182,7 @@ const ProjectCreationForm: React.FC<{
           tgeUnlock: metric.tgeUnlock,
         })),
       };
-      // console.log("projectDataToCreate", projectDataToCreate);
+      console.log("projectDataToCreate");
       // await createProject(projectDataToCreate);
       const projectDataParams: ProjectParams = {
         projectName: projectData.info.name,
@@ -175,17 +191,18 @@ const ProjectCreationForm: React.FC<{
         minAllocation: projectData.deals.minimum,
         maxAllocation: projectData.deals.maximum,
         vcAddress: `${projectData.projectWallet.walletAddress}`, //connected wallet
-        fundWallet: projectData.projectWallet.fundWalletAddress, // TODO : need to check
-        hardCap: 1, // TODO : need to check [maximum raising amt]
+        fundWallet: projectData.projectWallet.fundWalletAddress, 
+        hardCap: 
+        1000000000000000, // TODO : need to check [maximum raising amt]
         merkleRoot:
-          merkleRootWallets ||
-          "0x00000000000000000000000000000000000000000000000000000000000000",
-        startTime: Number(projectData.deals.startDate), //[epoc timestamp ]
-        endTime: Number(projectData.deals.endDate),
-        paymentTokenAddresses: ["0xdAC17F958D2ee523a2206206994597C13D831ec7"], // TODO : need to check
-        projectToken: projectData.info.name, // TODO : need to check
-        projectCount: 1, // TODO : need to check //depends on project status [new=>0,existing one =>increment counter will get from SDK ]
+       merkleRootWallets as string,
+        startTime: new Date(projectData.deals.startDate).getTime(), //[epoc timestamp ]
+        endTime: new Date(projectData.deals.endDate).getTime(),
+        paymentTokenAddresses: ["0x6C3DfEC39a45F2673AABdCe2290A1F33A027597C"], // TODO : need to check
+        projectToken: "0x4e01832Ed404e29c161ce48DB40ec64426B2401B", // TODO : need to check  token address
+        projectCount: 0, // TODO : need to check //depends on project status [new=>0,existing one =>increment counter will get from SDK ]
       };
+      console.log(projectDataParams, "projectDataParams");
       const sdkData = createProjectSDK(
         projectData?.projectWallet?.chain,
         projectDataParams
@@ -193,7 +210,7 @@ const ProjectCreationForm: React.FC<{
 
       const data = await sdkData;
       console.log(data, "data");
-
+      addProject(projectDataToCreate, data);
       // router.push("/dashboard");
     } catch (error) {
       console.error("Project creation error:", error);

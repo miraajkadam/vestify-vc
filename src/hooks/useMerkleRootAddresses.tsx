@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { api } from "@/lib/api";
 import { generateMerkleRoot } from "@/utils/merkleRoot";
+import crypto from "crypto";
 
 interface DecodedToken {
   user: {
@@ -36,12 +37,17 @@ const getSubscribedUsers = async () => {
     const response = await api.get<ApiResponse<GetSubscribedUserResponse>>(
       `/api/vc/${vcId}/subscribers`
     );
-
     // const wallets = generateMerkleRoot(response.data.data.data);
-    const wallets = generateMerkleRoot([
-      "0x5e2c12098f76e5437d8304b3fa35b2d5297a2596",
-    ]);
-    return wallets;
+    let input = [];
+    if (response.data.data.length === 0) {
+      input = [`0x${crypto.randomBytes(32).toString("hex")}`];
+      // input = [`0x4e01832Ed404e29c161ce48DB40ec64426B2401B`];
+    } else {
+      input = response.data.data.data;
+    }
+    console.log(input, "input");
+    const wallet = generateMerkleRoot(input);
+    return `0x${wallet}`;
   } catch (err) {
     throw err;
   }
