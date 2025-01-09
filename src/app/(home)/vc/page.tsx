@@ -127,6 +127,8 @@ const VCProfilePage2: React.FC = () => {
     }
   };
 
+  //fomodeal registerVC
+
   const handleRegister = async () => {
     try {
       await mutateAsync({

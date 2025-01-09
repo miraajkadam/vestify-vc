@@ -63,6 +63,21 @@ const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
     });
   };
 
+  const tokens = [
+    {
+      tokenAddress: "0x4971fa9b1e4015b5862d91ef221663ca82f4add9",
+      tokenName: "ETH",
+    },
+    {
+      tokenAddress: "0x4971fa9b1e4015b5862d91ef221663ca82f4add9",
+      tokenName: "BTS",
+    },
+    {
+      tokenAddress: "0x4971fa9b1e4015b5862d91ef221663ca82f4add9",
+      tokenName: "USDT",
+    },
+  ];
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <h2 className="text-2xl font-bold mb-6 text-black">Our Deals</h2>
@@ -140,14 +155,17 @@ const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
         <select
           id="acceptedTokens"
           value={acceptedTokens}
-          onChange={(e) => setAcceptedTokens(e.target.value)}
+          onChange={(e) => {
+            setAcceptedTokens(e.target.value);
+            console.log(e.target.value, "TOKEN ADDRESS");
+          }}
           className="w-full p-3 border border-gray-300 rounded-md text-black"
           required
         >
-          <option value="">Select token accepted</option>
-          <option value="BTC">BTC</option>
-          <option value="ETH">ETH</option>
-          <option value="USDT">USDT</option>
+          {/* <option value="">Select token accepted</option> */}
+          {tokens.map((item) => (
+            <option value={item.tokenAddress}>{item.tokenName}</option>
+          ))}
         </select>
       </div>
 

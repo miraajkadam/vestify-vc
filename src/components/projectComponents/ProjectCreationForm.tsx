@@ -23,7 +23,7 @@ import { ethers } from "ethers";
 import WalletConnection from "./WalletConnection";
 import { useWalletInfo } from "@/store/walletContext";
 import { useMerkleRootWallets } from "@/hooks/useMerkleRootAddresses";
-import { Config, useConnectorClient } from 'wagmi';
+import { Config, useConnectorClient } from "wagmi";
 
 type ProjectDataState = {
   info: {
@@ -38,6 +38,7 @@ type ProjectDataState = {
     tge: string;
     round: string;
     tgeSummary: string;
+    projectToken: string;
   }[];
   deals: {
     maximum: number;
@@ -106,13 +107,18 @@ const ProjectCreationForm: React.FC<{
   const fomoDeal = new FomoDeal();
   const CurrentStepComponent = steps[step - 1].component;
 
+  const getTokens = async () => {
+    const tokens = await fomoDeal.getSupportedTokens(Network.ETHEREUM);
+    console.log(tokens, "TOKENS");
+  };
+  getTokens();
 
   const createProjectSDK = async (
     chain: string | undefined,
     projectData: ProjectParams
   ) => {
     const network = chain === "EVM" ? Network.ETHEREUM : Network.SOLANA;
-    const signer =  new ethers.BrowserProvider(window.ethereum);
+    const signer = new ethers.BrowserProvider(window.ethereum);
 
     let options = {
       ethereum: {
@@ -136,7 +142,7 @@ const ProjectCreationForm: React.FC<{
       return updatedData;
     });
     // handleSubmit();
-    
+
     // // If this is the last step, submit the project
     // if (step === steps.length) {
     //   handleSubmit();
@@ -150,8 +156,11 @@ const ProjectCreationForm: React.FC<{
       setStep((prevStep) => prevStep + 1);
     }
   };
- 
-  const addProject = async (projectData: ProjectDataState, projectID: string) => {
+
+  const addProject = async (
+    projectData: ProjectDataState,
+    projectID: string
+  ) => {
     try {
       console.log(" project data:", projectData);
       const response = await createProject(projectData, projectID);
@@ -159,12 +168,14 @@ const ProjectCreationForm: React.FC<{
       router.push("/dashboard");
     } catch (error) {
       console.error("Error creating project:", error);
-      setError("An error occurred while creating the project. Please try again.");
+      setError(
+        "An error occurred while creating the project. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
-  }
-  
+  };
+
   useEffect(() => {
     if (isFinalStep) {
       handleSubmit(); // Trigger form submission after the final step
@@ -191,15 +202,13 @@ const ProjectCreationForm: React.FC<{
         minAllocation: projectData.deals.minimum,
         maxAllocation: projectData.deals.maximum,
         vcAddress: `${projectData.projectWallet.walletAddress}`, //connected wallet
-        fundWallet: projectData.projectWallet.fundWalletAddress, 
-        hardCap: 
-        1000000000000000, // TODO : need to check [maximum raising amt]
-        merkleRoot:
-       merkleRootWallets as string,
+        fundWallet: projectData.projectWallet.fundWalletAddress,
+        hardCap: 1000000000000000, // TODO : need to check [maximum raising amt]
+        merkleRoot: merkleRootWallets as string,
         startTime: new Date(projectData.deals.startDate).getTime(), //[epoc timestamp ]
         endTime: new Date(projectData.deals.endDate).getTime(),
         paymentTokenAddresses: ["0x6C3DfEC39a45F2673AABdCe2290A1F33A027597C"], // TODO : need to check
-        projectToken: "0x4e01832Ed404e29c161ce48DB40ec64426B2401B", // TODO : need to check  token address
+        projectToken: projectData.tokenMetrics[0].projectToken, // TODO : need to check  token address
         projectCount: 0, // TODO : need to check //depends on project status [new=>0,existing one =>increment counter will get from SDK ]
       };
       console.log(projectDataParams, "projectDataParams");

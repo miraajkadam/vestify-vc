@@ -9,6 +9,7 @@ interface tokenMetric {
   tgeUnlock: number;
   tge: string;
   tgeSummary: string;
+  projectToken: string;
 }
 
 interface TokenMetricsProps {
@@ -34,6 +35,7 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
               tgeUnlock: 0,
               tge: "",
               tgeSummary: "",
+              projectToken: "",
             },
           ]
     );
@@ -53,7 +55,15 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
   const addAnotherRound = () => {
     setRounds([
       ...rounds,
-      { round: "", fdv: "", price: "", tgeUnlock: 0, tge: "", tgeSummary: "" },
+      {
+        round: "",
+        fdv: "",
+        price: "",
+        tgeUnlock: 0,
+        tge: "",
+        tgeSummary: "",
+        projectToken: "",
+      },
     ]);
   };
 
@@ -146,6 +156,25 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
                 handleInputChange(index, "price", e.target.value)
               }
               placeholder="Enter price"
+              className="w-full p-3 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor={`projectToken-${index}`}
+              className="block mb-2 font-medium text-black"
+            >
+              ProjectToken Address
+            </label>
+            <input
+              id={`projectToken-${index}`}
+              type="text"
+              value={round.projectToken}
+              onChange={(e) =>
+                handleInputChange(index, "projectToken", e.target.value)
+              }
+              placeholder="ProjectToken address"
               className="w-full p-3 border border-gray-300 rounded-md"
               required
             />
