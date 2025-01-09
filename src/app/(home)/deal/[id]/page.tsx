@@ -6,14 +6,15 @@ import React from "react";
 import Fundrasing from "@/components/deal/Fundrasing";
 import Distribution from "@/components/deal/Distribution";
 import { useProjectDetails } from "@/hooks/useVCProjectDetails";
+import { useDistPools } from "@/hooks/useDistPools";
 
 function page({ params }: { params: { id: string } }) {
   console.log(params.id, "params");
 
   const { data, isPending, isError } = useProjectDetails(params.id);
+  const { data: walletPools } = useDistPools(params.id);
 
-  console.log(data, "PROJECT DATA");
-
+  console.log(walletPools, "walletPools");
   const [selectedOption, setSelectedOption] = useState("Deal Info");
 
   const handleSelect = (option: string) => {

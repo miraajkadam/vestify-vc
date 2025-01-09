@@ -132,12 +132,7 @@ const getVCProfile = async (): Promise<ApiResponse<ProjectData>> => {
     const [response, walletData] = await Promise.all([
       api.get<ApiResponse<GetVCProjectsResponse>>(`/api/vc/${vcId}/profile`),
       api.get<WalletAPIResponse<WalletData[]>>(`/api/account/${vcId}/wallets`),
-      // api.get(`/api/vc/${vcId}/projects`),
-
-      //getProjectBYID
     ]);
-
-    console.log(response, "PROJECT BY ID");
 
     const {
       id,
