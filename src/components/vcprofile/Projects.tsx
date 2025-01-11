@@ -64,7 +64,7 @@ function Projects({ projects }: { projects?: ProjectedCreated }) {
                       className="text-white text-sm font-semibold font-['Urbanist'] capitalize tracking-tight"
                       onClick={() => {
                         router.push(
-                          `/deal/${projects?.projectCreated?.projectId}`
+                          `/projectDeals/${projects?.projectCreated?.projectId}`
                         );
                       }}
                     >

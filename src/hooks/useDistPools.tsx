@@ -17,7 +17,5 @@ export const useDistPools = (projectId: string) => {
     queryFn: async () => {
       return getDistPools(projectId);
     },
-    staleTime: 5 * 60 * 1000,
-    enabled: !!projectId,
   });
 };

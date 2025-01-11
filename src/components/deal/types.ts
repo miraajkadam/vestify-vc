@@ -34,3 +34,10 @@ export interface ProjectSocials {
   youtube?: string;
   website?: string;
 }
+
+export interface Pools {
+  address: string[];
+  name: string;
+  id: string;
+}
+[];

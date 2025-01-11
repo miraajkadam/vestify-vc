@@ -2,13 +2,22 @@ import React, { useState } from "react";
 import { FileUploadModal } from "./UploadFile";
 import { useAddPools } from "@/hooks/useCreatePool";
 import { ToastContainer, toast } from "react-toastify";
+import { useDistPools } from "@/hooks/useDistPools";
+import { TabBar } from "../ui/TabBar";
+import { useQueryClient } from "@tanstack/react-query";
 function Fundrasing({ projectId }: { projectId: string }) {
+  const queryClient = useQueryClient();
   const [openModal, setOpenModal] = useState(false);
   const [groupName, setGroupName] = useState<string>("");
   const [isGroupNameAdded, setIsGroupNameAdded] = useState<boolean>(false);
   const [excelData, setExcelData] = useState<any[]>([]);
 
   const { mutateAsync, isPending } = useAddPools();
+
+  const { data: walletPools } = useDistPools(projectId);
+  console.log(walletPools?.data, "POOLS");
+
+  // const { data: pools } = walletPools;
 
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGroupName(e.target.value);
@@ -35,7 +44,9 @@ function Fundrasing({ projectId }: { projectId: string }) {
       };
       try {
         await mutateAsync(payload);
+        queryClient.refetchQueries({ queryKey: ["dist-pools", projectId] });
         toast.success("Uploaded success fully");
+
         setOpenModal(false);
       } catch (err) {
         setOpenModal(false);
@@ -85,7 +96,9 @@ function Fundrasing({ projectId }: { projectId: string }) {
             </div> */}
           </div>
         </div>
-        <div className="w-full h-full flex-col justify-start items-start flex">
+        <TabBar tabs={walletPools?.data} />
+
+        {/* <div className="w-full h-full flex-col justify-start items-start flex">
           <div className="justify-center items-start gap-[39px] inline-flex">
             <div className="py-[15px] justify-center items-center gap-2.5 flex">
               <div className="text-[#505050] text-lg font-semibold font-['Urbanist']">
@@ -104,17 +117,23 @@ function Fundrasing({ projectId }: { projectId: string }) {
                 Investors
               </div>
             </div>
-            {/* <div className="py-[15px] justify-center items-center gap-2.5 flex">
-              <div className="text-[#505050] text-lg font-semibold font-['Urbanist'] capitalize">
-                + Add pool
+
+            {pools?.map((item: any) => (
+              <div
+                key={item?.id}
+                className="py-[15px] justify-center items-center gap-2.5 flex"
+              >
+                <div className="text-[#505050] text-lg font-semibold font-['Urbanist'] capitalize">
+                  {item?.name}
+                </div>
               </div>
-            </div> */}
+            ))}
           </div>
           <div className="w-full h-[0px] relative">
             <div className="w-full h-[0px] left-0 top-0 absolute border border-[#e1e1e1]"></div>
             <div className="w-[147px] h-[0px] left-[150px] top-0 absolute border-2 border-[#7870fc]"></div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Bottom */}
