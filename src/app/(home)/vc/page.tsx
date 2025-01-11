@@ -159,6 +159,12 @@ const VCProfilePage2: React.FC = () => {
     }
   };
 
+  // const fomoDeal = new FomoDeal();
+
+  const handleCreateVC = async () => {
+    fomoDeal.createVc(Network.ETHEREUM, {}, "Test");
+  };
+
   if (isLoading) return <LoadingSpinner />;
   if (isError) {
     const errorMessage =
@@ -179,6 +185,7 @@ const VCProfilePage2: React.FC = () => {
             handleDisconnect={handleDisconnect}
           />
           <Profile profile={profileData?.data} />
+          <button onClick={handleCreateVC}>CALL</button>
         </div>
 
         {isConnected && profileData?.data?.linkedWallets?.length > 0 ? (

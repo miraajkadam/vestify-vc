@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 
 import { jwtDecode } from "jwt-decode";
 import { useMutation } from "@tanstack/react-query";
+import { FomoDeal, Network } from "fomo-deal-sdk-v1";
 
 interface DecodedToken {
   user: {
