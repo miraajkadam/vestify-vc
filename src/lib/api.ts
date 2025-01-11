@@ -248,7 +248,7 @@ export const createProject = async (
       projectId: projectId
     }
   };
-  console.log(projectData);
+  console.log(projectData, "projectData for create project api");
 
   return api.post<ApiResponse<{ project: ProjectData }>>(
     "api/project/new",

@@ -219,7 +219,7 @@ const ProjectCreationForm: React.FC<{
 
       const data = await sdkData;
       console.log(data, "data");
-      addProject(projectDataToCreate, data);
+      addProject(projectDataToCreate, data.projectId);
       // router.push("/dashboard");
     } catch (error) {
       console.error("Project creation error:", error);
