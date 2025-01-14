@@ -10,6 +10,8 @@ interface tokenMetric {
   tge: string;
   tgeSummary: string;
   projectToken: string;
+  raisedAmt: number;
+  projectTokenTicker: string;
 }
 
 interface TokenMetricsProps {
@@ -36,6 +38,8 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
               tge: "",
               tgeSummary: "",
               projectToken: "",
+              raisedAmt: 0,
+              projectTokenTicker: "",
             },
           ]
     );
@@ -63,6 +67,8 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
         tge: "",
         tgeSummary: "",
         projectToken: "",
+        projectTokenTicker: "",
+        raisedAmt: 0,
       },
     ]);
   };
@@ -175,6 +181,44 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
                 handleInputChange(index, "projectToken", e.target.value)
               }
               placeholder="ProjectToken address"
+              className="w-full p-3 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor={`projectTokenTicker-${index}`}
+              className="block mb-2 font-medium text-black"
+            >
+              Project Token Ticker
+            </label>
+            <input
+              id={`projectTokenTicker-${index}`}
+              type="text"
+              value={round.projectTokenTicker}
+              onChange={(e) =>
+                handleInputChange(index, "projectTokenTicker", e.target.value)
+              }
+              placeholder="Project Token ticker "
+              className="w-full p-3 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor={`raisedAmt-${index}`}
+              className="block mb-2 font-medium text-black"
+            >
+              Project Token Ticker
+            </label>
+            <input
+              id={`raisedAmt-${index}`}
+              type="text"
+              value={round.raisedAmt}
+              onChange={(e) =>
+                handleInputChange(index, "raisedAmt", e.target.value)
+              }
+              placeholder="Raised Amount"
               className="w-full p-3 border border-gray-300 rounded-md"
               required
             />
