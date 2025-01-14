@@ -25,7 +25,7 @@ import { useWalletInfo } from "@/store/walletContext";
 import { useMerkleRootWallets } from "@/hooks/useMerkleRootAddresses";
 import { Config, useConnectorClient } from "wagmi";
 
-type ProjectDataState = {
+export type ProjectDataState = {
   info: {
     name: string;
     categories: string[];

@@ -18,7 +18,8 @@ export interface TeamAndAdvisor {
   name: string;
   title: string;
   description: string;
-  logoBase64?: string;
+  // logoBase64?: string;
+  imgBase64?: string;
 }
 
 export interface Partners {
