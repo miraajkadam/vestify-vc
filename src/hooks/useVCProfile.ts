@@ -49,7 +49,7 @@ interface GetVCProjectsResponse {
 }
 
 interface LinkedWallets {
-  address: string;
+  address: `0x${string}` | undefined;
   chain: string;
 }
 
