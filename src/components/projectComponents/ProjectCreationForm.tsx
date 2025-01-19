@@ -107,11 +107,11 @@ const ProjectCreationForm: React.FC<{
   const fomoDeal = new FomoDeal();
   const CurrentStepComponent = steps[step - 1].component;
 
-  const getTokens = async () => {
-    const tokens = await fomoDeal.getSupportedTokens(Network.ETHEREUM);
-    console.log(tokens, "TOKENS");
-  };
-  getTokens();
+  // const getTokens = async () => {
+  //   const tokens = await fomoDeal.getSupportedTokens(Network.ETHEREUM);
+  //   console.log(tokens, "TOKENS");
+  // };
+  // getTokens();
 
   const createProjectSDK = async (
     chain: string | undefined,
@@ -162,8 +162,36 @@ const ProjectCreationForm: React.FC<{
     projectID: string
   ) => {
     try {
-      console.log(" project data:", projectData);
-      const response = await createProject(projectData, projectID);
+      const {
+        deals,
+        info,
+        partnersAndInvestors,
+        projectSocials,
+        projectWallet,
+        teamAndAdvisors,
+        tokenMetrics,
+      } = projectData;
+      const { startDate, endDate, ...rest } = deals;
+
+      const ISOStartTime = new Date(startDate).toISOString().split("T")[0];
+      const ISOEndTime = new Date(endDate).toISOString().split("T")[0];
+
+      const payload = {
+        deals: {
+          ...rest,
+          startDate: ISOStartTime,
+          endDate: ISOEndTime,
+        },
+        info,
+        partnersAndInvestors,
+        projectSocials,
+        projectWallet,
+        teamAndAdvisors,
+        tokenMetrics,
+      };
+
+      console.log(" project data:", payload);
+      const response = await createProject(payload, projectID);
       console.log("Project created:", response);
       router.push("/dashboard");
     } catch (error) {
@@ -193,7 +221,6 @@ const ProjectCreationForm: React.FC<{
           tgeUnlock: metric.tgeUnlock,
         })),
       };
-      console.log("projectDataToCreate");
       // await createProject(projectDataToCreate);
       const projectDataParams: ProjectParams = {
         projectName: projectData.info.name,

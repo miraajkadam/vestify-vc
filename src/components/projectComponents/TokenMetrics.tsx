@@ -209,7 +209,7 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
               htmlFor={`raisedAmt-${index}`}
               className="block mb-2 font-medium text-black"
             >
-              Project Token Ticker
+              Raised Amount
             </label>
             <input
               id={`raisedAmt-${index}`}

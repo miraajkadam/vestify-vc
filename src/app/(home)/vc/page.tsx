@@ -129,6 +129,13 @@ const VCProfilePage2: React.FC = () => {
 
   //fomodeal registerVC
 
+  const getTokens = async () => {
+    const res = await fomoDeal.getSupportedPaymentToken(Network.ETHEREUM);
+    console.log(res, "RESPONSE TOKENS");
+  };
+
+  getTokens();
+
   const handleRegister = async () => {
     try {
       await mutateAsync({
