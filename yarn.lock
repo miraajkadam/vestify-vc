@@ -5590,10 +5590,10 @@ follow-redirects@^1.15.6:
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.9.tgz"
   integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
 
-fomo-deal-sdk-v1@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.npmjs.org/fomo-deal-sdk-v1/-/fomo-deal-sdk-v1-0.1.3.tgz"
-  integrity sha512-U1sAdIOxMw/w6ZjyP22iif46Fx2WU0XgJsRDRefE/K/73ifdpNye5bGZlkityU+n4jQHWc87/t247u73AkHDaw==
+fomo-deal-sdk-v1@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.npmjs.org/fomo-deal-sdk-v1/-/fomo-deal-sdk-v1-0.1.5.tgz"
+  integrity sha512-GwpXETybI/9ccQh9BbWDz8a34prXEZY2bt4Teow94F6Vz+tfysdpBD4+zvf4xTU5sfYz01WiqxY21Ey6OsYK1Q==
   dependencies:
     "@solana/web3.js" "^1.95.4"
     date-fns "^4.1.0"
@@ -8241,9 +8241,9 @@ react-style-singleton@^2.2.1:
     tslib "^2.0.0"
 
 react-toastify@^11.0.2:
-  version "11.0.2"
-  resolved "https://registry.npmjs.org/react-toastify/-/react-toastify-11.0.2.tgz"
-  integrity sha512-GjHuGaiXMvbls3ywqv8XdWONwrcO4DXCJIY1zVLkHU73gEElKvTTXNI5Vom3s/k/M8hnkrfsqgBSX3OwmlonbA==
+  version "11.0.3"
+  resolved "https://registry.npmjs.org/react-toastify/-/react-toastify-11.0.3.tgz"
+  integrity sha512-cbPtHJPfc0sGqVwozBwaTrTu1ogB9+BLLjd4dDXd863qYLj7DGrQ2sg5RAChjFUB4yc3w8iXOtWcJqPK/6xqRQ==
   dependencies:
     clsx "^2.1.1"
 
