@@ -3,10 +3,14 @@ import { useRouter } from "next/navigation";
 import { ProjectData } from "@/hooks/useVCProfile";
 import EmptyState from "../ui/EmptyState";
 import { ProjectedCreated } from "@/hooks/useVCProjects";
+import { useTopGainers } from "@/hooks/useTopGainers";
 
 function Projects({ projects }: { projects?: ProjectedCreated }) {
   console.log(projects?.projectCreated, "INSIDE PROJECTS");
 
+
+  const {data : topGainers } = useTopGainers()
+  console.log(topGainers, "TOP GAINERS")
   // const { projectName, projectId, hardCap } = projects?.projectCreated;
 
   const router = useRouter();

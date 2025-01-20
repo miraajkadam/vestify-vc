@@ -12,6 +12,9 @@ interface tokenMetric {
   lockupPeriod: string;
   noOfMonths: number;
   releaseType: string;
+  projectToken: string;
+  raisedAmt: number;
+  projectTokenTicker: string;
 }
 
 interface TokenMetricsProps {
@@ -40,6 +43,9 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
               lockupPeriod: "",
               noOfMonths: 0,
               releaseType: "",
+              projectToken: "",
+              raisedAmt: 0,
+              projectTokenTicker: "",
             },
           ]
     );
@@ -69,6 +75,9 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
         lockupPeriod: "",
         noOfMonths: 0,
         releaseType: "",
+        projectToken: "",
+        projectTokenTicker: "",
+        raisedAmt: 0,
       },
     ]);
   };
@@ -159,6 +168,63 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
                 handleInputChange(index, "price", e.target.value)
               }
               placeholder="Enter price"
+              className="w-full p-3 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor={`projectToken-${index}`}
+              className="block mb-2 font-medium text-black"
+            >
+              ProjectToken Address
+            </label>
+            <input
+              id={`projectToken-${index}`}
+              type="text"
+              value={round.projectToken}
+              onChange={(e) =>
+                handleInputChange(index, "projectToken", e.target.value)
+              }
+              placeholder="ProjectToken address"
+              className="w-full p-3 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor={`projectTokenTicker-${index}`}
+              className="block mb-2 font-medium text-black"
+            >
+              Project Token Ticker
+            </label>
+            <input
+              id={`projectTokenTicker-${index}`}
+              type="text"
+              value={round.projectTokenTicker}
+              onChange={(e) =>
+                handleInputChange(index, "projectTokenTicker", e.target.value)
+              }
+              placeholder="Project Token ticker "
+              className="w-full p-3 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor={`raisedAmt-${index}`}
+              className="block mb-2 font-medium text-black"
+            >
+              Raised Amount
+            </label>
+            <input
+              id={`raisedAmt-${index}`}
+              type="text"
+              value={round.raisedAmt}
+              onChange={(e) =>
+                handleInputChange(index, "raisedAmt", e.target.value)
+              }
+              placeholder="Raised Amount"
               className="w-full p-3 border border-gray-300 rounded-md"
               required
             />

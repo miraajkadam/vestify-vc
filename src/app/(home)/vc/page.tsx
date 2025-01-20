@@ -58,6 +58,8 @@ const VCProfilePage2: React.FC = () => {
         (wallet) => wallet.address === address && wallet.chain === "EVM"
       ) ?? false;
 
+    console.log(profileData?.data?.linkedWallets, "IS REGISTERED");
+
     setIsWalletRegistered(isRegistered);
   }, [address, profileData]);
 

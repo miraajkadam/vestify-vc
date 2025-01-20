@@ -23,8 +23,9 @@ import { ethers } from "ethers";
 import WalletConnection from "./WalletConnection";
 import { useWalletInfo } from "@/store/walletContext";
 import { useMerkleRootWallets } from "@/hooks/useMerkleRootAddresses";
+import { Config, useConnectorClient } from "wagmi";
 
-type ProjectDataState = {
+export type ProjectDataState = {
   info: {
     name: string;
     categories: string[];
@@ -37,6 +38,7 @@ type ProjectDataState = {
     tge: string;
     round: string;
     tgeSummary: string;
+    projectToken: string;
   }[];
   deals: {
     maximum: number;
@@ -64,7 +66,7 @@ const ProjectCreationForm: React.FC<{
   const [error, setError] = useState<string | null>(null);
   const [isFinalStep, setIsFinalStep] = useState(false);
   const { data: merkleRootWallets } = useMerkleRootWallets();
-  console.log(merkleRootWallets);
+  console.log(merkleRootWallets, "merkleRootWallets");
   const [projectData, setProjectData] = useState<ProjectDataState>({
     info: {
       name: "",
@@ -105,20 +107,22 @@ const ProjectCreationForm: React.FC<{
   const fomoDeal = new FomoDeal();
   const CurrentStepComponent = steps[step - 1].component;
 
-  const contractAddress = "0x000000000000";
-  const abi = [{}];
+  // const getTokens = async () => {
+  //   const tokens = await fomoDeal.getSupportedTokens(Network.ETHEREUM);
+  //   console.log(tokens, "TOKENS");
+  // };
+  // getTokens();
 
   const createProjectSDK = async (
     chain: string | undefined,
     projectData: ProjectParams
   ) => {
     const network = chain === "EVM" ? Network.ETHEREUM : Network.SOLANA;
+    const signer = new ethers.BrowserProvider(window.ethereum);
+
     let options = {
       ethereum: {
-        provider: window.ethereum,
-        contractAddress,
-        abi,
-        vcAddress: projectData.vcAddress,
+        provider: signer,
       },
     }; // TODO : need to check
     const sdkData = await fomoDeal.createOrUpdateProject(
@@ -137,6 +141,7 @@ const ProjectCreationForm: React.FC<{
       console.log("Updated Project Data:", updatedData);
       return updatedData;
     });
+    // handleSubmit();
 
     // // If this is the last step, submit the project
     // if (step === steps.length) {
@@ -151,6 +156,54 @@ const ProjectCreationForm: React.FC<{
       setStep((prevStep) => prevStep + 1);
     }
   };
+
+  const addProject = async (
+    projectData: ProjectDataState,
+    projectID: string
+  ) => {
+    try {
+      const {
+        deals,
+        info,
+        partnersAndInvestors,
+        projectSocials,
+        projectWallet,
+        teamAndAdvisors,
+        tokenMetrics,
+      } = projectData;
+      const { startDate, endDate, ...rest } = deals;
+
+      const ISOStartTime = new Date(startDate).toISOString().split("T")[0];
+      const ISOEndTime = new Date(endDate).toISOString().split("T")[0];
+
+      const payload = {
+        deals: {
+          ...rest,
+          startDate: ISOStartTime,
+          endDate: ISOEndTime,
+        },
+        info,
+        partnersAndInvestors,
+        projectSocials,
+        projectWallet,
+        teamAndAdvisors,
+        tokenMetrics,
+      };
+
+      console.log(" project data:", payload);
+      const response = await createProject(payload, projectID);
+      console.log("Project created:", response);
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error creating project:", error);
+      setError(
+        "An error occurred while creating the project. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (isFinalStep) {
       handleSubmit(); // Trigger form submission after the final step
@@ -168,7 +221,6 @@ const ProjectCreationForm: React.FC<{
           tgeUnlock: metric.tgeUnlock,
         })),
       };
-      // console.log("projectDataToCreate", projectDataToCreate);
       // await createProject(projectDataToCreate);
       const projectDataParams: ProjectParams = {
         projectName: projectData.info.name,
@@ -177,17 +229,16 @@ const ProjectCreationForm: React.FC<{
         minAllocation: projectData.deals.minimum,
         maxAllocation: projectData.deals.maximum,
         vcAddress: `${projectData.projectWallet.walletAddress}`, //connected wallet
-        fundWallet: projectData.projectWallet.fundWalletAddress, // TODO : need to check
-        hardCap: 1, // TODO : need to check [maximum raising amt]
-        merkleRoot:
-          merkleRootWallets ||
-          "0x00000000000000000000000000000000000000000000000000000000000000",
-        startTime: Number(projectData.deals.startDate), //[epoc timestamp ]
-        endTime: Number(projectData.deals.endDate),
-        paymentTokenAddresses: ["0xdAC17F958D2ee523a2206206994597C13D831ec7"], // TODO : need to check
-        projectToken: projectData.info.name, // TODO : need to check
-        projectCount: 1, // TODO : need to check //depends on project status [new=>0,existing one =>increment counter will get from SDK ]
+        fundWallet: projectData.projectWallet.fundWalletAddress,
+        hardCap: 1000000000000000, // TODO : need to check [maximum raising amt]
+        merkleRoot: merkleRootWallets as string,
+        startTime: new Date(projectData.deals.startDate).getTime(), //[epoc timestamp ]
+        endTime: new Date(projectData.deals.endDate).getTime(),
+        paymentTokenAddresses: ["0x6C3DfEC39a45F2673AABdCe2290A1F33A027597C"], // TODO : need to check
+        projectToken: projectData.tokenMetrics[0].projectToken, // TODO : need to check  token address
+        projectCount: 0, // TODO : need to check //depends on project status [new=>0,existing one =>increment counter will get from SDK ]
       };
+      console.log(projectDataParams, "projectDataParams");
       const sdkData = createProjectSDK(
         projectData?.projectWallet?.chain,
         projectDataParams
@@ -195,7 +246,7 @@ const ProjectCreationForm: React.FC<{
 
       const data = await sdkData;
       console.log(data, "data");
-
+      addProject(projectDataToCreate, data.projectId);
       // router.push("/dashboard");
     } catch (error) {
       console.error("Project creation error:", error);

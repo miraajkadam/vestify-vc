@@ -50,19 +50,13 @@ function EVMWallets() {
       return;
     }
 
-    const contractAddress = "0x000000000000";
-    const abi = [{}];
+    // const contractAddress = "0x000000000000";
+    // const abi = [{}];
 
     try {
-      const vcData = await fomoDeal.getVCInfo({
-        ethereum: {
-          provider: window.ethereum,
-          contractAddress,
-          abi,
-          vcAddress: address,
-        },
-      });
-      setVcInfo(vcData);
+      const vcData = await fomoDeal.getVCInfo({ vcAddress: address });
+      // setVcInfo(vcData);
+      console.log("vcData", vcData);
     } catch (error) {
       console.error("Error fetching VC info:", error);
     }

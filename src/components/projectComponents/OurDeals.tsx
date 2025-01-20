@@ -1,4 +1,5 @@
 "use client";
+import { FomoDeal, Network } from "fomo-deal-sdk-v1";
 import React, { useEffect, useState } from "react";
 
 interface OurDealsProps {
@@ -22,6 +23,15 @@ interface OurDealsProps {
   };
 }
 
+interface PaymentToken {
+  tokenAddress?: string;
+  name: string;
+  symbol: string;
+  chain: string;
+  decimals: number;
+  icon: string;
+}
+
 const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
   const [minimum, setMinimum] = useState<string>(
     initialData?.minimum !== undefined ? initialData.minimum.toString() : ""
@@ -37,6 +47,8 @@ const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
   );
   const [tge, setTge] = useState<string>(initialData?.startDate || ""); // State for TGE
   const [vesting, setVesting] = useState<string>(initialData?.endDate || ""); // State for Vesting
+
+  const [paymentTokens, setPaymentTokens] = useState<PaymentToken[]>([]);
 
   useEffect(() => {
     if (initialData) {
@@ -57,11 +69,34 @@ const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
         minimum: parseFloat(minimum),
         acceptedTokens,
         poolFee: parseFloat(poolFee),
-        startDate: new Date(tge).toISOString(),
-        endDate: new Date(vesting).toISOString(),
+        startDate: tge,
+        endDate: vesting,
       },
     });
   };
+
+  const fomoDeal = new FomoDeal();
+
+  const getTokens = async () => {
+    const res = await fomoDeal.getSupportedPaymentToken(Network.ETHEREUM);
+    setPaymentTokens(res);
+  };
+  getTokens();
+
+  const tokens = [
+    {
+      tokenAddress: "0x4971fa9b1e4015b5862d91ef221663ca82f4add9",
+      tokenName: "ETH",
+    },
+    {
+      tokenAddress: "0x4971fa9b1e4015b5862d91ef221663ca82f4add9",
+      tokenName: "BTS",
+    },
+    {
+      tokenAddress: "0x4971fa9b1e4015b5862d91ef221663ca82f4add9",
+      tokenName: "USDT",
+    },
+  ];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -140,14 +175,17 @@ const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
         <select
           id="acceptedTokens"
           value={acceptedTokens}
-          onChange={(e) => setAcceptedTokens(e.target.value)}
+          onChange={(e) => {
+            setAcceptedTokens(e.target.value);
+            console.log(e.target.value, "TOKEN ADDRESS");
+          }}
           className="w-full p-3 border border-gray-300 rounded-md text-black"
           required
         >
-          <option value="">Select token accepted</option>
-          <option value="BTC">BTC</option>
-          <option value="ETH">ETH</option>
-          <option value="USDT">USDT</option>
+          {/* <option value="">Select token accepted</option> */}
+          {paymentTokens.map((item) => (
+            <option value={item.tokenAddress}>{item.name}</option>
+          ))}
         </select>
       </div>
 

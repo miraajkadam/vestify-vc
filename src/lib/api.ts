@@ -1,3 +1,5 @@
+import { ProjectDataState } from "@/components/projectComponents/ProjectCreationForm";
+import { TeamAndAdvisor } from "@/components/projectid/types";
 import { httpClientRequest } from "@/utils/axios-utils";
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
@@ -48,12 +50,45 @@ export interface ProjectInfo {
 }
 
 export interface TokenMetrics {
-  round: ProjectRound;
+  round?: ProjectRound;
   fdv: string;
   price: string;
   tgeUnlock: number;
   tge: string;
-  tgeSummary: string;
+  tgeSummary?: string;
+  lockupPeriod?: number;
+  releaseType?: string;
+  releaseMonths?: number;
+}
+
+export interface TokenMetricsV2 {
+  round?: string;
+  fdv: string;
+  price: string;
+  tgeUnlock: number;
+  tge: string;
+  lockupPeriod?: number;
+  releaseType?: string;
+  releaseMonths?: number;
+}
+
+export interface PastProjectTokenMetric {
+  round: string;
+  price: number;
+  lockupPeriod?: number;
+  releaseType?: string;
+  releaseMonths?: number;
+}
+
+export interface CurProjectTokenMetric {
+  round?: string;
+  price: number;
+  tgeUnlock: number;
+  tge: string;
+  lockupPeriod?: number;
+  releaseType?: string;
+  releaseMonths?: number;
+  fdv: number;
 }
 
 export interface Deals {
@@ -72,6 +107,17 @@ export interface TeamMember {
   imgBase64?: string;
 }
 
+export interface RoundDetails {
+  maximum: number;
+  minimum: number;
+  acceptedTokens: string;
+  poolFee: number;
+  startDate: string;
+  endDate: string;
+  raiseAmount: number;
+  tokenTicker: string;
+}
+
 export interface Partner {
   name: string;
   logoBase64: string | null;
@@ -88,11 +134,34 @@ export interface ProjectSocials {
 
 export interface ProjectData {
   info: ProjectInfo;
-  tokenMetrics: TokenMetrics[];
+  tokenMetrics: TokenMetricsV2[];
   deals: Deals;
   teamAndAdvisors: TeamMember[];
   partnersAndInvestors: Partner[];
   projectSocials: ProjectSocials;
+  projectWallet: projectWallet;
+  onChain: onChain;
+}
+
+export interface ProjectDataV2 {
+  info: ProjectInfo;
+  curProjTokenMetrics: CurProjectTokenMetric;
+  pastProjTokenMetrics: PastProjectTokenMetric[];
+  roundDetails: RoundDetails;
+  teamAndAdvisors: TeamAndAdvisor[];
+  partnersAndInvestors: Partner[];
+  projectSocials: ProjectSocials;
+  projectWallet: projectWallet;
+  onChain: onChain;
+}
+
+interface projectWallet {
+  chain: string | undefined;
+  walletAddress?: string | undefined;
+}
+
+interface onChain {
+  projectId: string;
 }
 export interface VCProfile {
   name: string;
@@ -212,8 +281,11 @@ export const createVC = async (
 };
 
 export const createProject = async (
-  data: Omit<ProjectData, "info"> & { info: Omit<ProjectInfo, "vcId"> }
-): Promise<AxiosResponse<ApiResponse<{ project: ProjectData }>>> => {
+  data: Omit<ProjectData, "info" | "onChain"> & {
+    info: Omit<ProjectInfo, "vcId">;
+  },
+  projectId: string
+): Promise<AxiosResponse<ApiResponse<{ project: ProjectDataState }>>> => {
   const token = Cookies.get("access_token");
   if (!token) {
     throw new Error("No access token found");
@@ -221,17 +293,139 @@ export const createProject = async (
 
   const decodedToken = jwtDecode<DecodedToken>(token);
   const vcId = decodedToken.user.id;
-
-  const projectData: ProjectData = {
-    ...data,
+  console.log(" create project api raw data", data);
+  let curProjTokenMetrics: CurProjectTokenMetric = {
+    round: data.tokenMetrics[0].round,
+    price: +data.tokenMetrics[0].price,
+    tgeUnlock: data.tokenMetrics[0].tgeUnlock,
+    tge: data.tokenMetrics[0].tge,
+    fdv: 1000000000,
+    lockupPeriod: 1,
+    releaseType: "QUARTERLY",
+    releaseMonths: 1,
+  };
+  const projectData: ProjectDataV2 = {
     info: {
       ...data.info,
       vcId,
     },
+    curProjTokenMetrics: curProjTokenMetrics,
+    pastProjTokenMetrics: [
+      {
+        round: data.tokenMetrics[0].round || "PRIVATE_3",
+        price: +data.tokenMetrics[0].price,
+      },
+    ],
+    roundDetails: {
+      ...data.deals,
+      raiseAmount: 123123123123,
+      tokenTicker: data.info.name.toUpperCase(),
+    },
+    teamAndAdvisors: data.teamAndAdvisors,
+    partnersAndInvestors: [
+      {
+        logoBase64: "b21hZSB3YSBtb3Ugc2hpbmRlaXJ1",
+        name: "Venture Capital Inc.",
+      },
+    ],
+    projectSocials: data.projectSocials,
+    projectWallet: {
+      chain: data.projectWallet.chain,
+      walletAddress: data.projectWallet.walletAddress,
+    },
+    onChain: {
+      projectId: projectId,
+    },
   };
-  console.log(projectData);
+  let releaseMonths = 3;
+  let lockupPeriod = 180;
+  let releaseType = "QUARTERLY";
 
-  return api.post<ApiResponse<{ project: ProjectData }>>(
+  projectData.curProjTokenMetrics.releaseMonths = releaseMonths;
+  projectData.curProjTokenMetrics.lockupPeriod = lockupPeriod;
+  projectData.curProjTokenMetrics.releaseType = releaseType;
+
+  projectData.pastProjTokenMetrics[0].releaseMonths = releaseMonths;
+  projectData.pastProjTokenMetrics[0].lockupPeriod = lockupPeriod;
+  projectData.pastProjTokenMetrics[0].releaseType = releaseType;
+
+  projectData.projectSocials.discord =  "https://discord.gg/project_invite",
+  projectData.projectSocials.telegram = "https://t.me/project_channel",
+  projectData.projectSocials.medium = "https://medium.com/@project_blog",
+  projectData.projectSocials.website = "https://www.example.com"
+
+  projectData.teamAndAdvisors[0].imgBase64 = "b21hZSB3YSBtb3Ugc2hpbmRlaXJ1";
+
+  const projectDatev2 = {
+    info: {
+      name: "Bitcoin",
+      categories: ["Tech", "DEFI", "Crypto"],
+      description:
+        "Bitcoin is a leading cryptocurrency with significant market potential.",
+      vcId: "1c30cc8e-ad15-480e-9593-82a3a8ecc82c",
+    },
+    curProjTokenMetrics: {
+      round: "SEED",
+      price: 1.23,
+      tgeUnlock: 60,
+      tge: "2024-08-28T12:20:13.264Z",
+      lockupPeriod: 180,
+      releaseType: "QUARTERLY",
+      releaseMonths: 3,
+      fdv: 1000000000,
+    },
+    pastProjTokenMetrics: [
+      {
+        price: 1.23,
+        lockupPeriod: 180,
+        releaseMonths: 3,
+        releaseType: "QUARTERLY",
+        round: "PRIVATE_3",
+      },
+    ],
+    roundDetails: {
+      maximum: 2000.5,
+      minimum: 1000,
+      acceptedTokens: "BTC",
+      poolFee: 2.5,
+      startDate: "2024-08-18T12:20:13.264Z",
+      endDate: "2024-08-28T12:20:13.264Z",
+      raiseAmount: 123123123123,
+      tokenTicker: "FOMO",
+    },
+    teamAndAdvisors: [
+      {
+        description:
+          "Experienced advisor with a background in blockchain technology.",
+        name: "Alice Johnson",
+        title: "Blockchain Specialist",
+        imgBase64: "b21hZSB3YSBtb3Ugc2hpbmRlaXJ1",
+      },
+    ],
+    partnersAndInvestors: [
+      {
+        logoBase64: "b21hZSB3YSBtb3Ugc2hpbmRlaXJ1",
+        name: "Venture Capital Inc.",
+      },
+    ],
+    projectSocials: {
+      x: "https://x.com/project_handle",
+      discord: "https://discord.gg/project_invite",
+      telegram: "https://t.me/project_channel",
+      medium: "https://medium.com/@project_blog",
+      website: "https://www.example.com",
+    },
+    projectWallet: {
+      chain: "EVM",
+      walletAddress: "0x32Be343B94f860124dC4fEe278FDCBD38C102D88",
+    },
+    onChain: {
+      projectId: "bdcdfb7e-379e-4d55-8fac-212422f61220",
+    },
+  };
+  console.log(projectData, "projectData for create project api");
+
+  return api.post<ApiResponse<{ project: ProjectDataState }>>(
     "api/project/new",
     projectData
   );
