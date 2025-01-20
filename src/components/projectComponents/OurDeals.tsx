@@ -1,4 +1,5 @@
 "use client";
+import { FomoDeal, Network } from "fomo-deal-sdk-v1";
 import React, { useEffect, useState } from "react";
 
 interface OurDealsProps {
@@ -22,6 +23,15 @@ interface OurDealsProps {
   };
 }
 
+interface PaymentToken {
+  tokenAddress?: string;
+  name: string;
+  symbol: string;
+  chain: string;
+  decimals: number;
+  icon: string;
+}
+
 const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
   const [minimum, setMinimum] = useState<string>(
     initialData?.minimum !== undefined ? initialData.minimum.toString() : ""
@@ -37,6 +47,8 @@ const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
   );
   const [tge, setTge] = useState<string>(initialData?.startDate || ""); // State for TGE
   const [vesting, setVesting] = useState<string>(initialData?.endDate || ""); // State for Vesting
+
+  const [paymentTokens, setPaymentTokens] = useState<PaymentToken[]>([]);
 
   useEffect(() => {
     if (initialData) {
@@ -62,6 +74,14 @@ const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
       },
     });
   };
+
+  const fomoDeal = new FomoDeal();
+
+  const getTokens = async () => {
+    const res = await fomoDeal.getSupportedPaymentToken(Network.ETHEREUM);
+    setPaymentTokens(res);
+  };
+  getTokens();
 
   const tokens = [
     {
@@ -163,8 +183,8 @@ const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
           required
         >
           {/* <option value="">Select token accepted</option> */}
-          {tokens.map((item) => (
-            <option value={item.tokenAddress}>{item.tokenName}</option>
+          {paymentTokens.map((item) => (
+            <option value={item.tokenAddress}>{item.name}</option>
           ))}
         </select>
       </div>
