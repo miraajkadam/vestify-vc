@@ -149,12 +149,15 @@ const VCProfilePage2: React.FC = () => {
   };
 
   const handleRegister = async () => {
+    // alert("called");
     try {
       const res = await fomoDeal.createVc(
         Network.ETHEREUM,
         options,
         `${profileData?.data?.vcName || "Test"}`
       );
+
+      console.log(res);
 
       if (res) {
         await mutateAsync({

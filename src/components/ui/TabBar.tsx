@@ -5,13 +5,15 @@ import { Pools } from "../deal/types";
 
 interface TabProps {
   tabs: Pools[];
+  handleTabClick: (poolId: string) => void;
 }
 
-export function TabBar({ tabs }: TabProps) {
+export function TabBar({ tabs, handleTabClick }: TabProps) {
   const [selectedTabId, setSelectedTabId] = useState("");
 
   const handleSelectTab = (id: string) => {
     setSelectedTabId(id);
+    handleTabClick(id);
   };
 
   return (

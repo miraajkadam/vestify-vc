@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useDistPools } from "@/hooks/useDistPools";
 import { TabBar } from "../ui/TabBar";
 import { useQueryClient } from "@tanstack/react-query";
+import { useDistPoolDetails } from "@/hooks/useDistPoolDetails";
 function Fundrasing({ projectId }: { projectId: string }) {
   const queryClient = useQueryClient();
   const [openModal, setOpenModal] = useState(false);
@@ -13,9 +14,9 @@ function Fundrasing({ projectId }: { projectId: string }) {
   const [excelData, setExcelData] = useState<any[]>([]);
 
   const { mutateAsync, isPending } = useAddPools();
+  const { mutateAsync: getPoolDetails, data, error } = useDistPoolDetails();
 
   const { data: walletPools } = useDistPools(projectId);
-  console.log(walletPools?.data, "POOLS");
 
   // const { data: pools } = walletPools;
 
@@ -52,6 +53,16 @@ function Fundrasing({ projectId }: { projectId: string }) {
         setOpenModal(false);
         toast.error("API got failed ");
       }
+    }
+  };
+
+  const handleTabClick = async (poolId: string) => {
+    console.log(poolId, "POOOOOL>>>>ID");
+    try {
+      const res = await getPoolDetails(poolId);
+      console.log(res, "RESPONSE");
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -96,7 +107,7 @@ function Fundrasing({ projectId }: { projectId: string }) {
             </div> */}
           </div>
         </div>
-        <TabBar tabs={walletPools?.data} />
+        <TabBar tabs={walletPools?.data} handleTabClick={handleTabClick} />
 
         {/* <div className="w-full h-full flex-col justify-start items-start flex">
           <div className="justify-center items-start gap-[39px] inline-flex">
