@@ -22,7 +22,7 @@ function page({ params }: { params: { id: string } }) {
       case "Fundraising":
         return <Fundrasing projectId={params.id} />;
       case "Distributions":
-        return <Distribution />;
+        return <Distribution projectId={params.id} />;
       default:
         return (
           <Info
@@ -38,7 +38,7 @@ function page({ params }: { params: { id: string } }) {
   }
   return (
     <div className="h-full w-full bg-white justify-start items-start inline-flex">
-      <div className="h-full w-full pt-[35px] pb-8 bg-white flex-col justify-start items-end inline-flex">
+      <div className="h-full w-full overflow-auto pt-[35px] pb-8 bg-white flex-col justify-start items-end inline-flex">
         <div className="h-full w-full px-8 flex-col justify-start items-start flex">
           <div className="h-full w-full flex-col justify-start items-start gap-[30px] flex">
             {/**Top */}

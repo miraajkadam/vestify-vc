@@ -41,3 +41,32 @@ export interface Pools {
   id: string;
 }
 [];
+
+export interface PoolDetails {
+  info: Info;
+  investments: Investment[];
+}
+
+export interface Info {
+  addresses: string[];
+  projectsId: string;
+  fee: string;
+  maxAllocation: string;
+  minAllocation: string;
+  name: string;
+}
+
+export interface Investment {
+  socials: Socials;
+  investment: Investment2;
+}
+
+export interface Socials {
+  x?: string;
+  discord?: string;
+  telegram?: string;
+}
+
+export interface Investment2 {
+  amount: number;
+}
