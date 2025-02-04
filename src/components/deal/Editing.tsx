@@ -105,11 +105,12 @@ function Editing({ handleEdit, projectId, refetch, scheduleData }: any) {
 
       try {
         await mutateAsync({ projectId, payload });
-        alert("added");
+        toast.success("Schedule Added Successfully");
         refetch();
         handleEdit();
       } catch (err) {
-        console.log(err, "ERROR API");
+        toast.error("Something went wrong");
+
         handleEdit();
       }
     }
@@ -316,47 +317,55 @@ function Editing({ handleEdit, projectId, refetch, scheduleData }: any) {
               </div>
             </div>
           </div>
-
-          <div className="relative w-full overflow-x-auto">
-            <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Batch
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Date
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Percentage
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {batchList.map((item, ind) => (
-                  <tr key={ind} className="bg-white border-b  border-gray-200">
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                    >
-                      {item.batch}
+          {batchList.length > 0 ? (
+            <div className="relative w-full overflow-x-auto">
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      Batch
                     </th>
-                    <td className="px-6 py-4">{item.date}</td>
-                    <td className="px-6 py-4">{item.percentage}</td>
-                    <td
-                      className="px-6 py-4 cursor-pointer"
-                      onClick={() => handleEditVesting(ind)}
-                    >
-                      <Pencil />
-                    </td>
+                    <th scope="col" className="px-6 py-3">
+                      Date
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Percentage
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      action
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {batchList.map((item, ind) => (
+                    <tr
+                      key={ind}
+                      className="bg-white border-b  border-gray-200"
+                    >
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                      >
+                        {item.batch}
+                      </th>
+                      <td className="px-6 py-4">{item.date}</td>
+                      <td className="px-6 py-4">{item.percentage}</td>
+                      <td
+                        className="px-6 py-4 cursor-pointer"
+                        onClick={() => handleEditVesting(ind)}
+                      >
+                        <Pencil />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <h1 className="text-black item-center">
+              There are no batches to display
+            </h1>
+          )}
 
           <div className="w-full  relative">
             <div className="h-[18px] left-0 top-[12.50px] absolute justify-start items-center gap-2.5 inline-flex">
@@ -365,24 +374,26 @@ function Editing({ handleEdit, projectId, refetch, scheduleData }: any) {
                 Distributed and confirmed batches cannot be edited.
               </div> */}
             </div>
-            <div className="h-[43px] p-[15px] left-[541px] top-0 absolute bg-indigo-600 rounded-[5px] justify-center items-center gap-2.5 inline-flex">
-              <button
-                onClick={scheduleData ? handleUpdateBatch : handleSaveVesting}
-                className="text-white text-lg font-semibold font-['Urbanist'] leading-loose"
-              >
-                {isAdding ? (
-                  "Adding..."
-                ) : isUpdating ? (
-                  "Updating..."
-                ) : (
-                  <>
-                    {scheduleData
-                      ? "Update vesting schedule"
-                      : "Save vesting schedule"}
-                  </>
-                )}
-              </button>
-            </div>
+            {batchList.length > 0 && (
+              <div className="h-[43px] p-[15px] left-[541px] top-0 absolute bg-indigo-600 rounded-[5px] justify-center items-center gap-2.5 inline-flex">
+                <button
+                  onClick={scheduleData ? handleUpdateBatch : handleSaveVesting}
+                  className="text-white text-lg font-semibold font-['Urbanist'] leading-loose"
+                >
+                  {isAdding ? (
+                    "Adding..."
+                  ) : isUpdating ? (
+                    "Updating..."
+                  ) : (
+                    <>
+                      {scheduleData
+                        ? "Update vesting schedule"
+                        : "Save vesting schedule"}
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -59,7 +59,7 @@ function Distribution({ projectId }: { projectId: string }) {
               className="text-white text-lg font-semibold font-['Urbanist'] leading-loose"
               onClick={() => handleEdit()}
             >
-              {error ? "Add schedule" : "Edit schedule"}
+              {!data ? "Add schedule" : "Edit schedule"}
             </button>
           </div>
           <div className="-full px-2  rounded-[5px] border border-[#908eb6] justify-center items-center gap-2.5 flex">

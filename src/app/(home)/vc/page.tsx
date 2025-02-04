@@ -45,7 +45,8 @@ const VCProfilePage2: React.FC = () => {
 
   const { data: vcProjects } = useVCProjects();
 
-  // console.log(profileData?.data.vcName);
+  const extractProjects = vcProjects?.map((proj) => proj.projectCreated);
+  console.log(extractProjects, "EXTRACTED PROJECTS");
 
   const { isConnected, address, chainId } = useAccount();
 
@@ -222,12 +223,34 @@ const VCProfilePage2: React.FC = () => {
             handleDisconnect={handleDisconnect}
             handleRegister={handleRegister}
           />
+
           <Profile profile={profileData?.data} />
           {/* <button onClick={handleCreateVC}>CALL</button> */}
         </div>
 
         {isConnected && isWalletRegistered ? (
-          <Projects projects={vcProjects} />
+          <>
+            <div className="text-[#18191c] text-[25px] font-bold font-['Urbanist'] leading-7">
+              Last 5 projects
+            </div>
+            <div className="w-full ">
+              <div className="w-full h-auto relative grid grid-cols-8 items-center text-[#afafaf] text-[15px] font-semibold gap-[10px]">
+                <div className="col-span-2"> Project Name</div>
+                <div> Pledge Amount</div>
+                <div> Market Cap</div>
+                <div> Top Gainers</div>
+                <div> Raised Amount</div>
+                <div> Ongoing Claim</div>
+                <div></div>
+
+                {extractProjects?.map((project) => (
+                  <Projects projects={project} />
+                ))}
+              </div>
+            </div>
+            {/* {vcProjects.map((project) => (
+            ))} */}
+          </>
         ) : (
           <EmptyState
             isWalletConnected={isConnected}

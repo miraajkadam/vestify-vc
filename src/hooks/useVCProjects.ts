@@ -68,10 +68,11 @@ export interface SDKProjects {
   blockTimestamp: string;
   transactionHash: string;
 }
+[];
 
 const fomoDeal = new FomoDeal();
 
-const getVCProjectsById = async (): Promise<ProjectedCreated> => {
+const getVCProjectsById = async (): Promise<any> => {
   try {
     const token = Cookies.get("access_token");
     if (!token) {
@@ -86,14 +87,31 @@ const getVCProjectsById = async (): Promise<ProjectedCreated> => {
 
     const { id } = response.data.data.projects[0];
 
-    console.log("BACKEND PID", response);
+    const allIds = response.data.data.projects.map((project) => project.id);
+    // console.log("ALL IDS", allIds);
 
-    const sdkVcProjects: ProjectedCreated = await fomoDeal.getProjectById(
-      Network.ETHEREUM,
-      id
+    // console.log("BACKEND PID", response);
+
+    const allData = await Promise.all(
+      allIds.map((item) => fomoDeal.getProjectById(Network.ETHEREUM, item))
     );
 
-    return sdkVcProjects;
+    // if (allData) {
+    //   const allProjects = allData.map((item) => item.projectCreated);
+    //   console.log(allProjects, "ALL PROJECTS");
+
+    // }
+
+    // console.log(allData, "ALL DATA");
+
+    // console.log("BACKEND PID", response);
+
+    // const sdkVcProjects: ProjectedCreated = await fomoDeal.getProjectById(
+    //   Network.ETHEREUM,
+    //   id
+    // );
+
+    return allData;
   } catch (error) {
     console.error("Error fetching VC projects:", error);
     throw error;
