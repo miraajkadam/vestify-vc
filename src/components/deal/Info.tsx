@@ -1,6 +1,13 @@
 import React from "react";
+import { Projects, TokenMetrics } from "./types";
 
-function Info() {
+function Info({
+  tokenMetrics,
+  project,
+}: {
+  tokenMetrics?: TokenMetrics;
+  project?: Projects;
+}) {
   return (
     <div className="h-full w-full justify-between items-start gap-[53px] inline-flex">
       <div className=" flex-col justify-start items-start gap-2.5 inline-flex">
@@ -11,12 +18,7 @@ function Info() {
           Participate in the Universal Investment Platform Token Event
         </div>
         <div className="w-[759.73px] text-[#2c2c2c] text-[17px] font-normal font-['Urbanist'] leading-normal">
-          Universal is a cutting-edge Web3 project that aims to revolutionize
-          investment groups and project scaling within the ecosystem. The
-          Universal Investment Platform (UIP) offers a sophisticated solution to
-          efficiently and securely facilitate investments in Web3. The provided
-          rounds outline the terms and conditions for different investment
-          rounds in the Universal fundraise.
+          {project?.description}
         </div>
         <div className="w-[760px] px-2.5 py-5 bg-indigo-600/10 rounded-lg justify-center items-center gap-2.5 inline-flex">
           <div className="text-indigo-600 text-xl font-bold font-['Urbanist'] leading-[29px]">
@@ -27,12 +29,12 @@ function Info() {
           Sale details
         </div>
         <div className="w-[759.73px] text-[#2c2c2c] text-[17px] font-normal font-['Urbanist'] leading-normal">
-          Seed Sale starts on the 2nd of June 2024.
+          {tokenMetrics?.round} Seed Sale starts on the 2nd of June 2024.
           <br />
           Continues until the maximum token allocation is reached or the end of
           August 2024. • A total of 250.000 tokens for sale in this raise.
           <br />
-          Minimum purchase amount: $500.
+          Minimum purchase amount: ${tokenMetrics?.price}.
         </div>
         <div className="text-[#18191c] text-lg font-medium font-['Inter'] leading-7">
           Investment rounds

@@ -1,13 +1,26 @@
 "use client";
 import React, { useState } from "react";
 import Editing from "./Editing";
+import { useVestingSchedules } from "@/hooks/useVestingSchedules";
+import { TabBar } from "../ui/TabBar";
+import { ToastContainer, toast } from "react-toastify";
 
-function Distribution() {
+function Distribution({ projectId }: { projectId: string }) {
   const [editing, setEditing] = useState(false);
+
+  const {
+    data,
+    refetch: refetchBatchList,
+    error,
+    isLoading,
+  } = useVestingSchedules(projectId);
+
+  console.log(data, error, "VESTING DATA");
 
   const handleEdit = () => {
     setEditing(!editing);
   };
+
   return (
     <div className="h-[531.85px] flex-col justify-start items-start gap-10 flex">
       <div className="self-stretch justify-between items-start gap-[523px] inline-flex">
@@ -46,7 +59,7 @@ function Distribution() {
               className="text-white text-lg font-semibold font-['Urbanist'] leading-loose"
               onClick={() => handleEdit()}
             >
-              Edit schedule
+              {error ? "Add schedule" : "Edit schedule"}
             </button>
           </div>
           <div className="-full px-2  rounded-[5px] border border-[#908eb6] justify-center items-center gap-2.5 flex">
@@ -56,7 +69,13 @@ function Distribution() {
           </div>
         </div>
       </div>
-      <div className="justify-start items-center gap-[30px] inline-flex">
+
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <TabBar tabs={data?.data?.vestingBatches} handleTabClick={() => {}} />
+      )}
+      {/* <div className="justify-start items-center gap-[30px] inline-flex">
         <div className="w-[110.54px] h-[47.85px] relative">
           <div className="w-[110.54px] h-[47.85px] left-0 top-0 absolute bg-[#f8f8ff] rounded-tl-[10px] rounded-tr-[10px]" />
           <div className="left-[16.27px] top-[16.43px] absolute text-[#7870fc] text-lg font-semibold font-['Urbanist'] capitalize">
@@ -64,40 +83,7 @@ function Distribution() {
           </div>
           <div className="w-[110.54px] h-[0px] left-0 top-[47.85px] absolute border-2 border-[#7870fc]"></div>
         </div>
-        <div className="justify-start items-center gap-[5px] flex">
-          <div className="text-[#979797] text-lg font-semibold font-['Urbanist'] capitalize">
-            TGE
-          </div>
-          <div className="w-[15px] h-[15px] relative" />
-        </div>
-        <div className="justify-start items-center gap-[5px] flex">
-          <div className="text-[#979797] text-lg font-semibold font-['Urbanist'] capitalize">
-            Batch 1
-          </div>
-          <div className="w-[15px] h-[15px] relative" />
-        </div>
-        <div className="justify-start items-center gap-[5px] flex">
-          <div className="text-[#979797] text-lg font-semibold font-['Urbanist'] capitalize">
-            Batch 2
-          </div>
-          <div className="w-[15px] h-[15px] relative" />
-        </div>
-        <div className="justify-start items-start gap-[5px] flex">
-          <div className="text-[#979797] text-lg font-semibold font-['Urbanist'] capitalize">
-            Batch 3
-          </div>
-          <div className="w-[15px] h-[15px] relative" />
-        </div>
-        <div className="text-[#979797] text-lg font-semibold font-['Urbanist'] capitalize">
-          Batch 4
-        </div>
-        <div className="text-[#979797] text-lg font-semibold font-['Urbanist'] capitalize">
-          Batch 5
-        </div>
-        <div className="text-[#979797] text-lg font-semibold font-['Urbanist'] capitalize">
-          Batch 6
-        </div>
-      </div>
+      </div> */}
       <div className="self-stretch h-[361px] flex-col justify-start items-start gap-5 flex">
         <div className="w-full h-[11px] relative">
           <div className="left-0 top-0 absolute text-[#afafaf] text-[15px] font-semibold font-['Urbanist'] capitalize">
@@ -199,9 +185,18 @@ function Distribution() {
               </div>
             </div>
           </div>
-          {editing && <Editing handleEdit={handleEdit} />}
+          {editing && (
+            <Editing
+              handleEdit={handleEdit}
+              projectId={projectId}
+              scheduleData={data?.data?.vestingBatches}
+              refetch={refetchBatchList}
+            />
+          )}
         </div>
       </div>
+
+      <ToastContainer autoClose={5000} />
     </div>
   );
 }

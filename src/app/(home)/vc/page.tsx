@@ -17,6 +17,7 @@ import EmptyState from "@/components/ui/EmptyState";
 import { useAddWallet } from "@/hooks/useAddWallet";
 import { useVCProjects } from "@/hooks/useVCProjects";
 import { getProjectDetails } from "@/lib/api";
+import { ethers } from "ethers";
 
 const VCProfilePage2: React.FC = () => {
   const fomoDeal = new FomoDeal();
@@ -26,8 +27,13 @@ const VCProfilePage2: React.FC = () => {
     useState<PhantomWalletAdapter | null>(null);
 
   const [nightlyAddress, setNightlyAddress] = useState<string | undefined>();
+
+  const [isWalletRegistered, setIsWalletRegistered] = useState(false);
+
   const [solanaAddress, setSolanaAddress] = useState<string | null>(null);
-  const [isPhantomConnected, setIsPhantomConnected] = useState(false);
+  const [isPhantomConnected, setIsPhantomConnected] = useState<
+    boolean | undefined
+  >(false);
   const { mutateAsync, isPending } = useAddWallet();
   const {
     data: profileData,
@@ -39,10 +45,25 @@ const VCProfilePage2: React.FC = () => {
 
   const { data: vcProjects } = useVCProjects();
 
+  // console.log(profileData?.data.vcName);
+
   const { isConnected, address, chainId } = useAccount();
+
   const { connect } = useConnect();
   const { connectors, disconnect } = useDisconnect();
 
+  useEffect(() => {
+    const isRegistered =
+      profileData?.data?.linkedWallets?.some(
+        (wallet) => wallet.address === address && wallet.chain === "EVM"
+      ) ?? false;
+
+    console.log(profileData?.data?.linkedWallets, "IS REGISTERED");
+
+    setIsWalletRegistered(isRegistered);
+  }, [address, profileData]);
+
+  const signer = new ethers.BrowserProvider(window.ethereum);
   const connectMetaMask = () => {
     if (typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask) {
       console.log("connectinggggggggggggggggggggg");
@@ -127,25 +148,27 @@ const VCProfilePage2: React.FC = () => {
     }
   };
 
-  //fomodeal registerVC
-
-  const getTokens = async () => {
-    const res = await fomoDeal.getSupportedPaymentToken(Network.ETHEREUM);
-    console.log(res, "RESPONSE TOKENS");
-  };
-
-  getTokens();
-
   const handleRegister = async () => {
+    // alert("called");
     try {
-      await mutateAsync({
-        address: connectedWalletAddressInfo.walletAdd,
-        chain: connectedWalletAddressInfo.chain,
-      });
-      console.log("wallet added");
-      setOpenRegisterModal(false);
-      alert("Wallet added successfully");
-      refetch();
+      const res = await fomoDeal.createVc(
+        Network.ETHEREUM,
+        options,
+        `${profileData?.data?.vcName || "Test"}`
+      );
+
+      console.log(res);
+
+      if (res) {
+        await mutateAsync({
+          address: connectedWalletAddressInfo.walletAdd,
+          chain: connectedWalletAddressInfo.chain,
+        });
+        console.log("wallet added");
+        setOpenRegisterModal(false);
+        alert("Wallet added successfully");
+        refetch();
+      }
     } catch (error) {
       console.log(error, "ERROR");
       setOpenRegisterModal(false);
@@ -168,6 +191,16 @@ const VCProfilePage2: React.FC = () => {
     }
   };
 
+  // const fomoDeal = new FomoDeal();
+
+  let options = {
+    ethereum: {
+      // contractAddress: "0x2e7483bcff40A5D6B251739531DF6b633490e256",
+      contractAddress: "0x37a87286200a821008141957F28E7602c93F92db",
+      provider: signer,
+    },
+  };
+
   if (isLoading) return <LoadingSpinner />;
   if (isError) {
     const errorMessage =
@@ -185,12 +218,15 @@ const VCProfilePage2: React.FC = () => {
             openModal={() => setOpenModal(true)}
             connectedWalletAdd={address}
             isConnected={isConnected}
+            isRegistered={isWalletRegistered}
             handleDisconnect={handleDisconnect}
+            handleRegister={handleRegister}
           />
           <Profile profile={profileData?.data} />
+          {/* <button onClick={handleCreateVC}>CALL</button> */}
         </div>
 
-        {isConnected && profileData?.data?.linkedWallets?.length > 0 ? (
+        {isConnected && isWalletRegistered ? (
           <Projects projects={vcProjects} />
         ) : (
           <EmptyState

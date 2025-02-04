@@ -8,6 +8,8 @@ function Navbar({
   connectedWalletAdd,
   isConnected,
   handleDisconnect,
+  isRegistered,
+  handleRegister,
 }: any) {
   const router = useRouter();
   return (
@@ -30,6 +32,14 @@ function Navbar({
             >
               Disconnect
             </button>
+            {!isRegistered && (
+              <button
+                onClick={handleRegister}
+                className="px-4 py-2  border-indigo-600 rounded-full text-black font-semibold border-2 hover:bg-indigo-700 hover:text-white transition"
+              >
+                Register Wallet
+              </button>
+            )}
           </>
         ) : (
           <button

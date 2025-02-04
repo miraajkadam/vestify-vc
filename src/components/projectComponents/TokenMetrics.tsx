@@ -9,6 +9,9 @@ interface tokenMetric {
   tgeUnlock: number;
   tge: string;
   tgeSummary: string;
+  lockupPeriod: string;
+  noOfMonths: number;
+  releaseType: string;
   projectToken: string;
   raisedAmt: number;
   projectTokenTicker: string;
@@ -37,6 +40,9 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
               tgeUnlock: 0,
               tge: "",
               tgeSummary: "",
+              lockupPeriod: "",
+              noOfMonths: 0,
+              releaseType: "",
               projectToken: "",
               raisedAmt: 0,
               projectTokenTicker: "",
@@ -66,6 +72,9 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
         tgeUnlock: 0,
         tge: "",
         tgeSummary: "",
+        lockupPeriod: "",
+        noOfMonths: 0,
+        releaseType: "",
         projectToken: "",
         projectTokenTicker: "",
         raisedAmt: 0,
@@ -96,6 +105,8 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
     "PUBLIC",
   ];
 
+  const releaseTypes = ["Linear", "Quarterly"];
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6 text-black">
       <h2 className="text-2xl font-bold mb-6 text-black text-center">
@@ -111,12 +122,7 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
             >
               Project Round
             </label>
-            {/* <Dropdown
-              options={roundOptions}
-              value={round.round}
-              onChange={(value) => handleInputChange(index, "round", value)}
-              placeholder="Select Round"
-            /> */}
+
             <Dropdown
               options={roundOptions}
               value={round.round}
@@ -258,6 +264,67 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
               required
             />
           </div>
+          <div>
+            <label
+              htmlFor={`noOfMonths-${index}`}
+              className="block mb-2 font-medium text-black"
+            >
+              No of Months
+            </label>
+            <input
+              id={`noOfMonths-${index}`}
+              type="text"
+              value={round.noOfMonths}
+              onChange={(e) =>
+                handleInputChange(index, "noOfMonths", e.target.value)
+              }
+              placeholder="No Of Months"
+              className="w-full p-3 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor={`price-${index}`}
+              className="block mb-2 font-medium text-black"
+            >
+              Lockup Period
+            </label>
+            <input
+              id={`lockupPeriod-${index}`}
+              type="text"
+              value={round.lockupPeriod}
+              onChange={(e) =>
+                handleInputChange(index, "lockupPeriod", e.target.value)
+              }
+              placeholder="Enter price"
+              className="w-full p-3 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor={`releaseType-${index}`}
+              className="block mb-2 font-medium text-black"
+            >
+              Release Type
+            </label>
+
+            <Dropdown
+              options={releaseTypes}
+              value={round.releaseType}
+              onChange={(value) => {
+                if (typeof value === "string" || typeof value === "number") {
+                  handleInputChange(index, "releaseType", value);
+                } else {
+                  console.error("Invalid value type:", value);
+                }
+              }}
+              placeholder="Select Release Type"
+            />
+          </div>
+
           <div>
             <label
               htmlFor={`tgeSummary-${index}`}
