@@ -124,7 +124,7 @@ const RegisterVCModal = ({
                     disabled={isPending}
                     className="bg-indigo-600 text-white px-4 py-2 cursor-pointer rounded-full hover:bg-indigo-700 flex items-center transition duration-300"
                   >
-                    {isPending ? "Loading..." : "Register"}
+                    {isPending ? "Registering..." : "Register"}
                   </button>
                 </div>
               </div>

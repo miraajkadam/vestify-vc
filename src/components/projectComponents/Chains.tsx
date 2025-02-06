@@ -14,7 +14,8 @@ interface projectWalletData {
 }
 
 interface ChainsProps {
-  onComplete: (data: { projectWallet: projectWalletData }) => void;
+  onComplete?: (data: { projectWallet: projectWalletData }) => void;
+  onSelectChain?: (chainType: string) => void;
 }
 
 const Chains: React.FC<ChainsProps> = ({ onComplete }) => {
@@ -69,9 +70,11 @@ const Chains: React.FC<ChainsProps> = ({ onComplete }) => {
       walletAddress: address,
     };
     console.log("projectWalletData", projectWalletData);
-    onComplete({
-      projectWallet: projectWalletData,
-    });
+    if (onComplete) {
+      onComplete({
+        projectWallet: projectWalletData,
+      });
+    }
   }, [chainId, address]);
 
   const connectWalletConnect = () => {

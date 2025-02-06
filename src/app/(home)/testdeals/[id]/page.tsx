@@ -26,7 +26,7 @@ function page({ params }: { params: { id: string } }) {
       case "Fundraising":
         return <Fundrasing projectId={params.id} />;
       case "Distributions":
-        return <Distribution />;
+        return <Distribution projectId={params.id} />;
       default:
         return (
           <Info

@@ -95,7 +95,7 @@ function page() {
             </div>
 
             {/**item 4 */}
-            <div className="w-full h-full flex flex-col  justify-center align-center gap-[18.97px] inline-flex text-white text-lg rounded-xl ">
+            <div className="w-full h-full flex flex-col  justify-center align-center gap-[18.97px] text-white text-lg rounded-xl ">
               <div className="w-full h-full  bg-[#f8f8f8] p-6 rounded-[18.97px] border border-black/10">
                 <div className="text-[#18191c] text-[15px] font-medium font-['Urbanist'] leading-[17.39px]">
                   Last Month’s Investment

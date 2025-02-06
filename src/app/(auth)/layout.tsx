@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex">
-        <Providers>
+        <Providers initialState={{}}>
           <main className="flex flex-row overflow-auto bg-gray-50 w-full">
             {/* <SideNavbar /> */}
             <div className="flex-1">{children}</div>

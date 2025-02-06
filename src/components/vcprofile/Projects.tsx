@@ -137,11 +137,11 @@ function Projects({ projects }: { projects?: ProjectedCreated }) {
       <div className="h-[55.36px] col-span-2 flex justify-start items-center">
         <div className="w-[55.36px] h-[55.36px] bg-[#d9d9d9]" />
         <div className=" ml-4 text-[#303138] text-lg font-bold font-['Urbanist'] leading-[32.85px]">
-          {projects?.projectName}
+          {projects?.projectCreated?.projectName}
         </div>
       </div>
       <div className=" text-[#505050] text-lg font-bold font-['Urbanist'] leading-[32.85px]">
-        {projects?.hardCap}
+        {projects?.projectCreated?.hardCap}
       </div>
       <div className="">
         <div className="text-[#303138] text-lg font-extrabold font-['Urbanist'] leading-[32.85px]">
@@ -168,7 +168,7 @@ function Projects({ projects }: { projects?: ProjectedCreated }) {
           <button
             className="text-white text-sm font-semibold font-['Urbanist'] capitalize tracking-tight"
             onClick={() => {
-              router.push(`/projectDeals/${projects?.projectId}`);
+              router.push(`/projectDeals/${projects?.projectCreated?.projectId}`);
             }}
           >
             Details
