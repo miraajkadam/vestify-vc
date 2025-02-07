@@ -7,14 +7,44 @@ import Fundrasing from "@/components/deal/Fundrasing";
 import Distribution from "@/components/deal/Distribution";
 import { useProjectDetails } from "@/hooks/useVCProjectDetails";
 import { LoadingSpinner } from "@/components/Loader/Loader";
+import { FomoDeal, Network } from "fomo-deal-sdk-v1";
+import { ethers } from "ethers";
+import { useWalletInfo } from "@/store/walletContext";
 
 function page({ params }: { params: { id: string } }) {
   const { data, isPending, isError } = useProjectDetails(params.id);
+  const fomodeal = new FomoDeal();
+
+  const { connectedWalletAddressInfo } = useWalletInfo();
 
   const [selectedOption, setSelectedOption] = useState("Deal Info");
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
+  };
+
+  const signer = new ethers.BrowserProvider(window.ethereum);
+
+  let options = {
+    ethereum: {
+      // contractAddress: "0x2e7483bcff40A5D6B251739531DF6b633490e256",
+      contractAddress: "0x37a87286200a821008141957F28E7602c93F92db",
+      provider: signer,
+    },
+  };
+
+  const Tparams = {
+    vcAddress: `0x${connectedWalletAddressInfo.walletAdd}`,
+    projectCount: 2,
+    paymentTokenAddress: "0x9674041992f4f45941577580f1e5Dc024CD93EaE",
+    amount: 1000,
+    proof: ["0x9674041992f4f45941577580f1e5Dc024CD93EaE"],
+  };
+
+  const handleContribute = async () => {
+    console.log("Contribute");
+    const res = await fomodeal.contribute(Network.ETHEREUM, options, Tparams);
+    console.log(res);
   };
 
   const renderComponent = () => {
@@ -91,6 +121,12 @@ function page({ params }: { params: { id: string } }) {
                   <div className="text-[#6c6c6c] text-[15px] font-semibold font-['Urbanist'] leading-snug">
                     Your allocation
                   </div>
+                  <button
+                    onClick={handleContribute}
+                    className="px-6 py-2 bg-gray-800 text-white text-lg font-medium rounded-2xl"
+                  >
+                    Contribute
+                  </button>
                 </div>
               </div>
             </div>
