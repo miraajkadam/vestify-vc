@@ -5,9 +5,9 @@ import EVMWallets from "@/components/web3/EVMWallets";
 import SolanaWallets from "@/components/web3/SolanaWallets";
 
 function Page() {
-  const [selectedChain, setSelectedChain] = useState(null);
+  const [selectedChain, setSelectedChain] = useState<string | null>(null);
 
-  const handleChainSelection = (chainType) => {
+  const handleChainSelection = (chainType: string) => {
     setSelectedChain(chainType);
   };
 

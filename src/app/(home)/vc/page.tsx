@@ -16,8 +16,8 @@ import RegisterVCModal from "@/components/web3/registerVCModal";
 import EmptyState from "@/components/ui/EmptyState";
 import { useAddWallet } from "@/hooks/useAddWallet";
 import { useVCProjects } from "@/hooks/useVCProjects";
-import { getProjectDetails } from "@/lib/api";
 import { ethers } from "ethers";
+import { ToastContainer, toast } from "react-toastify";
 
 const VCProfilePage2: React.FC = () => {
   const fomoDeal = new FomoDeal();
@@ -45,13 +45,13 @@ const VCProfilePage2: React.FC = () => {
 
   const { data: vcProjects } = useVCProjects();
 
-  const extractProjects = vcProjects?.map((proj) => proj.projectCreated);
-  console.log(extractProjects, "EXTRACTED PROJECTS");
+  const extractProjects = vcProjects?.map((proj: { projectCreated: any }) => proj.projectCreated);
 
   const { isConnected, address, chainId } = useAccount();
 
   const { connect } = useConnect();
   const { connectors, disconnect } = useDisconnect();
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     const isRegistered =
@@ -69,9 +69,11 @@ const VCProfilePage2: React.FC = () => {
     if (typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask) {
       console.log("connectinggggggggggggggggggggg");
       connect({ connector: metaMask() });
+      setOpenModal(false)
     } else {
       alert("MetaMask is not installed. Please install it.");
       window.open("https://metamask.io/download.html", "_blank");
+      setOpenModal(false)
     }
   };
 
@@ -150,8 +152,8 @@ const VCProfilePage2: React.FC = () => {
   };
 
   const handleRegister = async () => {
-    // alert("called");
     try {
+      setLoader(true);
       const res = await fomoDeal.createVc(
         Network.ETHEREUM,
         options,
@@ -167,11 +169,15 @@ const VCProfilePage2: React.FC = () => {
         });
         console.log("wallet added");
         setOpenRegisterModal(false);
-        alert("Wallet added successfully");
+        // alert("Wallet added successfully");
+        toast.success("Wallet added successfully");
         refetch();
+        setLoader(false);
       }
     } catch (error) {
+      setLoader(false);
       console.log(error, "ERROR");
+      toast.error("Error adding wallet");
       setOpenRegisterModal(false);
       refetch(); //need to shift in try block
     }
@@ -191,8 +197,6 @@ const VCProfilePage2: React.FC = () => {
       console.log(error);
     }
   };
-
-  // const fomoDeal = new FomoDeal();
 
   let options = {
     ethereum: {
@@ -243,7 +247,7 @@ const VCProfilePage2: React.FC = () => {
                 <div> Ongoing Claim</div>
                 <div></div>
 
-                {extractProjects?.map((project) => (
+                {extractProjects?.map((project: { projectCreated: any }) => (
                   <Projects projects={project} />
                 ))}
               </div>
@@ -275,11 +279,12 @@ const VCProfilePage2: React.FC = () => {
 
       <RegisterVCModal
         handleClose={() => setOpenRegisterModal(false)}
-        isPending={isPending}
+        isPending={isPending|| loader}
         isOpen={openRegisterModal}
         handleDisconnect={handleDisconnect}
         handleRegister={handleRegister}
       />
+      <ToastContainer autoClose={2000}/>
     </div>
   );
 };
