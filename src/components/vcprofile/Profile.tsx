@@ -22,10 +22,12 @@ function Profile({ profile }: { profile: ProjectData }) {
         <div className="w-[316.50px] h-[139.05px] relative">
           <div className="w-[316.50px] h-[139.05px] left-0 top-0 absolute bg-[#f8f8f8] rounded-3xl border border-black/10" />
           <div className="w-[250.53px] h-[73.21px] left-[32.99px] top-[32.92px] absolute justify-start items-center gap-[20.06px] inline-flex">
-            <img
-              src={""}
-              className="w-[73.21px] h-[73.21px] bg-[#bad7ff] rounded-full"
-            />
+            <div className=" border-2 border-blue-400 overflow-hidden w-[73.21px] h-[73.21px] bg-[#bad7ff] rounded-full">
+              <img
+                src="/vestify_logo.png"
+                className="w-full h-full object-cover"
+              />
+            </div>
             <div className="text-[#18191c] text-[35px] font-bold font-['Urbanist'] leading-[46.12px]">
               {profile?.vcName}
             </div>

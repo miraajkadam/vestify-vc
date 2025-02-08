@@ -48,7 +48,7 @@ function Editing({ handleEdit, projectId, refetch, scheduleData }: any) {
 
   useEffect(() => {
     if (scheduleData) {
-      const addedBatchList = scheduleData.map((item) => {
+      const addedBatchList = scheduleData.map((item: any) => {
         return {
           batch: item.name,
           date: item.date.split("T")[0],
@@ -174,7 +174,7 @@ function Editing({ handleEdit, projectId, refetch, scheduleData }: any) {
         toast.success("Schedule Updated Successfully");
         handleEdit();
         refetch();
-      } catch (err) {
+      } catch (err: any) {
         toast.error(err.message);
         handleEdit();
       }

@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logout } from "@/lib/api";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Logo from "@/components/ui/Icons/Logo";
 import Capital from "@/components/ui/Icons/Capital";
 import Home from "@/components/ui/Icons/Home";
@@ -22,6 +22,8 @@ import profileimg from "../../../public/profile.svg";
 
 export function SideNavbar() {
   const router = useRouter();
+  const pathname = usePathname();
+  console.log(pathname, "PATH NAME");
 
   const handleLogout = async () => {
     try {
@@ -54,7 +56,9 @@ export function SideNavbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="w-12 h-12 rounded-full text-white hover:bg-indigo-500 transition-colors"
+              className={`w-12 h-12  rounded-full text-white hover:bg-indigo-400 transition-colors ${
+                pathname === "/dashboard" ? "bg-indigo-500" : ""
+              }`}
             >
               <Home />
               <span className="sr-only">Home</span>
@@ -66,7 +70,9 @@ export function SideNavbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="w-12 h-12 rounded-full text-white hover:bg-indigo-500 transition-colors"
+              className={`w-12 h-12  rounded-full text-white hover:bg-indigo-400 transition-colors ${
+                pathname === "/capital" ? "bg-indigo-500" : ""
+              }`}
             >
               <Capital />
               <span className="sr-only">Capital</span>
@@ -78,7 +84,9 @@ export function SideNavbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="w-12 h-12 bg-indigo-500 rounded-full text-white hover:bg-indigo-400 transition-colors"
+              className={`w-12 h-12  rounded-full text-white hover:bg-indigo-400 transition-colors ${
+                pathname === "/vc" ? "bg-indigo-500" : ""
+              }`}
             >
               <User className="w-6 h-6" />
               <span className="sr-only">Profile</span>

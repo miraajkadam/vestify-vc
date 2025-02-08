@@ -1,8 +1,23 @@
 import React from "react";
 import { TeamAndAdvisor } from "./types";
 
+const teams = [
+  {
+    id: 1,
+    src: "/Team1.svg",
+  },
+  {
+    id: 2,
+    src: "/Team1.svg",
+  },
+  {
+    id: 3,
+    src: "/Team1.svg",
+  },
+];
 function Team({ teamAndAdvisors }: { teamAndAdvisors?: TeamAndAdvisor[] }) {
   // console.log(teamAndAdvisors);
+
   return (
     <div className="h-[266.37px] w-full flex-col justify-start items-center gap-2.5 flex">
       <div className="w-full px-[275.50px] py-2 bg-[#f8f8f8] rounded-lg justify-center items-center gap-2.5 inline-flex">
@@ -12,13 +27,14 @@ function Team({ teamAndAdvisors }: { teamAndAdvisors?: TeamAndAdvisor[] }) {
       </div>
 
       <div className="w-full justify-between items-center gap-[22.32px] inline-flex">
-        {teamAndAdvisors?.map((member: any, index: number) => (
+        {teams?.map((member: any, index: number) => (
           <div className="w-[238.45px] flex-col justify-start items-start gap-[20.09px] inline-flex">
             <div className="w-[238.45px] h-[208.37px] relative">
               <img
                 className="w-[238.45px] h-[181.91px] left-0 top-0 absolute rounded-[11.16px]"
-                src={member?.imgBase64}
-                alt={member?.name}
+                // src={member?.imgBase64}
+                src={member?.src}
+                // alt={member?.name}
               />
               <div className="h-[53.25px] p-[11.16px] left-[16px] top-[155.12px] absolute bg-white rounded-[8.93px] justify-start items-center gap-[77px] inline-flex">
                 <div className="w-full flex-col justify-start items-start gap-[8.93px] inline-flex">

@@ -24,6 +24,7 @@ import WalletConnection from "./WalletConnection";
 import { useWalletInfo } from "@/store/walletContext";
 import { useMerkleRootWallets } from "@/hooks/useMerkleRootAddresses";
 import { Config, useConnectorClient } from "wagmi";
+import { ToastContainer, toast } from "react-toastify";
 
 export type ProjectDataState = {
   info: {
@@ -62,7 +63,7 @@ const ProjectCreationForm: React.FC<{
   step: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ step, setStep }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isFinalStep, setIsFinalStep] = useState(false);
   const { data: merkleRootWallets } = useMerkleRootWallets();
@@ -101,7 +102,10 @@ const ProjectCreationForm: React.FC<{
     { name: "Team & Advisors", component: TeamAndAdvisors },
     { name: "Partners & Investors", component: PartnersAndInvestors },
     { name: "Socials", component: Socials },
-    { name: "ConnectWallet", component: WalletConnection },
+    {
+      name: "ConnectWallet",
+      component: WalletConnection,
+    },
   ];
 
   const fomoDeal = new FomoDeal();
@@ -190,15 +194,15 @@ const ProjectCreationForm: React.FC<{
         tokenMetrics,
       };
 
-      console.log(" project data:", payload);
       const response = await createProject(payload, projectID);
-      console.log("Project created:", response);
+
+      toast.success(response.data.message || "Project created successfully");
       router.push("/dashboard");
     } catch (error) {
+      toast.success("Something went wrong, please try again later");
+
       console.error("Error creating project:", error);
-      setError(
-        "An error occurred while creating the project. Please try again."
-      );
+      router.push("/vc");
     } finally {
       setIsLoading(false);
     }
@@ -247,12 +251,10 @@ const ProjectCreationForm: React.FC<{
       const data = await sdkData;
       console.log(data, "data");
       addProject(projectDataToCreate, data.projectId);
-      // router.push("/dashboard");
     } catch (error) {
       console.error("Project creation error:", error);
-      setError(
-        "An error occurred while creating the project. Please try again."
-      );
+      toast.error("Failed to create project");
+      router.push("/vc");
     } finally {
       setIsLoading(false);
     }
@@ -267,6 +269,7 @@ const ProjectCreationForm: React.FC<{
         {CurrentStepComponent && (
           <CurrentStepComponent
             onComplete={(data) => handleStepComplete(data)}
+            isCreating={isLoading}
             initialData={
               step === 1
                 ? (projectData.info as any)
@@ -286,9 +289,10 @@ const ProjectCreationForm: React.FC<{
             }
           />
         )}
-        {error && <p className="text-red-500 mb-4">{error}</p>}
         {isLoading && <p className="text-indigo-600">Creating Project...</p>}
       </div>
+
+      <ToastContainer autoClose={3000} />
     </div>
   );
 };

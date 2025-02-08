@@ -39,6 +39,7 @@ function Profile({
       <div className="justify-start items-center gap-2.5 inline-flex">
         <div className="w-[1012.05px] h-[16.08px] relative">
           <div className="w-[1012.05px] h-[16.08px] left-0 top-0 absolute bg-[#f3f3f3] rounded-[18px]" />
+
           <div className="w-[543.72px] h-[16.08px] left-0 top-0 absolute bg-gradient-to-r from-[#5047e6] to-[#7068f5] rounded-[18px]" />
         </div>
         <div className="text-black text-[17px] font-bold font-['Urbanist'] leading-normal">

@@ -69,7 +69,12 @@ const ProjectDetailsPage = ({ params }: { params: { id: string } }) => {
               </div>
 
               <div className="h-full w-full flex-col justify-end items-end gap-[25px] inline-flex">
-                <div className="w-[84.84px] h-[84.84px] bg-[#d9d9d9] rounded-[60px]" />
+                <div className="w-[84.84px] h-[84.84px] bg-[#d9d9d9] rounded-[60px] border-2 border-blue-400 overflow-hidden ">
+                  <img
+                    src="/vestify_logo.png"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <div className="flex-col justify-start items-end gap-[15px] flex">
                   <div className="text-black text-[22px] font-extrabold font-['Urbanist'] leading-loose">
                     $0.00

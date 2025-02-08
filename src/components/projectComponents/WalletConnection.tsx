@@ -2,6 +2,7 @@
 
 import { useWalletInfo } from "@/store/walletContext";
 import React, { FC, useState } from "react";
+import { toast } from "react-toastify";
 
 interface projectWalletData {
   chain: string | undefined;
@@ -10,10 +11,11 @@ interface projectWalletData {
 }
 
 interface ChainsProps {
-  onComplete: (data: { projectWallet: projectWalletData }) => void;
+  onComplete?: (data: { projectWallet: projectWalletData }) => void;
+  isCreating: boolean;
 }
 
-const WalletConnection: FC<ChainsProps> = ({ onComplete }) => {
+const WalletConnection: FC<ChainsProps> = ({ onComplete, isCreating }) => {
   const { connectedWalletAddressInfo } = useWalletInfo();
 
   const { chain, walletAdd } = connectedWalletAddressInfo;
@@ -37,10 +39,10 @@ const WalletConnection: FC<ChainsProps> = ({ onComplete }) => {
         chain,
         fundWalletAddress: fundraisingWalletAddress,
       };
-
-      onComplete({
-        projectWallet: payload,
-      });
+      if (onComplete)
+        onComplete({
+          projectWallet: payload,
+        });
       setWalletAddError("");
     }
   };
@@ -119,10 +121,12 @@ const WalletConnection: FC<ChainsProps> = ({ onComplete }) => {
 
       <button
         onClick={handleFinish}
-        // type="submit"
-        className="w-full py-3 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+        disabled={isCreating}
+        className={`w-full py-3 px-4 ${
+          isCreating ? "bg-indigo-300" : "bg-indigo-600"
+        } text-white rounded-md hover:bg-indigo-700`}
       >
-        Finish
+        {isCreating ? "Creating Project..." : "Finish"}
       </button>
     </>
   );
