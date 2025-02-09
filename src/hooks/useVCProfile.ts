@@ -55,15 +55,16 @@ interface LinkedWallets {
 
 export interface ProjectData {
   vcName: string;
-  kycStatus: boolean;
-  socialMedia: {
+  kycDone: boolean;
+  id: string;
+  social: {
     discord: string;
     x: string;
     telegram: string;
     website: string;
   };
   fundSize: string;
-  tags: never[];
+  tags?: any;
   vcId: string;
   lastProjectROI: string;
   averageROI: string;
@@ -113,13 +114,13 @@ export interface WalletAPIResponse<T> {
 }
 
 export interface WalletData {
-  address: string;
+  address: `0x${string}` | undefined;
   chain: string;
 }
 
 const fomoDeal = new FomoDeal();
 
-const getVCProfile = async (): Promise<ApiResponse<ProjectData>> => {
+const getVCProfile = async (): Promise<ProjectData> => {
   try {
     const token = Cookies.get("access_token");
     if (!token) {
@@ -130,23 +131,25 @@ const getVCProfile = async (): Promise<ApiResponse<ProjectData>> => {
     const vcId = decodedToken.user.id;
 
     const [response, walletData] = await Promise.all([
-      api.get<ApiResponse<GetVCProjectsResponse>>(`/api/vc/${vcId}/profile`),
+      api.get<ApiResponse<ProjectData>>(`/api/vc/${vcId}/profile`),
       api.get<WalletAPIResponse<WalletData[]>>(`/api/account/${vcId}/wallets`),
     ]);
 
+    console.log(response.data.data, "RESPONSE SDK");
+
     const {
       id,
+      tags,
       description,
       subscriptionFee,
       kycDone,
       social,
-      tags,
       vcId: vc_Id,
     } = response.data.data;
 
     const { discord, telegram, website, x } = social;
 
-    const projects = await fomoDeal.getAllProjects(Network.ETHEREUM);
+    const projects: any = await fomoDeal.getAllProjects(Network.ETHEREUM);
 
     // console.log(projects, "PROJECTS SDK");
     //onChian ID
@@ -171,8 +174,9 @@ const getVCProfile = async (): Promise<ApiResponse<ProjectData>> => {
 
     const projectData = {
       vcName: "",
-      kycStatus: kycDone,
-      socialMedia: {
+      id: id,
+      kycDone: kycDone,
+      social: {
         discord: discord,
         x: x,
         telegram: telegram,
@@ -189,7 +193,8 @@ const getVCProfile = async (): Promise<ApiResponse<ProjectData>> => {
       linkedWallets: walletData?.data?.data,
     };
 
-    return { data: projectData };
+    console.log(projectData, "PROJECT SDK DATA");
+    return projectData;
     // return response.data;
   } catch (error) {
     console.error("Error fetching VC profile:", error);

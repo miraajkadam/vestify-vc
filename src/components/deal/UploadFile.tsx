@@ -46,7 +46,7 @@ export function FileUploadModal({
   }, []);
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file: any = e.target.files?.[0];
     Papa.parse(file, {
       header: true,
       complete: function (results) {

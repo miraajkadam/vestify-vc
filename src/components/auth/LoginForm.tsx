@@ -39,7 +39,10 @@ const LoginForm: React.FC = () => {
     setError("");
 
     try {
-      const response = await login(data);
+      const response = await login({
+        email: data.email!,
+        password: data.password!,
+      });
       if (response.success && response.data?.access_token) {
         Cookies.set("access_token", response.data.access_token, {
           expires: 7,

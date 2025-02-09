@@ -58,7 +58,7 @@ function SolanaWallets() {
       const connectedWallet = await connectWallet();
       setWallet(connectedWallet);
       setWalletToCookies(connectedWallet.publicKey.toString(), true);
-      queryClient.invalidateQueries(["wallet"]);
+      queryClient.invalidateQueries({ queryKey: ["wallet"] });
     } catch (error) {
       console.error("Connection Error:", error);
     }
@@ -69,7 +69,7 @@ function SolanaWallets() {
       if (wallet) {
         await disconnectWallet();
         setWalletToCookies("", false);
-        queryClient.invalidateQueries(["wallet"]);
+        queryClient.invalidateQueries({ queryKey: ["wallet"] });
       }
     } catch (error) {
       console.error("Disconnection Error:", error);

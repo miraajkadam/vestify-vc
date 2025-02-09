@@ -10,12 +10,21 @@ import { LoadingSpinner } from "@/components/Loader/Loader";
 import { FomoDeal, Network } from "fomo-deal-sdk-v1";
 import { ethers } from "ethers";
 import { useWalletInfo } from "@/store/walletContext";
+import { useVCProjects } from "@/hooks/useVCProjects";
 
 function page({ params }: { params: { id: string } }) {
   const { data, isPending, isError } = useProjectDetails(params.id);
   const fomodeal = new FomoDeal();
+  const { data: vcProjects } = useVCProjects();
 
-  const { connectedWalletAddressInfo } = useWalletInfo();
+  const extractProjects = vcProjects?.map(
+    (proj: { projectCreated: any }) => proj.projectCreated
+  );
+
+  const findProjectDetails = extractProjects?.find(
+    (item) => item.projectId === params.id
+  );
+  console.log(findProjectDetails, "findProjectDetails");
 
   const [selectedOption, setSelectedOption] = useState("Deal Info");
 
@@ -27,18 +36,16 @@ function page({ params }: { params: { id: string } }) {
 
   let options = {
     ethereum: {
-      // contractAddress: "0x2e7483bcff40A5D6B251739531DF6b633490e256",
-      contractAddress: "0x37a87286200a821008141957F28E7602c93F92db",
       provider: signer,
     },
   };
 
   const Tparams = {
-    vcAddress: `0x${connectedWalletAddressInfo.walletAdd}`,
-    projectCount: 2,
-    paymentTokenAddress: "0x9674041992f4f45941577580f1e5Dc024CD93EaE",
+    vcAddress: findProjectDetails?.vcAddress, //VC owner
+    projectCount: findProjectDetails?.projectCount,
+    paymentTokenAddress: findProjectDetails?.paymentTokens[0],
     amount: 1000,
-    proof: ["0x9674041992f4f45941577580f1e5Dc024CD93EaE"],
+    proof: [""],
   };
 
   const handleContribute = async () => {

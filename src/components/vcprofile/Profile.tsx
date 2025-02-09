@@ -14,7 +14,6 @@ const socialIcons = {
 };
 
 function Profile({ profile }: { profile: ProjectData }) {
-  console.log(profile, "DATA");
   return (
     <div className="w-full self-stretch h-[291.32px] flex-col justify-start items-start gap-[21.34px] flex">
       <div className="w-full justify-between items-start gap-[25.61px] inline-flex">
@@ -40,7 +39,7 @@ function Profile({ profile }: { profile: ProjectData }) {
           <div className="left-[20.69px] top-[20.29px] absolute text-[#18191c] text-[15px] font-medium font-['Urbanist'] leading-[17.39px]">
             KYC Status
           </div>
-          {profile?.kycStatus ? (
+          {profile?.kycDone ? (
             <div className="h-[49.09px] p-[16.05px] left-[60px] top-[60.65px] absolute bg-[#00b800]/5 rounded-lg justify-start items-center gap-2 inline-flex">
               <div className="text-[#00ea00] text-2xl font-semibold font-['Urbanist'] leading-[32.81px]">
                 Approved
@@ -60,7 +59,7 @@ function Profile({ profile }: { profile: ProjectData }) {
           <div className="p-5 flex-col justify-between h-full w-full  inline-flex text-[#18191c] text-[15px] font-medium font-['Urbanist'] leading-[17.39px]">
             <span>Social Media:</span>
             <div className="flex gap-5 py-4 flex-row justify-between items-start ">
-              {Object.entries(profile?.socialMedia).map(
+              {Object.entries(profile?.social).map(
                 ([platform, url]: [any, unknown]) => (
                   <a
                     key={platform}

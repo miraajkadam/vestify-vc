@@ -197,12 +197,16 @@ const ProjectCreationForm: React.FC<{
       const response = await createProject(payload, projectID);
 
       toast.success(response.data.message || "Project created successfully");
-      router.push("/dashboard");
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 3000);
     } catch (error) {
       toast.success("Something went wrong, please try again later");
 
       console.error("Error creating project:", error);
-      router.push("/vc");
+      setTimeout(() => {
+        router.push("/vc");
+      }, 3000);
     } finally {
       setIsLoading(false);
     }
@@ -254,7 +258,7 @@ const ProjectCreationForm: React.FC<{
     } catch (error) {
       console.error("Project creation error:", error);
       toast.error("Failed to create project");
-      router.push("/vc");
+      // router.push("/vc");
     } finally {
       setIsLoading(false);
     }

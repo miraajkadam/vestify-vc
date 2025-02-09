@@ -2,10 +2,10 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { ProjectData } from "@/hooks/useVCProfile";
 import EmptyState from "../ui/EmptyState";
-import { ProjectedCreated } from "@/hooks/useVCProjects";
+import { ProjectedCreated, SDKProjects } from "@/hooks/useVCProjects";
 import { useTopGainers } from "@/hooks/useTopGainers";
 
-function Projects({ projects }: { projects?: ProjectedCreated }) {
+function Projects({ projects }: { projects?: SDKProjects }) {
   console.log(projects, "PROJECTS");
   const { data: topGainers } = useTopGainers();
   console.log(topGainers, "TOP GAINERS");

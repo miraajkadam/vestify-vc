@@ -15,7 +15,11 @@ import { useWalletInfo } from "@/store/walletContext";
 import RegisterVCModal from "@/components/web3/registerVCModal";
 import EmptyState from "@/components/ui/EmptyState";
 import { useAddWallet } from "@/hooks/useAddWallet";
-import { useVCProjects } from "@/hooks/useVCProjects";
+import {
+  ProjectedCreated,
+  SDKProjects,
+  useVCProjects,
+} from "@/hooks/useVCProjects";
 import { ethers } from "ethers";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -43,9 +47,14 @@ const VCProfilePage2: React.FC = () => {
     refetch,
   } = useVCProfileData();
 
-  const { data: vcProjects } = useVCProjects();
+  console.log(profileData, "PROFILE DATA");
 
-  const extractProjects = vcProjects?.map((proj: { projectCreated: any }) => proj.projectCreated);
+  const { data: vcProjects } = useVCProjects();
+  console.log(vcProjects, "VC PROJECTS");
+
+  const extractProjects = vcProjects?.map(
+    (proj: { projectCreated: any }) => proj.projectCreated
+  );
 
   const { isConnected, address, chainId } = useAccount();
 
@@ -55,25 +64,25 @@ const VCProfilePage2: React.FC = () => {
 
   useEffect(() => {
     const isRegistered =
-      profileData?.data?.linkedWallets?.some(
+      profileData?.linkedWallets?.some(
         (wallet) => wallet.address === address && wallet.chain === "EVM"
       ) ?? false;
 
-    console.log(profileData?.data?.linkedWallets, "IS REGISTERED");
-
     setIsWalletRegistered(isRegistered);
   }, [address, profileData]);
+  let signer;
 
-  const signer = new ethers.BrowserProvider(window.ethereum);
+  if (typeof window !== "undefined")
+    signer = new ethers.BrowserProvider(window.ethereum);
   const connectMetaMask = () => {
     if (typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask) {
       console.log("connectinggggggggggggggggggggg");
       connect({ connector: metaMask() });
-      setOpenModal(false)
+      setOpenModal(false);
     } else {
       alert("MetaMask is not installed. Please install it.");
       window.open("https://metamask.io/download.html", "_blank");
-      setOpenModal(false)
+      setOpenModal(false);
     }
   };
 
@@ -157,7 +166,7 @@ const VCProfilePage2: React.FC = () => {
       const res = await fomoDeal.createVc(
         Network.ETHEREUM,
         options,
-        `${profileData?.data?.vcName || "Test"}`
+        `${profileData?.vcName || "Test"}`
       );
 
       console.log(res);
@@ -212,14 +221,14 @@ const VCProfilePage2: React.FC = () => {
       error instanceof Error ? error.message : "An unknown error occurred.";
     return <ErrorMessage message={errorMessage} />;
   }
-  if (!profileData?.data) return <NoProfileData />;
+  if (!profileData) return <NoProfileData />;
 
   return (
     <div className=" h-[100vh] w-full bg-white justify-start items-start inline-flex overflow-y-scroll ">
       <div className="w-full px-8 pb-8 bg-white flex-col justify-start items-start gap-[25px] inline-flex">
         <div className="w-full flex-col justify-start items-end flex">
           <Navbar
-            profile={profileData?.data}
+            profile={profileData}
             openModal={() => setOpenModal(true)}
             connectedWalletAdd={address}
             isConnected={isConnected}
@@ -228,7 +237,7 @@ const VCProfilePage2: React.FC = () => {
             handleRegister={handleRegister}
           />
 
-          <Profile profile={profileData?.data} />
+          <Profile profile={profileData} />
           {/* <button onClick={handleCreateVC}>CALL</button> */}
         </div>
 
@@ -247,7 +256,7 @@ const VCProfilePage2: React.FC = () => {
                 <div> Ongoing Claim</div>
                 <div></div>
 
-                {extractProjects?.map((project: { projectCreated: any }) => (
+                {extractProjects?.map((project: SDKProjects) => (
                   <Projects projects={project} />
                 ))}
               </div>
@@ -279,12 +288,12 @@ const VCProfilePage2: React.FC = () => {
 
       <RegisterVCModal
         handleClose={() => setOpenRegisterModal(false)}
-        isPending={isPending|| loader}
+        isPending={isPending || loader}
         isOpen={openRegisterModal}
         handleDisconnect={handleDisconnect}
         handleRegister={handleRegister}
       />
-      <ToastContainer autoClose={2000}/>
+      <ToastContainer autoClose={2000} />
     </div>
   );
 };
