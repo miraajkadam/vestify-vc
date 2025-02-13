@@ -9,7 +9,6 @@ interface TabProps {
 }
 
 export function TabBar({ tabs, handleTabClick }: TabProps) {
-  console.log(tabs, "tabs");
   const [selectedTabId, setSelectedTabId] = useState("");
 
   const handleSelectTab = (id: string) => {

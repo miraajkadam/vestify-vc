@@ -11,20 +11,30 @@ import { FomoDeal, Network } from "fomo-deal-sdk-v1";
 import { ethers } from "ethers";
 import { useWalletInfo } from "@/store/walletContext";
 import { useVCProjects } from "@/hooks/useVCProjects";
+import ContributeModal from "@/components/web3/contributeModal";
+import { toBigInt } from "ethers";
+export interface ContributeParams {
+  vcAddress: string;
+  projectCount: number;
+  paymentTokenAddress: string;
+  amount: ethers.BigNumberish;
+  proof: string[];
+}
 
 function page({ params }: { params: { id: string } }) {
   const { data, isPending, isError } = useProjectDetails(params.id);
   const fomodeal = new FomoDeal();
   const { data: vcProjects } = useVCProjects();
 
+  const [openModal, setOpenModal] = useState(false);
+
   const extractProjects = vcProjects?.map(
     (proj: { projectCreated: any }) => proj.projectCreated
   );
 
   const findProjectDetails = extractProjects?.find(
-    (item) => item.projectId === params.id
+    (item) => item?.projectId === params.id
   );
-  console.log(findProjectDetails, "findProjectDetails");
 
   const [selectedOption, setSelectedOption] = useState("Deal Info");
 
@@ -40,18 +50,24 @@ function page({ params }: { params: { id: string } }) {
     },
   };
 
-  const Tparams = {
+  const Tparams: ContributeParams = {
     vcAddress: findProjectDetails?.vcAddress, //VC owner
-    projectCount: findProjectDetails?.projectCount,
+    projectCount: Number(findProjectDetails?.projectCount),
     paymentTokenAddress: findProjectDetails?.paymentTokens[0],
-    amount: 1000,
-    proof: [""],
+    amount: BigInt("1000000000000000000"),
+    proof: [findProjectDetails?.merkleRoot],
   };
 
-  const handleContribute = async () => {
-    console.log("Contribute");
-    const res = await fomodeal.contribute(Network.ETHEREUM, options, Tparams);
-    console.log(res);
+  const handleContribute = () => {
+    setOpenModal(true);
+  };
+
+  const handleInvest = async () => {
+    setOpenModal(false);
+
+    // console.log("Contribute", Tparams);
+    // const res = await fomodeal.contribute(Network.ETHEREUM, options, Tparams);
+    // console.log(res, "CONTRIBUTE");
   };
 
   const renderComponent = () => {
@@ -192,6 +208,12 @@ function page({ params }: { params: { id: string } }) {
           </div>
         </div>
       </div>
+
+      <ContributeModal
+        handleClose={() => setOpenModal(false)}
+        isOpen={openModal}
+        handleInvest={handleInvest}
+      />
     </div>
   );
 }

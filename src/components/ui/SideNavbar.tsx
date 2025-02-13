@@ -23,7 +23,6 @@ import profileimg from "../../../public/profile.svg";
 export function SideNavbar() {
   const router = useRouter();
   const pathname = usePathname();
-  console.log(pathname, "PATH NAME");
 
   const handleLogout = async () => {
     try {

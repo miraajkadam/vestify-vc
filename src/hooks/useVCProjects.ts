@@ -85,31 +85,13 @@ const getVCProjectsById = async (): Promise<any> => {
       `/api/vc/${vcId}/projects`
     );
 
-    const { id } = response.data.data.projects[0];
-
-    const allIds = response.data.data.projects.map((project) => project.id);
-    // console.log("ALL IDS", allIds);
+    const allIds = response?.data?.data?.projects?.map((project) => project.id);
 
     // console.log("BACKEND PID", response);
 
     const allData = await Promise.all(
-      allIds.map((item) => fomoDeal.getProjectById(Network.ETHEREUM, item))
+      allIds?.map((item) => fomoDeal.getProjectById(Network.ETHEREUM, item))
     );
-
-    // if (allData) {
-    //   const allProjects = allData.map((item) => item.projectCreated);
-    //   console.log(allProjects, "ALL PROJECTS");
-
-    // }
-
-    // console.log(allData, "ALL DATA");
-
-    // console.log("BACKEND PID", response);
-
-    // const sdkVcProjects: ProjectedCreated = await fomoDeal.getProjectById(
-    //   Network.ETHEREUM,
-    //   id
-    // );
 
     return allData;
   } catch (error) {

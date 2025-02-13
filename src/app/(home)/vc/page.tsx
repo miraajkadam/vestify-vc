@@ -47,10 +47,7 @@ const VCProfilePage2: React.FC = () => {
     refetch,
   } = useVCProfileData();
 
-  console.log(profileData, "PROFILE DATA");
-
   const { data: vcProjects } = useVCProjects();
-  console.log(vcProjects, "VC PROJECTS");
 
   const extractProjects = vcProjects?.map(
     (proj: { projectCreated: any }) => proj.projectCreated

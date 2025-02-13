@@ -135,8 +135,6 @@ const getVCProfile = async (): Promise<ProjectData> => {
       api.get<WalletAPIResponse<WalletData[]>>(`/api/account/${vcId}/wallets`),
     ]);
 
-    console.log(response.data.data, "RESPONSE SDK");
-
     const {
       id,
       tags,
@@ -193,9 +191,7 @@ const getVCProfile = async (): Promise<ProjectData> => {
       linkedWallets: walletData?.data?.data,
     };
 
-    console.log(projectData, "PROJECT SDK DATA");
     return projectData;
-    // return response.data;
   } catch (error) {
     console.error("Error fetching VC profile:", error);
     throw error;

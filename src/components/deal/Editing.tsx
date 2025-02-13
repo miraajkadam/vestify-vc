@@ -377,7 +377,7 @@ function Editing({ handleEdit, projectId, refetch, scheduleData }: any) {
             {batchList.length > 0 && (
               <div className="h-[43px] p-[15px] left-[541px] top-0 absolute bg-indigo-600 rounded-[5px] justify-center items-center gap-2.5 inline-flex">
                 <button
-                  onClick={scheduleData ? handleUpdateBatch : handleSaveVesting}
+                  onClick={scheduleData ? handleUpdateBatch : handleUpdateBatch}
                   className="text-white text-lg font-semibold font-['Urbanist'] leading-loose"
                 >
                   {isAdding ? (

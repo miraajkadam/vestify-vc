@@ -233,7 +233,7 @@ const ProjectCreationForm: React.FC<{
       const projectDataParams: ProjectParams = {
         projectName: projectData.info.name,
         poolFee: projectData.deals.poolFee,
-        price: Number(projectData.tokenMetrics[0].price),
+        price: Number(projectData.tokenMetrics[0]?.price),
         minAllocation: projectData.deals.minimum,
         maxAllocation: projectData.deals.maximum,
         vcAddress: `${projectData.projectWallet.walletAddress}`, //connected wallet
@@ -255,10 +255,15 @@ const ProjectCreationForm: React.FC<{
       const data = await sdkData;
       console.log(data, "data");
       addProject(projectDataToCreate, data.projectId);
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 3000);
     } catch (error) {
       console.error("Project creation error:", error);
       toast.error("Failed to create project");
-      // router.push("/vc");
+      setTimeout(() => {
+        router.push("/vc");
+      }, 3000);
     } finally {
       setIsLoading(false);
     }
