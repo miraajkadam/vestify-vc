@@ -79,9 +79,11 @@ const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
 
   const getTokens = async () => {
     const res = await fomoDeal.getSupportedPaymentToken(Network.ETHEREUM);
+    console.log("res", res)
     setPaymentTokens(res);
   };
   getTokens();
+  console.log(paymentTokens, "PAYMENT TOKENS");
 
   const tokens = [
     {
