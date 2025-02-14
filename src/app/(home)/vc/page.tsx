@@ -38,6 +38,7 @@ const VCProfilePage2: React.FC = () => {
   const [isPhantomConnected, setIsPhantomConnected] = useState<
     boolean | undefined
   >(false);
+
   const { mutateAsync, isPending } = useAddWallet();
   const {
     data: profileData,
@@ -85,6 +86,20 @@ const VCProfilePage2: React.FC = () => {
 
   const { handleSetWalletAddressInfo, connectedWalletAddressInfo } =
     useWalletInfo();
+
+  // const { walletAdd } = connectedWalletAddressInfo;
+
+  // const getVcProfileSDKinfo = async () => {
+  //   const preojectVC = await fomoDeal.getVCInfo({
+  //     vcAddress: walletAdd,
+  //   });
+  //   console.log(preojectVC, "SDK preojectVC");
+  //   // return preojectVC;
+  // };
+
+  // useEffect(() => {
+  //   getVcProfileSDKinfo();
+  // }, []);
 
   useEffect(() => {
     handleSetWalletAddressInfo({

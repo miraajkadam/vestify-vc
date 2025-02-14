@@ -1,5 +1,6 @@
 "use client";
 import { FomoDeal, Network } from "fomo-deal-sdk-v1";
+import { get } from "http";
 import React, { useEffect, useState } from "react";
 
 interface OurDealsProps {
@@ -81,22 +82,9 @@ const OurDeals: React.FC<OurDealsProps> = ({ onComplete, initialData }) => {
     const res = await fomoDeal.getSupportedPaymentToken(Network.ETHEREUM);
     setPaymentTokens(res);
   };
-  getTokens();
-
-  const tokens = [
-    {
-      tokenAddress: "0x4971fa9b1e4015b5862d91ef221663ca82f4add9",
-      tokenName: "ETH",
-    },
-    {
-      tokenAddress: "0x4971fa9b1e4015b5862d91ef221663ca82f4add9",
-      tokenName: "BTS",
-    },
-    {
-      tokenAddress: "0x4971fa9b1e4015b5862d91ef221663ca82f4add9",
-      tokenName: "USDT",
-    },
-  ];
+  useEffect(() => {
+    getTokens();
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

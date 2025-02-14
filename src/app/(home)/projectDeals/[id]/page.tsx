@@ -63,11 +63,11 @@ function page({ params }: { params: { id: string } }) {
   };
 
   const handleInvest = async () => {
-    setOpenModal(false);
+    // setOpenModal(false);
 
-    // console.log("Contribute", Tparams);
-    // const res = await fomodeal.contribute(Network.ETHEREUM, options, Tparams);
-    // console.log(res, "CONTRIBUTE");
+    console.log("Contribute", Tparams);
+    const res = await fomodeal.contribute(Network.ETHEREUM, options, Tparams);
+    console.log(res, "CONTRIBUTE");
   };
 
   const renderComponent = () => {

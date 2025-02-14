@@ -7,6 +7,7 @@ import { FomoDeal, Network } from "fomo-deal-sdk-v1";
 import { reset } from "viem/actions";
 import { on } from "events";
 import { link } from "fs";
+import { useWalletInfo } from "@/store/walletContext";
 
 interface ApiResponse<T> {
   // success: boolean;
@@ -121,6 +122,9 @@ export interface WalletData {
 const fomoDeal = new FomoDeal();
 
 const getVCProfile = async (): Promise<ProjectData> => {
+  // const { connectedWalletAddressInfo } = useWalletInfo();
+  // const { walletAdd } = connectedWalletAddressInfo;
+
   try {
     const token = Cookies.get("access_token");
     if (!token) {
@@ -149,7 +153,11 @@ const getVCProfile = async (): Promise<ProjectData> => {
 
     const projects: any = await fomoDeal.getAllProjects(Network.ETHEREUM);
 
-    // console.log(projects, "PROJECTS SDK");
+    // const preojectVC = await fomoDeal.getVCInfo({
+    //   vcAddress: walletAdd,
+    // });
+
+    // console.log(preojectVC, "SDK preojectVC");
     //onChian ID
     // const projectById = await fomoDeal.getProjectById(
     //   Network.ETHEREUM,
