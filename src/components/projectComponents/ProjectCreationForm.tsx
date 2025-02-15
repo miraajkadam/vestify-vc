@@ -40,6 +40,10 @@ export type ProjectDataState = {
     round: string;
     tgeSummary: string;
     projectToken: string;
+    noOfMonths: number,
+    releaseType: string,
+    raisedAmt: number,
+    projectTokenTicker: string,
   }[];
   deals: {
     maximum: number;
@@ -236,13 +240,13 @@ const ProjectCreationForm: React.FC<{
         price: Number(projectData.tokenMetrics[0]?.price),
         minAllocation: projectData.deals.minimum,
         maxAllocation: projectData.deals.maximum,
-        vcAddress: `${projectData.projectWallet.walletAddress}`, //connected wallet
+        vcAddress: `${projectData.projectWallet.walletAddress}`, 
         fundWallet: projectData.projectWallet.fundWalletAddress,
-        hardCap: 1000000000000000, // TODO : need to check [maximum raising amt]
+        hardCap: projectData.tokenMetrics[0].raisedAmt,
         merkleRoot: merkleRootWallets as string,
-        startTime: new Date(projectData.deals.startDate).getTime(), //[epoc timestamp ]
+        startTime: new Date(projectData.deals.startDate).getTime(),
         endTime: new Date(projectData.deals.endDate).getTime(),
-        paymentTokenAddresses: ["0x6C3DfEC39a45F2673AABdCe2290A1F33A027597C"], // TODO : need to check
+        paymentTokenAddresses: [projectData.deals.acceptedTokens || "0x6C3DfEC39a45F2673AABdCe2290A1F33A027597C"], // TODO : need to check
         projectToken: projectData.tokenMetrics[0].projectToken, // TODO : need to check  token address
         projectCount: 0, // TODO : need to check //depends on project status [new=>0,existing one =>increment counter will get from SDK ]
       };
