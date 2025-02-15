@@ -181,15 +181,11 @@ const ProjectCreationForm: React.FC<{
       } = projectData;
       const { startDate, endDate, ...rest } = deals;
 
-      const ISOStartTime = new Date(startDate).toISOString().split("T")[0];
-      const ISOEndTime = new Date(endDate).toISOString().split("T")[0];
+      // const ISOStartTime = new Date(startDate).toISOString().split("T")[0];
+      // const ISOEndTime = new Date(endDate).toISOString().split("T")[0];
 
       const payload = {
-        deals: {
-          ...rest,
-          startDate: ISOStartTime,
-          endDate: ISOEndTime,
-        },
+        deals,
         info,
         partnersAndInvestors,
         projectSocials,
@@ -242,7 +238,7 @@ const ProjectCreationForm: React.FC<{
         maxAllocation: projectData.deals.maximum,
         vcAddress: `${projectData.projectWallet.walletAddress}`, 
         fundWallet: projectData.projectWallet.fundWalletAddress,
-        hardCap: projectData.tokenMetrics[0].raisedAmt,
+        hardCap: Number(projectData.tokenMetrics[0].raisedAmt),
         merkleRoot: merkleRootWallets as string,
         startTime: new Date(projectData.deals.startDate).getTime(),
         endTime: new Date(projectData.deals.endDate).getTime(),

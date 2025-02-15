@@ -92,9 +92,9 @@ export interface CurProjectTokenMetric {
   releaseType?: string;
   releaseMonths?: number;
   fdv: number;
-  noOfMonths: number,
-  raisedAmt: number,
-  projectTokenTicker: string,
+  noOfMonths?: number,
+  raisedAmt?: number,
+  projectTokenTicker?: string,
 }
 
 export interface Deals {
@@ -305,13 +305,13 @@ export const createProject = async (
     price: +data.tokenMetrics[0].price,
     tgeUnlock: data.tokenMetrics[0].tgeUnlock,
     tge: data.tokenMetrics[0].tge,
-    fdv: Number(data.tokenMetrics[0].fdv),
-    lockupPeriod: data.tokenMetrics[0].lockupPeriod,
+    fdv:  1000000000,
+    lockupPeriod: Number(data.tokenMetrics[0].lockupPeriod),
     releaseType: data.tokenMetrics[0].releaseType,
-    releaseMonths: data.tokenMetrics[0].releaseMonths,
-    noOfMonths: data.tokenMetrics[0].noOfMonths,
-    raisedAmt: data.tokenMetrics[0].raisedAmt,
-    projectTokenTicker: data.tokenMetrics[0].projectTokenTicker,
+    releaseMonths: Number(data.tokenMetrics[0].noOfMonths) || 1,
+    // noOfMonths: Number(data.tokenMetrics[0].noOfMonths),
+    // raisedAmt: Number(data.tokenMetrics[0].raisedAmt),
+    // projectTokenTicker: data.tokenMetrics[0].projectTokenTicker,
   };
   const projectData: ProjectDataV2 = {
     info: {
@@ -328,7 +328,7 @@ export const createProject = async (
     roundDetails: {
       maximum: data.deals.maximum,
       minimum: data.deals.minimum,
-      acceptedTokens: data.deals.acceptedTokens,
+      acceptedTokens: data.deals.acceptedTokens || "0x6C3DfEC39a45F2673AABdCe2290A1F33A027597C",
       poolFee: data.deals.poolFee,
       startDate: data.deals.startDate,
       endDate: data.deals.endDate,
@@ -351,8 +351,8 @@ export const createProject = async (
       projectId: projectId,
     },
   };
-  let releaseMonths = data.tokenMetrics[0].releaseMonths;
-  let lockupPeriod = data.tokenMetrics[0].lockupPeriod;
+  let releaseMonths = Number(data.tokenMetrics[0].noOfMonths) || 1;
+  let lockupPeriod = Number(data.tokenMetrics[0].lockupPeriod);
   let releaseType = data.tokenMetrics[0].releaseType;
 
   projectData.curProjTokenMetrics.releaseMonths = releaseMonths;
@@ -363,10 +363,10 @@ export const createProject = async (
   projectData.pastProjTokenMetrics[0].lockupPeriod = lockupPeriod;
   projectData.pastProjTokenMetrics[0].releaseType = releaseType;
 
-  projectData.projectSocials.discord =  data.projectSocials.discord,
-  projectData.projectSocials.telegram = data.projectSocials.telegram,
-  projectData.projectSocials.medium = data.projectSocials.medium,
-  projectData.projectSocials.website = data.projectSocials.website,
+  projectData.projectSocials.discord =  data.projectSocials.discord || "https://discord.gg/project_invite",
+  projectData.projectSocials.telegram = data.projectSocials.telegram || "https://t.me/project_channel",
+  projectData.projectSocials.medium = data.projectSocials.medium || "https://medium.com/@project_blog",
+  projectData.projectSocials.website = data.projectSocials.website || "https://www.example.com",
 
   projectData.teamAndAdvisors[0].imgBase64 = "b21hZSB3YSBtb3Ugc2hpbmRlaXJ1";
 
