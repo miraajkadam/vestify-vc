@@ -37,6 +37,8 @@ const getSubscribedUsers = async () => {
     const response = await api.get<ApiResponse<GetSubscribedUserResponse>>(
       `/api/vc/${vcId}/subscribers`
     );
+
+    console.log(response.data.data.length, "==>");
     // const wallets = generateMerkleRoot(response.data.data.data);
     let input = [];
     if (response.data.data.length === 0) {

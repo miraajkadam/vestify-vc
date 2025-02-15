@@ -87,7 +87,7 @@ const VCProfilePage2: React.FC = () => {
   const { handleSetWalletAddressInfo, connectedWalletAddressInfo } =
     useWalletInfo();
 
-  // const { walletAdd } = connectedWalletAddressInfo;
+  const { walletAdd } = connectedWalletAddressInfo;
 
   // const getVcProfileSDKinfo = async () => {
   //   const preojectVC = await fomoDeal.getVCInfo({
