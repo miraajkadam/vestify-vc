@@ -179,7 +179,7 @@ const getVCProfile = async (
 
     const decodedToken = jwtDecode<DecodedToken>(token);
     const vcId = decodedToken.user.id;
-
+    // console.log(vcId, "VCID");
     const [response, walletData] = await Promise.all([
       api.get<ApiResponse<ProjectData>>(`/api/vc/${vcId}/profile`),
       api.get<WalletAPIResponse<WalletData[]>>(`/api/account/${vcId}/wallets`),

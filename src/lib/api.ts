@@ -71,8 +71,8 @@ export interface TokenMetricsV2 {
   releaseType?: string;
   releaseMonths?: number;
   raisedAmt: number;
-  noOfMonths: number,
-  projectTokenTicker: string,
+  noOfMonths: number;
+  projectTokenTicker: string;
 }
 
 export interface PastProjectTokenMetric {
@@ -92,9 +92,9 @@ export interface CurProjectTokenMetric {
   releaseType?: string;
   releaseMonths?: number;
   fdv: number;
-  noOfMonths?: number,
-  raisedAmt?: number,
-  projectTokenTicker?: string,
+  noOfMonths?: number;
+  raisedAmt?: number;
+  projectTokenTicker?: string;
 }
 
 export interface Deals {
@@ -305,7 +305,7 @@ export const createProject = async (
     price: +data.tokenMetrics[0].price,
     tgeUnlock: data.tokenMetrics[0].tgeUnlock,
     tge: data.tokenMetrics[0].tge,
-    fdv:  1000000000,
+    fdv: 1000000000,
     lockupPeriod: Number(data.tokenMetrics[0].lockupPeriod),
     releaseType: data.tokenMetrics[0].releaseType,
     releaseMonths: Number(data.tokenMetrics[0].noOfMonths) || 1,
@@ -328,11 +328,13 @@ export const createProject = async (
     roundDetails: {
       maximum: data.deals.maximum,
       minimum: data.deals.minimum,
-      acceptedTokens: data.deals.acceptedTokens || "0x6C3DfEC39a45F2673AABdCe2290A1F33A027597C",
+      acceptedTokens:
+        data.deals.acceptedTokens ||
+        "0x6C3DfEC39a45F2673AABdCe2290A1F33A027597C",
       poolFee: data.deals.poolFee,
       startDate: data.deals.startDate,
       endDate: data.deals.endDate,
-      raiseAmount: data.tokenMetrics[0].raisedAmt,
+      raiseAmount: Number(data.tokenMetrics[0].raisedAmt),
       tokenTicker: data.info.name.toUpperCase(),
     },
     teamAndAdvisors: data.teamAndAdvisors,
@@ -357,18 +359,21 @@ export const createProject = async (
 
   projectData.curProjTokenMetrics.releaseMonths = releaseMonths;
   projectData.curProjTokenMetrics.lockupPeriod = lockupPeriod;
-  projectData.curProjTokenMetrics.releaseType = releaseType;
+  projectData.curProjTokenMetrics.releaseType = releaseType.toUpperCase();
 
   projectData.pastProjTokenMetrics[0].releaseMonths = releaseMonths;
   projectData.pastProjTokenMetrics[0].lockupPeriod = lockupPeriod;
-  projectData.pastProjTokenMetrics[0].releaseType = releaseType;
+  projectData.pastProjTokenMetrics[0].releaseType = releaseType.toUpperCase();
 
-  projectData.projectSocials.discord =  data.projectSocials.discord || "https://discord.gg/project_invite",
-  projectData.projectSocials.telegram = data.projectSocials.telegram || "https://t.me/project_channel",
-  projectData.projectSocials.medium = data.projectSocials.medium || "https://medium.com/@project_blog",
-  projectData.projectSocials.website = data.projectSocials.website || "https://www.example.com",
-
-  projectData.teamAndAdvisors[0].imgBase64 = "b21hZSB3YSBtb3Ugc2hpbmRlaXJ1";
+  (projectData.projectSocials.discord =
+    data.projectSocials.discord || "https://discord.gg/project_invite"),
+    (projectData.projectSocials.telegram =
+      data.projectSocials.telegram || "https://t.me/project_channel"),
+    (projectData.projectSocials.medium =
+      data.projectSocials.medium || "https://medium.com/@project_blog"),
+    (projectData.projectSocials.website =
+      data.projectSocials.website || "https://www.example.com"),
+    (projectData.teamAndAdvisors[0].imgBase64 = "b21hZSB3YSBtb3Ugc2hpbmRlaXJ1");
 
   const projectDatev2 = {
     info: {

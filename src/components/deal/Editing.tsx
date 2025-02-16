@@ -99,7 +99,7 @@ function Editing({ handleEdit, projectId, refetch, scheduleData }: any) {
       );
 
       const payload = {
-        batchInterval: "MONTHLY",
+        batchInterval: "QUARTERLY",
         vestingBatches: formattedBatchList,
       };
 
@@ -150,6 +150,8 @@ function Editing({ handleEdit, projectId, refetch, scheduleData }: any) {
       return acc + Number(curr.percentage); // Ensure percentage is a number
     }, 0);
 
+    console.log({ percentage });
+
     if (percentage > 100) {
       alert("Sum of batch Percentage should not be greater than 100");
     } else if (percentage < 100) {
@@ -164,7 +166,7 @@ function Editing({ handleEdit, projectId, refetch, scheduleData }: any) {
       );
 
       const payload = {
-        batchInterval: "MONTHLY",
+        batchInterval: "QUARTERLY",
         vestingBatches: formattedBatchList,
       };
 
