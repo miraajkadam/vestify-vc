@@ -39,6 +39,11 @@ const VCProfilePage2: React.FC = () => {
     boolean | undefined
   >(false);
 
+  const { handleSetWalletAddressInfo, connectedWalletAddressInfo } =
+    useWalletInfo();
+
+  const { walletAdd } = connectedWalletAddressInfo;
+
   const { mutateAsync, isPending } = useAddWallet();
   const {
     data: profileData,
@@ -46,7 +51,7 @@ const VCProfilePage2: React.FC = () => {
     error,
     isLoading,
     refetch,
-  } = useVCProfileData();
+  } = useVCProfileData(walletAdd);
 
   const { data: vcProjects } = useVCProjects();
 
@@ -83,23 +88,6 @@ const VCProfilePage2: React.FC = () => {
       setOpenModal(false);
     }
   };
-
-  const { handleSetWalletAddressInfo, connectedWalletAddressInfo } =
-    useWalletInfo();
-
-  const { walletAdd } = connectedWalletAddressInfo;
-
-  // const getVcProfileSDKinfo = async () => {
-  //   const preojectVC = await fomoDeal.getVCInfo({
-  //     vcAddress: walletAdd,
-  //   });
-  //   console.log(preojectVC, "SDK preojectVC");
-  //   // return preojectVC;
-  // };
-
-  // useEffect(() => {
-  //   getVcProfileSDKinfo();
-  // }, []);
 
   useEffect(() => {
     handleSetWalletAddressInfo({
@@ -178,7 +166,7 @@ const VCProfilePage2: React.FC = () => {
       const res = await fomoDeal.createVc(
         Network.ETHEREUM,
         options,
-        `${profileData?.vcName || "Test"}`
+        `${profileData?.name || "Test"}`
       );
 
       console.log(res);
@@ -248,8 +236,8 @@ const VCProfilePage2: React.FC = () => {
             handleDisconnect={handleDisconnect}
             handleRegister={handleRegister}
           />
-
           <Profile profile={profileData} />
+          {/* Last 5 PROJECT */}
           {/* <button onClick={handleCreateVC}>CALL</button> */}
         </div>
 

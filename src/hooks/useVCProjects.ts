@@ -84,10 +84,9 @@ const getVCProjectsById = async (): Promise<any> => {
     const response = await api.get<ApiResponse<ProjectResponse>>(
       `/api/vc/${vcId}/projects`
     );
+    console.log("BACKEND PID", response.data.data);
 
     const allIds = response?.data?.data?.projects?.map((project) => project.id);
-
-    // console.log("BACKEND PID", response);
 
     const allData = await Promise.all(
       allIds?.map((item) => fomoDeal.getProjectById(Network.ETHEREUM, item))

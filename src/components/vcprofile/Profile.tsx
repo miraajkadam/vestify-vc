@@ -4,7 +4,7 @@ import twitterIcon from "../../../public/Twitter.svg";
 import telegramIcon from "../../../public/Telegram.svg";
 import linkedinIcon from "../../../public/Linkedin.svg";
 import Image from "next/image";
-import { ProjectData } from "@/hooks/useVCProfile";
+import { ProjectData, VCProfileData } from "@/hooks/useVCProfile";
 
 const socialIcons = {
   discord: discordIcon,
@@ -13,7 +13,7 @@ const socialIcons = {
   website: linkedinIcon,
 };
 
-function Profile({ profile }: { profile: ProjectData }) {
+function Profile({ profile }: { profile: VCProfileData }) {
   return (
     <div className="w-full self-stretch h-[291.32px] flex-col justify-start items-start gap-[21.34px] flex">
       <div className="w-full justify-between items-start gap-[25.61px] inline-flex">
@@ -28,7 +28,7 @@ function Profile({ profile }: { profile: ProjectData }) {
               />
             </div>
             <div className="text-[#18191c] text-[35px] font-bold font-['Urbanist'] leading-[46.12px]">
-              {profile?.vcName}
+              {profile?.name}
             </div>
           </div>
         </div>

@@ -64,6 +64,7 @@ const getProjectDetails = async (
 ): Promise<ApiResponse<ProjectDetails>> => {
   try {
     const res = await api.get(`/api/project/${projectId}`);
+    console.log(res.data, "ALL DETAILS DATA");
     return res.data;
   } catch (error) {
     throw error;

@@ -119,9 +119,55 @@ export interface WalletData {
   chain: string;
 }
 
+interface SDKVCProfileResponse {
+  name: string;
+  fundSize: number;
+  lastProjectROI: number;
+  averageROI: number;
+  last5ProjectsStats: {
+    chain: Network;
+    projectName: string;
+    pledgeAmount: number;
+    marketCap: number;
+    topExchanges: string[];
+    raisedAmount: number;
+    ongoingClaim: number;
+  }[];
+}
+
+export interface VCProfileData {
+  name: string;
+  fundSize: number;
+  lastProjectROI: number;
+  averageROI: number;
+  last5ProjectsStats: {
+    chain: Network;
+    projectName: string;
+    pledgeAmount: number;
+    marketCap: number;
+    topExchanges: string[];
+    raisedAmount: number;
+    ongoingClaim: number;
+  }[];
+  kycDone: boolean;
+  discord: string;
+  social: {
+    x: string;
+    telegram: string;
+    website: string;
+  };
+  linkedWallets: any;
+  vcId: string;
+  description: string;
+  tags: [];
+  subscriptionFee: string;
+}
+
 const fomoDeal = new FomoDeal();
 
-const getVCProfile = async (): Promise<ProjectData> => {
+const getVCProfile = async (
+  walletAdd: `0x${string}`
+): Promise<VCProfileData> => {
   // const { connectedWalletAddressInfo } = useWalletInfo();
   // const { walletAdd } = connectedWalletAddressInfo;
 
@@ -148,10 +194,16 @@ const getVCProfile = async (): Promise<ProjectData> => {
       social,
       vcId: vc_Id,
     } = response.data.data;
+    console.log(response.data.data, "VC PROFILE DATA");
 
     const { discord, telegram, website, x } = social;
 
-    const projects: any = await fomoDeal.getAllProjects(Network.ETHEREUM);
+    const vcProfileData: SDKVCProfileResponse = await fomoDeal.getVCInfo({
+      vcAddress: walletAdd,
+    });
+
+    const { averageROI, fundSize, last5ProjectsStats, lastProjectROI, name } =
+      vcProfileData;
 
     // const preojectVC = await fomoDeal.getVCInfo({
     //   vcAddress: walletAdd,
@@ -164,53 +216,58 @@ const getVCProfile = async (): Promise<ProjectData> => {
     //   "0xf9492e17a64410373b44a9c8137a0bc7e26700a405d3960342233e1075f74203"
     // );
     // console.log(projectById, "PROJECT BY ID");
-    const vcprojects = projects?.projectCreateds?.map((item: Project) => {
-      return {
-        projectName: item.projectName,
-        pledgeAmt: item.hardCap,
-        marketCap: "",
-        topGainers: "",
-        raisedAmt: "",
-        ongoingClaim: "",
-        vcId: vc_Id,
-      };
-    });
 
     // const { hardCap, projectName } = projects.
 
-    const projectData = {
-      vcName: "",
-      id: id,
-      kycDone: kycDone,
-      social: {
-        discord: discord,
-        x: x,
-        telegram: telegram,
-        website: website,
-      },
-      fundSize: "", //sum of all the Raised AMT
-      tags: [],
-      vcId: vc_Id,
-      lastProjectROI: "", //backend job
-      averageROI: "", //backend job
-      subscriptionFee: subscriptionFee,
-      description: description,
-      project: vcprojects,
+    // const projectData = {
+    //   vcName: "",
+    //   id: id,
+    //   kycDone: kycDone,
+    //   social: {
+    //     discord: discord,
+    //     x: x,
+    //     telegram: telegram,
+    //     website: website,
+    //   },
+    //   fundSize: "", //sum of all the Raised AMT
+    //   tags: [],
+    //   vcId: vc_Id,
+    //   lastProjectROI: "", //backend job
+    //   averageROI: "", //backend job
+    //   subscriptionFee: subscriptionFee,
+    //   description: description,
+    //   project: vcprojects,
+    //   linkedWallets: walletData?.data?.data,
+    // };
+
+    const vcProfile = {
+      name,
+      averageROI,
+      fundSize,
+      last5ProjectsStats,
+      lastProjectROI,
+      kycDone,
+      discord: discord,
+      social,
       linkedWallets: walletData?.data?.data,
+      vcId: vc_Id,
+      description,
+      tags,
+      subscriptionFee,
     };
 
-    return projectData;
+    return vcProfile;
   } catch (error) {
     console.error("Error fetching VC profile:", error);
     throw error;
   }
 };
 
-export const useVCProfileData = () => {
+export const useVCProfileData = (walletAdd: `0x${string}`) => {
   return useQuery({
     queryKey: ["profile-data"],
     queryFn: async () => {
-      return getVCProfile();
+      return getVCProfile(walletAdd);
     },
   });
 };
