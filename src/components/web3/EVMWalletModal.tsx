@@ -26,9 +26,9 @@ const EVMWalletModal = ({
     <>
       <div className="flex-col justify-start items-center gap-8 flex">
         <div className="h-[68px] flex-col justify-start items-center gap-2 flex">
-          <div className="text-center text-[#101828] text-[28px] font-semibold font-['Urbanist'] leading-[33.60px]">
+          {/* <div className="text-center text-[#101828] text-[28px] font-semibold font-['Urbanist'] leading-[33.60px]">
             Connect a wallet on Ethereum to continue
-          </div>
+          </div> */}
 
           {/* {address && ( */}
 

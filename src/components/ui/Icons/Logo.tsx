@@ -43,9 +43,9 @@ const Logo: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
         width="48"
         height="48"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -78,9 +78,9 @@ const Logo: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
         width="30.6211"
         height="34.5"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -114,8 +114,8 @@ const Logo: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
         y2="29"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#4F46E5" />
-        <stop offset="1" stop-color="#4F46E5" stop-opacity="0" />
+        <stop stopColor="#4F46E5" />
+        <stop offset="1" stopColor="#4F46E5" stopOpacity="0" />
       </linearGradient>
       <clipPath id="clip0_1126_19555">
         <rect x="8.02734" y="4" width="32" height="32" rx="12" fill="white" />

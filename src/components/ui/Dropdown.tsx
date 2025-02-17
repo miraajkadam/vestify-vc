@@ -6,6 +6,7 @@ interface DropdownProps {
   onChange: (value: string | string[]) => void;
   placeholder: string;
   multiple?: boolean;
+  customeStyle?: string;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -14,6 +15,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   onChange,
   placeholder,
   multiple = false,
+  customeStyle = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -31,7 +33,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div className={`relative ${customeStyle}`}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}

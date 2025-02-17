@@ -51,7 +51,7 @@ const VCProfilePage2: React.FC = () => {
     error,
     isLoading,
     refetch,
-  } = useVCProfileData(walletAdd);
+  } = useVCProfileData(walletAdd || `0x{9090}`);
 
   const { data: vcProjects } = useVCProjects();
 
