@@ -115,12 +115,6 @@ const ProjectCreationForm: React.FC<{
   const fomoDeal = new FomoDeal();
   const CurrentStepComponent = steps[step - 1].component;
 
-  // const getTokens = async () => {
-  //   const tokens = await fomoDeal.getSupportedTokens(Network.ETHEREUM);
-  //   console.log(tokens, "TOKENS");
-  // };
-  // getTokens();
-
   const createProjectSDK = async (
     chain: string | undefined,
     projectData: ProjectParams
@@ -179,11 +173,6 @@ const ProjectCreationForm: React.FC<{
         teamAndAdvisors,
         tokenMetrics,
       } = projectData;
-      const { startDate, endDate, ...rest } = deals;
-
-      // const ISOStartTime = new Date(startDate).toISOString().split("T")[0];
-      // const ISOEndTime = new Date(endDate).toISOString().split("T")[0];
-
       const payload = {
         deals,
         info,
@@ -201,7 +190,7 @@ const ProjectCreationForm: React.FC<{
         router.push("/dashboard");
       }, 3000);
     } catch (error) {
-      toast.success("Something went wrong, please try again later");
+      toast.error("Something went wrong, please try again later");
 
       console.error("Error creating project:", error);
       setTimeout(() => {
