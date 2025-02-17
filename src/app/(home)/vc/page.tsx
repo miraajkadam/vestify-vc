@@ -42,16 +42,8 @@ const VCProfilePage2: React.FC = () => {
   const { handleSetWalletAddressInfo, connectedWalletAddressInfo } =
     useWalletInfo();
 
-  const { walletAdd } = connectedWalletAddressInfo;
-
   const { mutateAsync, isPending } = useAddWallet();
-  const {
-    data: profileData,
-    isError,
-    error,
-    isLoading,
-    refetch,
-  } = useVCProfileData(walletAdd);
+  
 
   const { data: vcProjects } = useVCProjects();
 
@@ -64,6 +56,14 @@ const VCProfilePage2: React.FC = () => {
   const { connect } = useConnect();
   const { connectors, disconnect } = useDisconnect();
   const [loader, setLoader] = useState(false);
+
+  const {
+    data: profileData,
+    isError,
+    error,
+    isLoading,
+    refetch,
+  } = useVCProfileData("0x694a445f9458eDc55E7f3Fa4357D4De8ec62eb7B");
 
   useEffect(() => {
     const isRegistered =
